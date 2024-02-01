@@ -6,5 +6,10 @@ export default async function Notes() {
   const supabase = createClient(cookieStore);
   const { data: notes } = await supabase.from("notes").select();
 
-  return <pre>{JSON.stringify(notes, null, 2)}</pre>
+  return (
+    <>
+      <div>Supabase Result:</div>
+      <pre>{JSON.stringify(notes, null, 2)}</pre>
+    </>
+  )
 }
