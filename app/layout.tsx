@@ -8,8 +8,8 @@ import NavMenu from "@/components/NavMenu";
 import { options } from "./api/auth/[...nextauth]/options";
 
 
-const defaultUrl = process.env.VERCEL_URL
-  ? `https://teamconnect.projects.multimediatechnology.at`
+const defaultUrl = process.env.PRODUCTION
+  ? "https://teamconnect.projects.multimediatechnology.at"
   : "http://localhost:3000";
 
 export const metadata = {
