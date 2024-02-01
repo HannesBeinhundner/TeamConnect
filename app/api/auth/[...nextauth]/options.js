@@ -52,7 +52,7 @@ export const options = {
             clientSecret: process.env.GITHUB_SECRET,
         }),
     ],
-    secret: process.env.NEXTAUTH_SECRET,
+    secret: process.env.SECRET,
     // strategy: "jwt",
     callbacks: {
         async jwt({ token, user }) {
