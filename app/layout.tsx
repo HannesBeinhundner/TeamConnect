@@ -23,6 +23,7 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  //@ts-ignore
   const session = await getServerSession(options);
   console.log("My session: ", session)
 
