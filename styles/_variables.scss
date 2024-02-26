@@ -1,0 +1,24 @@
+// BREAKPOINTS
+$mobile: 600;
+$tablet: 960;
+$desktop: $tablet + 1;
+
+// COLORS
+$white: #EDEDED;
+$black: #161616;
+$grey-dark: #1C1C1C; // Gray-2
+$grey-light: #232323; //Gray-1
+$blue: #007DFF; //CTA-Farbe 1
+$blue-dark: #0057B2; // CTA-1 Hover
+$highlight: #6F2931;
+$error: #F44336;
+$warning: #FF9800;
+$succuess: #4CAF50;
+
+// SHADOWS
+$container-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+$inner-shadow: inset 1px 1px 26px rgba(0, 0, 0, 0.25);
+
+// BACKGROUNDS
+$background-red: linear-gradient(129deg, $grey-dark 38%, rgba(31, 20, 22, 1) 100%);
+$background-blue: linear-gradient(180deg, $grey-light 38%, #1c344e 100%);
