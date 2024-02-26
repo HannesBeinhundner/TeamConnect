@@ -1,5 +1,5 @@
 import { GeistSans } from "geist/font/sans";
-import "./globals.css";
+import "@/styles/globals.scss";
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v13-appRouter';
 
 import { getServerSession } from "next-auth";

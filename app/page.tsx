@@ -1,5 +1,6 @@
 import { getServerSession } from "next-auth";
 import { options } from "./api/auth/[...nextauth]/options";
+import InnerArea from "@/components/InnerArea/InnerArea";
 
 export default async function Home() {
   //@ts-ignore
@@ -13,6 +14,7 @@ export default async function Home() {
       ) : (
         <div>Not logged in</div>
       )}
+      <InnerArea />
     </>
   );
 }
