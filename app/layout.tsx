@@ -1,12 +1,10 @@
-import { GeistSans } from "geist/font/sans";
+import { Inter } from 'next/font/google'
 import "@/styles/globals.scss";
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v13-appRouter';
-
 import { getServerSession } from "next-auth";
 import SessionProvider from "@/components/SessionProvider";
-import NavMenu from "@/components/NavMenu";
-import { options } from "./api/auth/[...nextauth]/options";
 import { Toaster } from "react-hot-toast";
+import { options } from "@/app/api/auth/[...nextauth]/options"
 
 const defaultUrl = process.env.PRODUCTION
   ? "https://teamconnect.projects.multimediatechnology.at"
@@ -18,21 +16,28 @@ export const metadata = {
   description: "The fastest way to build apps with Next.js and Supabase",
 };
 
+const inter = Inter({ subsets: ['latin'] })
+
 export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  //@ts-ignore
+  // @ts-ignore
   const session = await getServerSession(options);
-  console.log("My session: ", session)
+
+  const containerStyle: React.CSSProperties = {
+    backgroundColor: 'blue',
+    //padding: '1.5rem',
+    height: '100%',
+    width: '100%'
+  };
 
   return (
-    <html lang="en" className={GeistSans.className}>
+    <html lang="en" className={inter.className}>
       <body className="bg-background text-foreground">
         <SessionProvider session={session}>
-          <main className="min-h-screen flex flex-col items-center">
-            <NavMenu />
+          <main style={containerStyle}>
             <AppRouterCacheProvider options={{ enableCssLayer: true }}>{children}</AppRouterCacheProvider>
             <Toaster position="top-right"></Toaster>
           </main>

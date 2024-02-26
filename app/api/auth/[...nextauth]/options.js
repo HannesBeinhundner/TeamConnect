@@ -43,14 +43,15 @@ export const options = {
             clientSecret: process.env.FH_SECRET,
             authorization: {
                 url: 'https://auth.projects.multimediatechnology.at/oauth/authorize',
-                params: { scope: "public identity" }
+                params: { scope: "public identity" },
+                prompt: 'login',
             },
             token: 'https://auth.projects.multimediatechnology.at/oauth/token',
         },
-        GitHubProvider({
-            clientId: process.env.GITHUB_ID,
-            clientSecret: process.env.GITHUB_SECRET,
-        }),
+        // GitHubProvider({
+        //     clientId: process.env.GITHUB_ID,
+        //     clientSecret: process.env.GITHUB_SECRET,
+        // }),
     ],
     secret: process.env.SECRET,
     // strategy: "jwt",

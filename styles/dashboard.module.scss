@@ -1,0 +1,27 @@
+@import "_variables.scss";
+@import "_mixins.scss";
+
+.container {
+    background-color: $grey-light;
+    height: 100%;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 100px 1fr;
+    grid-template-rows: min-content;
+}
+
+.topArea {
+    grid-column: span 2;
+}
+
+.optionsArea {
+    background-color: blue;
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    padding-bottom: 2rem;
+}
+
+.mainArea {
+    background-color: yellow;
+}
