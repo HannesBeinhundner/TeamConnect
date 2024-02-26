@@ -1,4 +1,4 @@
-import styles from "./InnerArea.module.scss"
+import styles from "./InnerArea.module.scss";
 
 export default function InnerArea() {
     return (

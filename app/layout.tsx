@@ -6,6 +6,7 @@ import { getServerSession } from "next-auth";
 import SessionProvider from "@/components/SessionProvider";
 import NavMenu from "@/components/NavMenu";
 import { options } from "./api/auth/[...nextauth]/options";
+import { Toaster } from "react-hot-toast";
 
 const defaultUrl = process.env.PRODUCTION
   ? "https://teamconnect.projects.multimediatechnology.at"
@@ -33,6 +34,7 @@ export default async function RootLayout({
           <main className="min-h-screen flex flex-col items-center">
             <NavMenu />
             <AppRouterCacheProvider options={{ enableCssLayer: true }}>{children}</AppRouterCacheProvider>
+            <Toaster position="top-right"></Toaster>
           </main>
         </SessionProvider>
       </body>

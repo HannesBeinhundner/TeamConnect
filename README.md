@@ -18,6 +18,7 @@
 - `npx prisma db pull` -> connects to your database and adds Prisma models to your Prisma schema that reflect the current database schema
 - `npx prisma db push` -> pushes the state of your Prisma schema file to the database without using migrations. It creates the database if the database does not exist.
 - `npx prisma db seed` -> seeds the database with dummy data
+- `npx prisma format` -> reformats the migration file.
 
 ## create project
 - `npx create-next-app@14.01 -e with-supabase`
