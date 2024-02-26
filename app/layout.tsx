@@ -3,6 +3,7 @@ import "@/styles/globals.scss";
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v13-appRouter';
 import { getServerSession } from "next-auth";
 import SessionProvider from "@/components/SessionProvider";
+import { Toaster } from "react-hot-toast";
 import { options } from "@/app/api/auth/[...nextauth]/options"
 
 const defaultUrl = process.env.PRODUCTION
@@ -38,6 +39,7 @@ export default async function RootLayout({
         <SessionProvider session={session}>
           <main style={containerStyle}>
             <AppRouterCacheProvider options={{ enableCssLayer: true }}>{children}</AppRouterCacheProvider>
+            <Toaster position="top-right"></Toaster>
           </main>
         </SessionProvider>
       </body>

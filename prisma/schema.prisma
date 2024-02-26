@@ -8,10 +8,12 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
-model milestone {
-  milestone_id Int      @id @default(autoincrement())
-  name         String   @db.VarChar(256)
-  date         DateTime
+model Milestone {
+  id              Int           @id @default(autoincrement())
+  name            String        @db.VarChar(256)
+  date            DateTime
+  configurationId Int           @unique
+  configuration   Configuration @relation(fields: [configurationId], references: [id])
 }
 
 model Account {
@@ -64,4 +66,10 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+model Configuration {
+  id         Int         @id @default(autoincrement())
+  name       String
+  milestones Milestone[]
 }
