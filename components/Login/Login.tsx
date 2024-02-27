@@ -17,7 +17,7 @@ function AuthButton() {
     return (
         <>
             {/* NOT SINGED IN */}
-            <Button variant="contained" color="primary" onClick={() => signIn()}>Sign in with FH</Button>
+            <Button variant="contained" color="primary" onClick={() => signIn("teamconnect")}>Sign in with FH</Button>
         </>
     );
 }

@@ -5,6 +5,17 @@ import { getServerSession } from "next-auth";
 import SessionProvider from "@/components/SessionProvider";
 import { Toaster } from "react-hot-toast";
 import { options } from "@/app/api/auth/[...nextauth]/options"
+// import { createTheme, ThemeProvider } from '@mui/material/styles'
+
+// const theme = createTheme({
+//   typography: {
+//     allVariants: {
+//       fontFamily: 'Inter',
+//       textTransform: 'none',
+//       fontSize: 16
+//     }
+//   }
+// })
 
 const defaultUrl = process.env.PRODUCTION
   ? "https://teamconnect.projects.multimediatechnology.at"
@@ -37,10 +48,12 @@ export default async function RootLayout({
     <html lang="en" className={inter.className}>
       <body className="bg-background text-foreground">
         <SessionProvider session={session}>
+          {/* <ThemeProvider theme={theme}> */}
           <main style={containerStyle}>
             <AppRouterCacheProvider options={{ enableCssLayer: true }}>{children}</AppRouterCacheProvider>
             <Toaster position="top-right"></Toaster>
           </main>
+          {/* </ThemeProvider> */}
         </SessionProvider>
       </body>
     </html>

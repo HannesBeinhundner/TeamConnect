@@ -29,11 +29,15 @@ export default function TopArea() {
             <Box sx={{ width: '100%' }}>
                 <Stepper activeStep={1} alternativeLabel>
                     {steps.map((label) => (
-                        <Step key={label}>
-                            <StepLabel>
+                        <Step key={label} >
+                            <StepLabel className={styles.milestone} sx={{
+                                color: 'primary.main',
+                            }}>
                                 {label}
                                 <br></br>
-                                <Typography variant="caption">Optional</Typography>
+                                <Typography sx={{
+                                    color: 'primary.main',
+                                }} variant="caption">Optional</Typography>
                             </StepLabel>
                         </Step>
                     ))}

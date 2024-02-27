@@ -15,13 +15,13 @@
 }
 
 .optionsArea {
-    background-color: blue;
+    //background-color: blue;
     display: flex;
     flex-direction: column;
-    justify-content: end;
+    justify-content: flex-end;
     padding-bottom: 2rem;
 }
 
 .mainArea {
-    background-color: yellow;
+    // background-color: yellow;
 }

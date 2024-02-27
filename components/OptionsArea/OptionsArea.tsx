@@ -14,18 +14,16 @@ export default function OptionsArea() {
     return (
         <div className={styles.container}>
             <NotificationsIcon />
-            <AccountCircleIcon />
-            {/* <Link href="/profile" className={styles.profile}>
+            <Link href="/profile" className={styles.profile}>
                 <Image
+                    className={styles.profile}
                     src={ProfileGirl}
                     alt="Girl"
-                    sizes="100px"
-                    fill
                     style={{
                         objectFit: 'cover',
                     }}
                 />
-            </Link> */}
+            </Link>
             <FormControl component="fieldset">
                 <FormGroup aria-label="position" row>
                     <FormControlLabel
