@@ -16,6 +16,12 @@ model Milestone {
   configuration   Configuration @relation(fields: [configurationId], references: [id])
 }
 
+model Configuration {
+  id         Int         @id @default(autoincrement())
+  name       String      @unique
+  milestones Milestone[]
+}
+
 model Account {
   id                String  @id @default(cuid())
   userId            String
@@ -66,10 +72,4 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
-}
-
-model Configuration {
-  id         Int         @id @default(autoincrement())
-  name       String
-  milestones Milestone[]
 }
