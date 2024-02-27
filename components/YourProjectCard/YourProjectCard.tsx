@@ -1,7 +1,6 @@
 "use client"
 
-import * as React from 'react';
-import Link from "next/link";
+import React, { useState } from 'react';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
@@ -17,6 +16,16 @@ import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import OpenInFullIcon from '@mui/icons-material/OpenInFull';
 import styles from "./YourProjectCard.module.scss"
+import { useForm, SubmitHandler } from "react-hook-form"
+import { register } from 'module';
+import { ErrorSharp } from '@mui/icons-material';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from "zod";
+import { CreateProjectSchema } from '@/app/lib/types'
+import { CreateProjectInputs } from '@/app/lib/types'
+import { addEntry } from './AddProjectAction';
+import { error } from 'console';
+
 
 export default function YourProjectCard() {
     const [open, setOpen] = React.useState(false);
@@ -29,11 +38,55 @@ export default function YourProjectCard() {
         setOpen(false);
     };
 
-    const [age, setAge] = React.useState('');
+    const [age, setAge] = useState('');
 
     const handleChange = (event: SelectChangeEvent) => {
         setAge(event.target.value);
     };
+
+
+
+    const {
+        register,
+        handleSubmit,
+        setError,
+        reset,
+        watch,
+        formState: { errors },
+    } = useForm<CreateProjectInputs>({
+        resolver: zodResolver(CreateProjectSchema)
+    })
+
+    const processForm: SubmitHandler<CreateProjectInputs> = async data => {
+        const result = await addEntry(data)
+
+        if (!result) {
+            alert("Something went wrong")
+            return
+        }
+
+        if (result.error) {
+            console.log(result.error)
+            // if (result.errors.projectName) {
+            //     setError("projectName", {
+            //         type: "server",
+            //         message: result.error.projectName
+            //     })
+            // }
+            return
+        }
+
+        console.log(result)
+
+        reset()
+    }
+
+    // const onSubmit = (data: CreateProjectInputs) => {
+    //     console.log(data)
+    //     reset()
+    // }
+
+    //console.log(watch("projectName"))
 
     return (
         <div className={styles.container}>
@@ -45,7 +98,7 @@ export default function YourProjectCard() {
             </div>
             <div className={styles.contentArea}>
                 <p>You haven’t yet created a project or joined an existing one</p>
-                <React.Fragment>
+                <>
                     <Button variant="contained" onClick={handleClickOpen}>
                         Create Project
                     </Button>
@@ -55,17 +108,6 @@ export default function YourProjectCard() {
                         fullWidth={true}
                         maxWidth={"md"}
                         className={styles.createModal}
-                        PaperProps={{
-                            component: 'form',
-                            onSubmit: (event: React.FormEvent<HTMLFormElement>) => {
-                                event.preventDefault();
-                                const formData = new FormData(event.currentTarget);
-                                const formJson = Object.fromEntries((formData as any).entries());
-                                const email = formJson.email;
-                                console.log(email);
-                                handleClose();
-                            },
-                        }}
                     >
                         <DialogTitle>Create Project</DialogTitle>
                         <IconButton
@@ -84,29 +126,22 @@ export default function YourProjectCard() {
                             <DialogContentText>
                                 Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.Stet clita kasd gubergren, no sea taLorem ipsum dolor sit amet, consetetur sadipscing elitr
                             </DialogContentText>
-                            <form action="" className={styles.formContainer}>
+                            <form onSubmit={handleSubmit(processForm)} className={styles.formContainer}>
                                 <TextField
-                                    autoFocus
-                                    required
-                                    margin="dense"
-                                    id="name"
-                                    name="email"
-                                    label="Email Address"
-                                    type="email"
-                                    fullWidth
-                                    variant="standard"
-                                />
-                                <TextField
-                                    required
+                                    //required
                                     margin="dense"
                                     id="projectName"
-                                    name="projectName"
+                                    //name="projectName"
                                     label="Project Name"
                                     type="text"
                                     fullWidth
                                     variant="standard"
+                                    {...register('projectName')}
+                                    error={!!errors.projectName}
+                                    helperText={errors.projectName?.message}
                                 />
-                                <FormControl variant="standard" sx={{ minWidth: "100%" }}>
+                                {/* {errors.projectName?.message && (<p>{errors.projectName.message}</p>)} */}
+                                {/* <FormControl variant="standard" sx={{ minWidth: "100%" }}>
                                     <InputLabel id="projectType">Project Type *</InputLabel>
                                     <Select
                                         labelId="projectType"
@@ -152,18 +187,15 @@ export default function YourProjectCard() {
                                     fullWidth
                                     multiline
                                     maxRows={4}
-                                />
+                                /> */}
+                                <DialogActions>
+                                    <Button variant="contained" type="submit">Create</Button>
+                                </DialogActions>
                             </form>
                         </DialogContent>
-                        <DialogActions>
-                            {/* <Button onClick={handleClose}>Cancel</Button> */}
-                            <Button variant="contained" type="submit">Create</Button>
-                        </DialogActions>
                     </Dialog>
-                </React.Fragment>
+                </>
             </div>
-
-
         </div>
 
 
