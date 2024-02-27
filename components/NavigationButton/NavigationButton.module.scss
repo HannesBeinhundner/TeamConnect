@@ -1,0 +1,29 @@
+@import "_variables.scss";
+@import "_mixins.scss";
+
+.container {
+    @include card;
+    overflow: hidden;
+    text-decoration: none;
+    color: $white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-height: 120px;
+    padding: 2rem;
+    background: $background-blue;
+}
+
+.textarea {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    h3 {
+        font-size: 1.5rem;
+        line-height: 2.3rem;
+        letter-spacing: 0.7px;
+        width: 140px;
+        text-transform: uppercase;
+    }
+}

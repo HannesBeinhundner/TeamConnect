@@ -13,8 +13,8 @@
 - `dokku cache:clear` -> clear the cache and ENV Varbiales on the server
 
 ## prisma
-- `npx prisma generate` -> Once you have saved your schema, use the Prisma CLI to generate the Prisma
 - `npx prisma migrate dev` ->  applies pending database migrations to synchronize the database schema with changes in your Prisma schema
+- `npx prisma generate` -> Once you have saved your schema, use the Prisma CLI to generate the Prisma
 - `npx prisma db pull` -> connects to your database and adds Prisma models to your Prisma schema that reflect the current database schema
 - `npx prisma db push` -> pushes the state of your Prisma schema file to the database without using migrations. It creates the database if the database does not exist.
 - `npx prisma db seed` -> seeds the database with dummy data
