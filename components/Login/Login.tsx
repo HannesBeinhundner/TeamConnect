@@ -5,7 +5,7 @@ import { signIn, signOut, useSession } from "next-auth/react";
 import Button from '@mui/material/Button'
 import Link from "next/link";
 import Image from "next/image";
-import LogoWhiteImg from '@/images/logo_white.svg'
+import LogoDarkImg from '@/images/logo_dark.svg'
 
 function AuthButton() {
     // const { data: session } = useSession();
@@ -27,9 +27,9 @@ export default function Login() {
         <div className={styles.container}>
             <Link href="/" className={styles.logoLink}>
                 <Image
-                    src={LogoWhiteImg}
+                    src={LogoDarkImg}
                     alt="TeamConnect Logo"
-                    width={320}
+                    width={340}
                 />
                 <p>simplify the interdisciplinary team and project finding phase</p>
             </Link>
