@@ -18,10 +18,6 @@
     }
 }
 
-.createModal form {
-    // background-color: $grey-light;
-}
-
 .contentArea {
     height: 80%;
     display: flex;
@@ -35,4 +31,11 @@
     display: flex;
     flex-direction: column;
     gap: 1.2rem;
+}
+
+.alert {
+    position: absolute;
+    top: 80px;
+    left: 50%;
+    transform: translateX(-50%);
 }

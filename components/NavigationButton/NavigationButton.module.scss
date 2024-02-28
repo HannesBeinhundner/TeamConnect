@@ -5,13 +5,13 @@
     @include card;
     overflow: hidden;
     text-decoration: none;
-    color: $white;
+    color: $black-light;
     display: flex;
     align-items: center;
     justify-content: space-between;
     max-height: 120px;
     padding: 2rem;
-    background: $background-blue;
+    border: none;
 }
 
 .textarea {

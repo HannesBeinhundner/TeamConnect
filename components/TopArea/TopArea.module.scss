@@ -17,3 +17,11 @@
 //     color: $white !important;
 //     background-color: green;
 // }
+
+.milestone {
+
+    .MuiStepLabel-label,
+    .mui-5340bo-MuiStepLabel-label.MuiStepLabel-alternativeLabel {
+        margin-top: 0.5rem !important
+    }
+}

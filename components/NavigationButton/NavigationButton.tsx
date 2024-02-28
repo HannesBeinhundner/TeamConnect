@@ -1,7 +1,6 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import findTeamMembersImg from "@/images/findTeamMembers.svg";
 import styles from "./NavigationButton.module.scss"
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 
