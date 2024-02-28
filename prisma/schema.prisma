@@ -77,6 +77,8 @@ model User {
   department    String?
   studies       String?
   username      String?
+  projectId     Int?
+  projectAdmin  Boolean   @default(false)
 }
 
 model VerificationToken {

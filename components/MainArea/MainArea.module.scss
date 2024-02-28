@@ -34,3 +34,8 @@
     grid-column: 7 / span 6;
     grid-row: 2/3;
 }
+
+.bottomCenter {
+    grid-column: 1 / span 12; // Spanning the entire row
+    grid-row: 2/3;
+}
