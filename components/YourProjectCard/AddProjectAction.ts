@@ -1,17 +1,35 @@
 'use server'
-import { z } from 'zod'
+
 import { CreateProjectSchema } from '@/app/lib/types'
 import { CreateProjectInputs } from '@/app/lib/types'
-import { NextResponse } from 'next/server'
 import { prisma } from "@/prisma";
 import { Prisma } from '@prisma/client'
+import { data } from 'autoprefixer';
 
-export async function addEntry(inputData: CreateProjectInputs) {
+
+export async function addEntry(inputData: CreateProjectInputs, sessionEmail: string | null | undefined) {
+
     const result = CreateProjectSchema.safeParse(inputData);
 
     try {
         if (result.success) {
-            await prisma.project.create({
+            if (!sessionEmail) {
+                return
+            }
+
+            //TODO: CHECK IF THE USER HAS ALREADY A PROJECT
+            const user = await prisma.user.findUnique({
+                where: {
+                    email: sessionEmail,
+                },
+            })
+
+            if (user?.projectId != null) {
+                return { success: false, error: 'A User can only create or be part of one project at a time' };
+            }
+
+            //Create Project
+            const createdProject = await prisma.project.create({
                 data: {
                     name: inputData.projectName,
                     type: inputData.projectType,
@@ -21,9 +39,23 @@ export async function addEntry(inputData: CreateProjectInputs) {
                     file: "testFile",
                     image: "testImage",
                     link: inputData.projectLink,
-                    status: "not accepted"
-                }
+                    status: "not accepted",
+                },
+                select: {
+                    id: true, // Include the 'id' field in the selection
+                },
             });
+
+            //Insert ProjectID to User and make set Admin to true
+            const updateUser = await prisma.user.update({
+                where: {
+                    email: sessionEmail,
+                },
+                data: {
+                    projectId: createdProject.id,
+                    projectAdmin: true
+                },
+            })
 
             return { success: true, data: result.data };
         }
@@ -33,7 +65,6 @@ export async function addEntry(inputData: CreateProjectInputs) {
             return { success: false, error: 'Project name must be unique.' };
         }
 
-        // Handle other errors if needed
         console.error(error);
         return { success: false, error: 'An unexpected error occurred.' };
     }

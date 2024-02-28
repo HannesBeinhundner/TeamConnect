@@ -26,37 +26,44 @@ import { z } from "zod";
 import { CreateProjectSchema } from '@/app/lib/types'
 import { CreateProjectInputs } from '@/app/lib/types'
 import { addEntry } from './AddProjectAction';
+import { signIn, signOut, useSession } from "next-auth/react";
+
 
 
 export default function YourProjectCard() {
-    const [open, setOpen] = React.useState(false);
+    const { data: session } = useSession();
+    const sessionEmail = session?.user?.email;
+
+    const [open, setOpen] = useState(false);
+    const [errorAlert, setErrorAlert] = useState(false)
+    const [sucessAlert, setSucessAlert] = useState(false)
+    const [serverErrorMessage, setserverErrorMessage] = useState("")
 
     const handleClickOpen = () => {
         setOpen(true);
     };
 
-    const handleClose = () => {
+    const handleModalClose = () => {
+        reset()
         setOpen(false);
     };
 
-    const [sucessAlert, setSucessAlert] = useState(false)
     const handleCloseAlert = () => {
         setSucessAlert(false)
+        setErrorAlert(false)
     }
 
     useEffect(() => {
-        if (sucessAlert) {
+        if (sucessAlert || errorAlert) {
             const timerId = setTimeout(() => {
-                handleClose();
-                setSucessAlert(false);  // Reset the success alert state
+                handleCloseAlert();
+                setSucessAlert(false);
+                setErrorAlert(false);
             }, 4000);
 
-            // Clear the timeout in case the component is unmounted
             return () => clearTimeout(timerId);
         }
-    }, [sucessAlert]);
-
-    const [projectTypeInput, setProjectTypeInput] = useState('');
+    }, [sucessAlert, errorAlert]);
 
     const VisuallyHiddenInput = styled('input')({
         clip: 'rect(0 0 0 0)',
@@ -70,10 +77,6 @@ export default function YourProjectCard() {
         width: 1,
     });
 
-    // const handleChange = (event: SelectChangeEvent) => {
-    //     setProjectTypeInput(event.target.value);
-    // };
-
     const {
         register,
         handleSubmit,
@@ -86,7 +89,7 @@ export default function YourProjectCard() {
     })
 
     const processForm: SubmitHandler<CreateProjectInputs> = async data => {
-        const result = await addEntry(data)
+        const result = await addEntry(data, sessionEmail)
 
         if (!result) {
             alert("Something went wrong")
@@ -94,19 +97,14 @@ export default function YourProjectCard() {
         }
 
         if (result.error) {
-            console.log(result.error)
-            setError("projectName", {
-                type: "server",
-                message: result.error.toString() // TODO: FIX MESSAGE OUTPUT TO HELPERINPUT FIELD
-            })
-
+            setserverErrorMessage(result.error.toString())
+            setErrorAlert(true)
             return
         }
 
-        console.log(result)
         setSucessAlert(true)
         reset()
-        handleClose()
+        handleModalClose()
     }
 
     return (
@@ -125,7 +123,7 @@ export default function YourProjectCard() {
                     </Button>
                     <Dialog
                         open={open}
-                        onClose={handleClose}
+                        onClose={handleModalClose}
                         fullWidth={true}
                         maxWidth={"md"}
                         className={styles.createModal}
@@ -139,7 +137,7 @@ export default function YourProjectCard() {
                         <DialogTitle>Create Project</DialogTitle>
                         <IconButton
                             aria-label="close"
-                            onClick={handleClose}
+                            onClick={handleModalClose}
                             sx={{
                                 position: 'absolute',
                                 right: 8,
@@ -155,7 +153,6 @@ export default function YourProjectCard() {
                             </DialogContentText>
                             <form onSubmit={handleSubmit(processForm)} className={styles.formContainer}>
                                 <TextField
-                                    //required
                                     margin="dense"
                                     id="projectName"
                                     label="Project Name*"
@@ -171,10 +168,7 @@ export default function YourProjectCard() {
                                     <Select
                                         labelId="projectType"
                                         id="projectType"
-                                        //value={projectTypeInput}
-                                        //onChange={handleChange}
                                         label="Project Type"
-                                        //required
                                         fullWidth
                                         {...register('projectType')}
                                         error={!!errors.projectType}
@@ -197,10 +191,7 @@ export default function YourProjectCard() {
                                     <Select
                                         labelId="projectSupervisor"
                                         id="projectSupervisor"
-                                        //value={projectTypeInput}
-                                        //onChange={handleChange}
                                         label="project Supervisor"
-                                        //required
                                         fullWidth
                                         {...register('projectSupervisor')}
                                         error={!!errors.projectSupervisor}
@@ -226,7 +217,6 @@ export default function YourProjectCard() {
                                     helperText={errors.projectLink?.message}
                                 />
                                 <TextField
-                                    //required
                                     margin="dense"
                                     id="projectDescription"
                                     label="Project Description *"
@@ -240,7 +230,6 @@ export default function YourProjectCard() {
                                     helperText={errors.projectDescription?.message}
                                 />
                                 <TextField
-                                    //required
                                     margin="dense"
                                     id="projectSkills"
                                     label="Preffered skills and study program"
@@ -283,6 +272,11 @@ export default function YourProjectCard() {
                 {sucessAlert && (
                     <Alert severity="success" onClose={handleCloseAlert} className={styles.alert}>
                         {'Your Project was successfully created!'}
+                    </Alert>
+                )}
+                {errorAlert && (
+                    <Alert severity="error" onClose={handleCloseAlert} className={styles.alert}>
+                        {serverErrorMessage}
                     </Alert>
                 )}
             </div>
