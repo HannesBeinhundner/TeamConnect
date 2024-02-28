@@ -4,14 +4,15 @@ import { options } from "@/app/api/auth/[...nextauth]/options"
 import TopArea from "@/components/TopArea/TopArea";
 import MainArea from "@/components/MainArea/MainArea";
 import OptionsArea from "@/components/OptionsArea/OptionsArea";
-import YourProjectCard from "@/components/YourProjectCard/YourProjectCard";
-import StudentStatistics from "@/components/StudentStatistics/StudentStatistics";
 import findTeamMembersImg from "@/images/findTeamMembers.svg";
-import viewAllProjectsImg from "@/images/viewAllProjects.svg";
+import backToDashboardImg from "@/images/backToDashboard.svg";
 import NavigationButton from "@/components/NavigationButton/NavigationButton";
-import styles from "@/styles/dashboard.module.scss";
+import YourProjectCard from "@/components/YourProjectCard/YourProjectCard";
 
-export default async function Dashboard() {
+import styles from "@/styles/dashboard.module.scss"
+
+
+export default async function Projects() {
     // @ts-ignore
     const session = await getServerSession(options);
     if (!session || !session.user) {
@@ -29,21 +30,20 @@ export default async function Dashboard() {
             <div className={styles.mainArea}>
                 <MainArea
                     topLeftComponent={<NavigationButton
-                        href="/members"
-                        imgSrc={findTeamMembersImg}
+                        href="../"
+                        imgSrc={backToDashboardImg}
                         altText="Illustration of a team celebrating together"
-                        buttonText="Find Team Members"
+                        buttonText="Back to Dashboard"
                     />}
                     topRightComponent={<NavigationButton
-                        href="./dashboard/projects"
-                        imgSrc={viewAllProjectsImg}
+                        href="/members"
+                        imgSrc={findTeamMembersImg}
                         altText="Illustration of a team working together"
-                        buttonText="View all projects"
+                        buttonText="Find team members"
                     />}
                     bottomLeftComponent={<YourProjectCard />}
-                    bottomRightComponent={<StudentStatistics value={60} />}
                 />
             </div>
         </div>
-    );
+    )
 }

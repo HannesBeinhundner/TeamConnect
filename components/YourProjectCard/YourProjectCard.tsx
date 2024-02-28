@@ -18,14 +18,13 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 import IconButton from '@mui/material/IconButton';
 import FormHelperText from '@mui/material/FormHelperText';
 import CloseIcon from '@mui/icons-material/Close';
-import OpenInFullIcon from '@mui/icons-material/OpenInFull';
 import styles from "./YourProjectCard.module.scss"
 import { useForm, SubmitHandler } from "react-hook-form"
 import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from "zod";
 import { CreateProjectSchema } from '@/app/lib/types'
 import { CreateProjectInputs } from '@/app/lib/types'
 import { addEntry } from './AddProjectAction';
+//import { checkProject } from './CheckProjectAction';
 import { signIn, signOut, useSession } from "next-auth/react";
 
 
@@ -116,6 +115,9 @@ export default function YourProjectCard() {
                 </Link> */}
             </div>
             <div className={styles.contentArea}>
+                {
+
+                }
                 <p>You haven’t yet created a project or joined an existing one</p>
                 <div>
                     <Button variant="contained" onClick={handleClickOpen}>
@@ -268,17 +270,17 @@ export default function YourProjectCard() {
                             </form>
                         </DialogContent>
                     </Dialog>
+                    {sucessAlert && (
+                        <Alert severity="success" onClose={handleCloseAlert} className={styles.alert}>
+                            {'Your Project was successfully created!'}
+                        </Alert>
+                    )}
+                    {errorAlert && (
+                        <Alert severity="error" onClose={handleCloseAlert} className={styles.alert}>
+                            {serverErrorMessage}
+                        </Alert>
+                    )}
                 </div>
-                {sucessAlert && (
-                    <Alert severity="success" onClose={handleCloseAlert} className={styles.alert}>
-                        {'Your Project was successfully created!'}
-                    </Alert>
-                )}
-                {errorAlert && (
-                    <Alert severity="error" onClose={handleCloseAlert} className={styles.alert}>
-                        {serverErrorMessage}
-                    </Alert>
-                )}
             </div>
         </div>
     );

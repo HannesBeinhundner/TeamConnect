@@ -4,8 +4,6 @@ import { CreateProjectSchema } from '@/app/lib/types'
 import { CreateProjectInputs } from '@/app/lib/types'
 import { prisma } from "@/prisma";
 import { Prisma } from '@prisma/client'
-import { data } from 'autoprefixer';
-
 
 export async function addEntry(inputData: CreateProjectInputs, sessionEmail: string | null | undefined) {
 
@@ -17,7 +15,6 @@ export async function addEntry(inputData: CreateProjectInputs, sessionEmail: str
                 return
             }
 
-            //TODO: CHECK IF THE USER HAS ALREADY A PROJECT
             const user = await prisma.user.findUnique({
                 where: {
                     email: sessionEmail,
@@ -46,7 +43,7 @@ export async function addEntry(inputData: CreateProjectInputs, sessionEmail: str
                 },
             });
 
-            //Insert ProjectID to User and make set Admin to true
+            //Insert ProjectID to User and set Admin to true
             const updateUser = await prisma.user.update({
                 where: {
                     email: sessionEmail,
