@@ -1,24 +1,6 @@
 @import "_variables.scss";
 @import "_mixins.scss";
 
-.container {
-    @include card;
-    background-color: $grey-light;
-    height: 100%;
-}
-
-.headerArea {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 2rem;
-
-    .expandLink {
-        text-decoration: none;
-        color: $black-light;
-    }
-}
-
 .contentArea {
     height: 100%;
     display: flex;

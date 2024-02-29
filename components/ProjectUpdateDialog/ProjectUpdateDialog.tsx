@@ -1,6 +1,5 @@
-// YourProjectUpdateDialog.tsx
-
-import React, { useState } from 'react';
+"use client"
+import React, { useState, useEffect } from 'react';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
@@ -20,14 +19,15 @@ import Select from '@mui/material/Select';
 import FormHelperText from '@mui/material/FormHelperText';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { CreateProjectInputs, CreateProjectSchema } from '@/app/lib/types';
-import styles from './ProjectUpdateDialog.module.scss'; // You can style this as needed
+import { UpdateProjectSchema } from '@/app/lib/types';
+import { UpdateProjectInputs } from '@/app/lib/types';
+import styles from './ProjectUpdateDialog.module.scss';
 import { updateProject } from './UpdateProjectAction';
 
 interface ProjectUpdateDialogProps {
     open: boolean;
     onClose: () => void;
-    projectResult: any; // Pass the existing project details
+    projectResult: any;
 }
 
 const ProjectUpdateDialog: React.FC<ProjectUpdateDialogProps> = ({ open, onClose, projectResult }) => {
@@ -47,14 +47,31 @@ const ProjectUpdateDialog: React.FC<ProjectUpdateDialogProps> = ({ open, onClose
         width: 1,
     });
 
+    const handleCloseAlert = () => {
+        setSuccessAlert(false);
+        setErrorAlert(false);
+    };
+
+    useEffect(() => {
+        if (successAlert || errorAlert) {
+            const timerId = setTimeout(() => {
+                handleCloseAlert();
+                setSuccessAlert(false);
+                setErrorAlert(false);
+            }, 3000);
+
+            return () => clearTimeout(timerId);
+        }
+    }, [successAlert, errorAlert]);
+
     const {
         register,
         handleSubmit,
         setError,
         reset,
         formState: { errors },
-    } = useForm<CreateProjectInputs>({
-        resolver: zodResolver(CreateProjectSchema),
+    } = useForm<UpdateProjectInputs>({
+        resolver: zodResolver(UpdateProjectSchema),
         defaultValues: {
             projectName: projectResult?.name || '',
             projectType: projectResult?.type || '',
@@ -65,7 +82,7 @@ const ProjectUpdateDialog: React.FC<ProjectUpdateDialogProps> = ({ open, onClose
         },
     });
 
-    const handleUpdate: SubmitHandler<CreateProjectInputs> = async (data: any) => {
+    const handleUpdate: SubmitHandler<UpdateProjectInputs> = async (data: any) => {
         const result = await updateProject(data, projectResult?.id);
 
         if (!result) {
@@ -81,14 +98,9 @@ const ProjectUpdateDialog: React.FC<ProjectUpdateDialogProps> = ({ open, onClose
 
         setSuccessAlert(true);
         onClose();
-        // setTimeout(() => {
-        //     window.location.reload();
-        // }, 3000);
-    };
-
-    const handleCloseAlert = () => {
-        setSuccessAlert(false);
-        setErrorAlert(false);
+        setTimeout(() => {
+            window.location.reload();
+        }, 3000);
     };
 
     return (

@@ -4,8 +4,10 @@ import { UpdateProjectSchema } from '@/app/lib/types';
 import { UpdateProjectInputs } from '@/app/lib/types';
 import { prisma } from '@/prisma';
 
-export async function updateProject(projectId: number, inputData: UpdateProjectInputs) {
+export async function updateProject(inputData: UpdateProjectInputs, projectId: number) {
+    console.log(inputData)
     const result = UpdateProjectSchema.safeParse(inputData);
+    // console.log(result)
 
     try {
 
@@ -13,7 +15,6 @@ export async function updateProject(projectId: number, inputData: UpdateProjectI
             return { success: false, error: 'Validation error. Check your input data.' };
         }
 
-        // Retrieve the existing project from the database
         const existingProject = await prisma.project.findUnique({
             where: { id: projectId },
         });

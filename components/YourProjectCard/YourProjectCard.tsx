@@ -39,8 +39,9 @@ export default function YourProjectCard() {
     const [projectResult, setProjectResult] = useState<any>({});
 
     const [open, setOpen] = useState(false);
+    const [updateDialogOpen, setUpdateDialogOpen] = useState(false);
     const [errorAlert, setErrorAlert] = useState(false)
-    const [sucessAlert, setSucessAlert] = useState(false)
+    const [successAlert, setSucessAlert] = useState(false)
     const [serverErrorMessage, setServerErrorMessage] = useState("")
 
     const handleClickOpen = () => {
@@ -57,7 +58,7 @@ export default function YourProjectCard() {
         setErrorAlert(false)
     }
 
-    const [updateDialogOpen, setUpdateDialogOpen] = useState(false);
+
 
     const handleUpdateDialogOpen = () => {
         setUpdateDialogOpen(true);
@@ -79,7 +80,7 @@ export default function YourProjectCard() {
     }, []);
 
     useEffect(() => {
-        if (sucessAlert || errorAlert) {
+        if (successAlert || errorAlert) {
             const timerId = setTimeout(() => {
                 handleCloseAlert();
                 setSucessAlert(false);
@@ -88,7 +89,7 @@ export default function YourProjectCard() {
 
             return () => clearTimeout(timerId);
         }
-    }, [sucessAlert, errorAlert]);
+    }, [successAlert, errorAlert]);
 
     const VisuallyHiddenInput = styled('input')({
         clip: 'rect(0 0 0 0)',
@@ -133,6 +134,8 @@ export default function YourProjectCard() {
         setTimeout(() => {
             window.location.reload();
         }, 3000);
+
+        // fetchProjectStatus again
     }
 
     return (
@@ -311,7 +314,7 @@ export default function YourProjectCard() {
                                     </form>
                                 </DialogContent>
                             </Dialog>
-                            {sucessAlert && (
+                            {successAlert && (
                                 <Alert severity="success" onClose={handleCloseAlert} className={styles.alert}>
                                     {'Your Project was successfully created!'}
                                 </Alert>
