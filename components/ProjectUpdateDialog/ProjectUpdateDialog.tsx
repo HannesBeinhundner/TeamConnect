@@ -23,18 +23,23 @@ import { UpdateProjectSchema } from '@/app/lib/types';
 import { UpdateProjectInputs } from '@/app/lib/types';
 import styles from './ProjectUpdateDialog.module.scss';
 import { updateProject } from './UpdateProjectAction';
+import { deleteProject } from './DeleteProjectAction';
+import { projectTypes } from '@/app/lib/data'
 
 interface ProjectUpdateDialogProps {
     open: boolean;
     onClose: () => void;
     projectResult: any;
-    reload: () => void;
+    reloadComponent: () => void;
+    projectSupervisors: [];
 }
 
-const ProjectUpdateDialog: React.FC<ProjectUpdateDialogProps> = ({ open, onClose, projectResult, reload }) => {
+const ProjectUpdateDialog: React.FC<ProjectUpdateDialogProps> = ({ open, onClose, projectResult, reloadComponent, projectSupervisors }) => {
     const [errorAlert, setErrorAlert] = useState(false);
     const [successAlert, setSuccessAlert] = useState(false);
+    const [successMessage, setSuccessMessage] = useState('');
     const [serverErrorMessage, setServerErrorMessage] = useState('');
+    const [confirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
 
     const VisuallyHiddenInput = styled('input')({
         clip: 'rect(0 0 0 0)',
@@ -95,9 +100,37 @@ const ProjectUpdateDialog: React.FC<ProjectUpdateDialogProps> = ({ open, onClose
             return;
         }
 
+        setSuccessMessage('Your Project was successfully updated!')
         setSuccessAlert(true);
         onClose();
-        reload();
+        reloadComponent();
+    };
+
+    const handleDeleteProject = async () => {
+        const result = await deleteProject(projectResult?.id);
+
+        if (!result) {
+            alert("Something went wrong");
+            return;
+        }
+
+        if (result.error) {
+            setServerErrorMessage(result.error.toString());
+            setErrorAlert(true);
+            return;
+        }
+        setSuccessMessage('Your Project was successfully deleted!')
+        setSuccessAlert(true);
+        onClose();
+        setInterval(() => reloadComponent(), 2000)
+    };
+
+    const handleDeleteButtonClick = () => {
+        setConfirmationDialogOpen(true);
+    };
+
+    const handleConfirmationDialogClose = () => {
+        setConfirmationDialogOpen(false);
     };
 
     return (
@@ -146,13 +179,13 @@ const ProjectUpdateDialog: React.FC<ProjectUpdateDialogProps> = ({ open, onClose
                                 <MenuItem value="">
                                     <em>None</em>
                                 </MenuItem>
-                                <MenuItem value="Web-project">Web-project</MenuItem>
-                                <MenuItem value="Game-project">Game-project</MenuItem>
-                                <MenuItem value="Film-project">Film-project</MenuItem>
-                                <MenuItem value="Audio-project">Audio-project</MenuItem>
-                                <MenuItem value="Computeranimation-project">Computeranimation-Project</MenuItem>
-                                <MenuItem value="Multimedia-project">Multimedia-project</MenuItem>
-                                <MenuItem value="other">other</MenuItem>
+                                <MenuItem value={projectTypes.web}>{projectTypes.web}</MenuItem>
+                                <MenuItem value={projectTypes.game}>{projectTypes.game}</MenuItem>
+                                <MenuItem value={projectTypes.film}>{projectTypes.film}</MenuItem>
+                                <MenuItem value={projectTypes.audio}>{projectTypes.audio}</MenuItem>
+                                <MenuItem value={projectTypes.computeranimation}>{projectTypes.computeranimation}</MenuItem>
+                                <MenuItem value={projectTypes.communicationdesign}>{projectTypes.communicationdesign}</MenuItem>
+                                <MenuItem value={projectTypes.other}>{projectTypes.other}</MenuItem>
                             </Select>
                             <FormHelperText sx={{ color: (theme) => theme.palette.error.main }}>{errors.projectType?.message}</FormHelperText>
                         </FormControl>
@@ -170,9 +203,11 @@ const ProjectUpdateDialog: React.FC<ProjectUpdateDialogProps> = ({ open, onClose
                                 <MenuItem value="">
                                     <em>None</em>
                                 </MenuItem>
-                                <MenuItem value="Melanie Daveid">Melanie Daveid</MenuItem>
-                                <MenuItem value="Florian Jindra">Florian Jindra</MenuItem>
-                                <MenuItem value="Brigitte Jellinek">Brigitte Jellinek</MenuItem>
+                                {projectSupervisors && projectSupervisors.map((supervisor: any) => (
+                                    <MenuItem key={supervisor.id} value={supervisor.name}>
+                                        {supervisor.name}
+                                    </MenuItem>
+                                ))}
                             </Select>
                             <FormHelperText sx={{ color: (theme) => theme.palette.error.main }}>{errors.projectSupervisor?.message}</FormHelperText>
                         </FormControl>
@@ -234,16 +269,34 @@ const ProjectUpdateDialog: React.FC<ProjectUpdateDialogProps> = ({ open, onClose
                             <VisuallyHiddenInput type="file" />
                         </Button>
                         <DialogActions>
+                            <Button variant="contained" color="error" onClick={handleDeleteButtonClick}>
+                                Delete Project
+                            </Button>
                             <Button variant="contained" type="submit">
                                 Update
                             </Button>
+                            <Dialog
+                                open={confirmationDialogOpen}
+                                onClose={handleConfirmationDialogClose}
+                            >
+                                <DialogTitle>Confirm Deletion</DialogTitle>
+                                <DialogContent>
+                                    <DialogContentText>
+                                        Are you sure you want to delete this project?
+                                    </DialogContentText>
+                                </DialogContent>
+                                <DialogActions>
+                                    <Button onClick={handleConfirmationDialogClose}>Cancel</Button>
+                                    <Button onClick={handleDeleteProject} color="error">Delete</Button>
+                                </DialogActions>
+                            </Dialog>
                         </DialogActions>
                     </form>
                 </DialogContent>
             </Dialog>
             {successAlert && (
                 <Alert severity="success" onClose={handleCloseAlert} className={styles.alert}>
-                    {'Your Project was successfully updated!'}
+                    {successMessage}
                 </Alert>
             )}
             {errorAlert && (

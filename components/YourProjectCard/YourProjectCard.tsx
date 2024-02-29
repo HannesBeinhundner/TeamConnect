@@ -28,15 +28,18 @@ import { CreateProjectInputs } from '@/app/lib/types'
 import { addEntry } from './AddProjectAction';
 import { useSession } from "next-auth/react";
 import { checkProject } from './CheckProjectAction';
+import { getSupervisors } from './GetSupervisorsAction';
 import YourProjectInformationArea from '../YourProjectInfoArea/YourProjectInfoArea';
 import ProjectUpdateDialog from '@/components/ProjectUpdateDialog/ProjectUpdateDialog';
+import { projectTypes } from '@/app/lib/data'
 
 
 export default function YourProjectCard() {
     const { data: session } = useSession();
     const sessionEmail = session?.user?.email;
     const [checkProjectResult, setCheckProjectResult] = useState(false);
-    const [projectResult, setProjectResult] = useState<any>({});
+    const [projectResult, setProjectResult] = useState<any>([]);
+    const [projectSupervisors, setProjectSupervisors] = useState<any>([]);
 
     const [open, setOpen] = useState(false);
     const [updateDialogOpen, setUpdateDialogOpen] = useState(false);
@@ -71,6 +74,11 @@ export default function YourProjectCard() {
         projectResult ? setCheckProjectResult(true) : setCheckProjectResult(false)
         setProjectResult(projectResult);
         console.log(projectResult)
+
+        //Fetch Supervisors
+        const supervisorsResult: any = await getSupervisors();
+        console.log(supervisorsResult.data)
+        setProjectSupervisors(supervisorsResult.data || []);
     };
 
     useEffect(() => {
@@ -145,7 +153,8 @@ export default function YourProjectCard() {
                     open={updateDialogOpen}
                     onClose={handleUpdateDialogClose}
                     projectResult={projectResult}
-                    reload={fetchProjectStatus}
+                    reloadComponent={fetchProjectStatus}
+                    projectSupervisors={projectSupervisors}
                 />
             )
             }
@@ -154,7 +163,7 @@ export default function YourProjectCard() {
                 {checkProjectResult ? (
                     <YourProjectInformationArea projectResult={projectResult} />
                 ) : (
-                    <>
+                    <div className={styles.emptyProjectArea}>
                         <p>You haven’t yet created a project or joined an existing one</p>
                         <div>
                             <Button variant="contained" onClick={handleClickOpen}>
@@ -215,13 +224,13 @@ export default function YourProjectCard() {
                                                 <MenuItem value="">
                                                     <em>None</em>
                                                 </MenuItem>
-                                                <MenuItem value={"Web-project"}>Web-project</MenuItem>
-                                                <MenuItem value={"Game-project"}>Game-project</MenuItem>
-                                                <MenuItem value={"Film-project"}>Film-project</MenuItem>
-                                                <MenuItem value={"Audio-project"}>Audio-project</MenuItem>
-                                                <MenuItem value={"Computeranimation-project"}>Computeranimation-Project</MenuItem>
-                                                <MenuItem value={"Multimedia-project"}> Multimedia-project</MenuItem>
-                                                <MenuItem value={"other"}>other</MenuItem>
+                                                <MenuItem value={projectTypes.web}>{projectTypes.web}</MenuItem>
+                                                <MenuItem value={projectTypes.game}>{projectTypes.game}</MenuItem>
+                                                <MenuItem value={projectTypes.film}>{projectTypes.film}</MenuItem>
+                                                <MenuItem value={projectTypes.audio}>{projectTypes.audio}</MenuItem>
+                                                <MenuItem value={projectTypes.computeranimation}>{projectTypes.computeranimation}</MenuItem>
+                                                <MenuItem value={projectTypes.communicationdesign}>{projectTypes.communicationdesign}</MenuItem>
+                                                <MenuItem value={projectTypes.other}>{projectTypes.other}</MenuItem>
                                             </Select>
                                             <FormHelperText sx={{ color: (theme) => theme.palette.error.main }}>{errors.projectType?.message}</FormHelperText>
                                         </FormControl>
@@ -238,9 +247,12 @@ export default function YourProjectCard() {
                                                 <MenuItem value="">
                                                     <em>None</em>
                                                 </MenuItem>
-                                                <MenuItem value={"Melanie Daveid"}>Melanie Daveid</MenuItem>
-                                                <MenuItem value={"Florian Jindra"}>Florian Jindra</MenuItem>
-                                                <MenuItem value={"Brigitte Jellinek"}>Brigitte Jellinek</MenuItem>
+
+                                                {projectSupervisors && projectSupervisors.map((supervisor: any) => (
+                                                    <MenuItem key={supervisor.id} value={supervisor.name}>
+                                                        {supervisor.name}
+                                                    </MenuItem>
+                                                ))}
                                             </Select>
                                             <FormHelperText sx={{ color: (theme) => theme.palette.error.main }}>{errors.projectSupervisor?.message}</FormHelperText>
                                         </FormControl>
@@ -318,7 +330,7 @@ export default function YourProjectCard() {
                                 </Alert>
                             )}
                         </div>
-                    </>
+                    </div>
                 )}
             </div>
         </div >

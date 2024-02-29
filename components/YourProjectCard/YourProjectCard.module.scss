@@ -26,6 +26,14 @@
     justify-content: flex-start;
     align-items: center;
     gap: 0.3rem;
+
+    .emptyProjectArea {
+        margin-top: 4rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
 }
 
 .formContainer {
