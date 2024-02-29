@@ -26,3 +26,11 @@ export const CreateProjectSchema = z.object({
 });
 
 export type CreateProjectInputs = z.infer<typeof CreateProjectSchema>
+
+export const ApplyFilterSchema = z.object({
+    projectSearch: z.string(),
+    projectType: z.string(),
+    projectStatus: z.string()
+});
+
+export type ApplyFilterInputs = z.infer<typeof ApplyFilterSchema>

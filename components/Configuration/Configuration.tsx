@@ -19,7 +19,7 @@ interface ConfigResponse {
 export default function Configuration() {
     const [configName, setConfigName] = useState<string>('');
     const [milestones, setMilestones] = useState<Milestone[]>([{ name: '', date: new Date() }]);
-    
+
     const handleInputChange = (index: number, field: keyof Milestone, value: string) => {
         const newMilestones = [...milestones];
         if (field === 'date') {
@@ -48,17 +48,17 @@ export default function Configuration() {
 
                 debugger
                 await addMilestoneAction(configId, formattedMilestones);
-                toast.success('Configuration and milestones added successfully');
+                    toast.success('Configuration and milestones added successfully');
             } else {
                 toast.error('Error creating configuration');
             }
         } catch (error:any) {
             toast.error('Error: ' + error.message);
         }
-    };
+    };    
+
     
-    
-    
+
     const addMilestone = () => {
         setMilestones([...milestones, { name: '', date: new Date() }]);
     };
