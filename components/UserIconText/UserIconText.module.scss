@@ -1,0 +1,28 @@
+@import "_variables.scss";
+@import "_mixins.scss";
+
+.container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 0.3rem;
+
+    .textArea {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .smallText {
+        margin: 0;
+        font-size: 0.5rem;
+        letter-spacing: 0.7px;
+        text-transform: uppercase;
+    }
+
+    .text {
+        margin: 0;
+        font-size: 0.8rem;
+        letter-spacing: 0.7px;
+    }
+}

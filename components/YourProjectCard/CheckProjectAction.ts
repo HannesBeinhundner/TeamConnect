@@ -1,10 +1,41 @@
 'use server'
 
-import { CreateProjectSchema } from '@/app/lib/types'
-import { CreateProjectInputs } from '@/app/lib/types'
 import { prisma } from "@/prisma";
-import { Prisma } from '@prisma/client'
 
 export async function checkProject(sessionEmail: string | null | undefined) {
+    try {
+        if (!sessionEmail) {
+            return
+        }
 
+        const user = await prisma.user.findUnique({
+            where: {
+                email: sessionEmail,
+            },
+        })
+
+        if (user?.projectId) {
+            let project = await prisma.project.findUnique({
+                where: {
+                    id: user.projectId,
+                },
+            })
+
+            if (project) {
+                const joinedUsers = await prisma.user.findMany({
+                    where: {
+                        projectId: project.id,
+                    },
+                })
+                //@ts-ignore
+                project = { ...project, users: joinedUsers };
+                return project;
+            }
+        }
+
+        return false;
+
+    } catch (error) {
+        return { success: false, error: 'An unexpected error occurred.' };
+    }
 }

@@ -33,6 +33,7 @@ model Project {
   link        String @db.VarChar(256)
   status      String @db.VarChar(256)
   image       String @db.VarChar(256)
+  User        User[]
 }
 
 model Account {
@@ -79,6 +80,7 @@ model User {
   username      String?
   projectId     Int?
   projectAdmin  Boolean   @default(false)
+  project       Project?  @relation(fields: [projectId], references: [id], onDelete: SetNull)
 }
 
 model VerificationToken {
