@@ -8,7 +8,7 @@
     border: 1px 1px 0 0 solid $grey-light;
     height: 100%;
     padding: 2rem;
-
+    overflow-y: auto;
     display: grid;
     grid-template-columns: repeat(12, 1fr);
     grid-template-rows: min-content auto;

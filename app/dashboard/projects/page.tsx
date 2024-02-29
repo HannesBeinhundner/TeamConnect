@@ -28,14 +28,14 @@ export default async function Projects() {
             </div>
             <div className={styles.mainArea}>
                 <MainArea
-                    topLeftComponent={<NavigationButton
+                    topRightComponent={<NavigationButton
                         href="../"
                         imgSrc={backToDashboardImg}
                         altText="Illustration of a team celebrating together"
                         buttonText="Back to Dashboard"
                     />}
-                    topRightComponent={<NavigationButton
-                        href="/members"
+                    topLeftComponent={<NavigationButton
+                        href="../dashboard/members"
                         imgSrc={findTeamMembersImg}
                         altText="Illustration of a team working together"
                         buttonText="Find team members"

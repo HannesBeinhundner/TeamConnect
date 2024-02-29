@@ -1,0 +1,69 @@
+@import "_variables.scss";
+@import "_mixins.scss";
+
+.projectInformationArea {
+    @include card;
+    background-color: $grey-dark;
+    display: flex;
+    flex-direction: column;
+    width: 45%;
+    gap: 1.25rem;
+
+    .titleArea {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 1.2rem;
+
+        .profile {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            overflow: hidden;
+        }
+    }
+
+    .propertyArea {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.75rem;
+
+        .chipLink {
+            text-decoration: none;
+        }
+
+        .chipColor {
+            background-color: $grey-light;
+        }
+    }
+
+    .teamArea {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .descriptionArea {
+        min-height: 5rem;
+        p {
+            max-height: 6rem;
+            overflow: hidden;
+            word-wrap: break-word;
+            text-overflow: ellipsis;
+            -webkit-line-clamp: 4;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            line-clamp: 4;
+            box-orient: vertical;
+        }
+        .requestButton {
+            display: flex;
+            align-items: flex-end;
+            justify-content: end;
+            gap: 25px;
+        }
+    }
+}
