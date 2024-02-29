@@ -28,9 +28,10 @@ interface ProjectUpdateDialogProps {
     open: boolean;
     onClose: () => void;
     projectResult: any;
+    reload: () => void;
 }
 
-const ProjectUpdateDialog: React.FC<ProjectUpdateDialogProps> = ({ open, onClose, projectResult }) => {
+const ProjectUpdateDialog: React.FC<ProjectUpdateDialogProps> = ({ open, onClose, projectResult, reload }) => {
     const [errorAlert, setErrorAlert] = useState(false);
     const [successAlert, setSuccessAlert] = useState(false);
     const [serverErrorMessage, setServerErrorMessage] = useState('');
@@ -56,8 +57,6 @@ const ProjectUpdateDialog: React.FC<ProjectUpdateDialogProps> = ({ open, onClose
         if (successAlert || errorAlert) {
             const timerId = setTimeout(() => {
                 handleCloseAlert();
-                setSuccessAlert(false);
-                setErrorAlert(false);
             }, 3000);
 
             return () => clearTimeout(timerId);
@@ -98,150 +97,150 @@ const ProjectUpdateDialog: React.FC<ProjectUpdateDialogProps> = ({ open, onClose
 
         setSuccessAlert(true);
         onClose();
-        setTimeout(() => {
-            window.location.reload();
-        }, 3000);
+        reload();
     };
 
     return (
-        <Dialog open={open} onClose={onClose} fullWidth maxWidth="md" className={styles.updateModal}>
-            <DialogTitle>Update Project</DialogTitle>
-            <IconButton
-                aria-label="close"
-                onClick={onClose}
-                sx={{
-                    position: 'absolute',
-                    right: 8,
-                    top: 8,
-                    color: (theme) => theme.palette.grey[700],
-                }}
-            >
-                <CloseIcon />
-            </IconButton>
-            <DialogContent>
-                <DialogContentText sx={{ color: '#1C1C1C' }}>
-                    Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
-                </DialogContentText>
-                <form onSubmit={handleSubmit(handleUpdate)} className={styles.formContainer}>
-                    <TextField
-                        margin="dense"
-                        id="projectName"
-                        label="Project Name*"
-                        type="text"
-                        fullWidth
-                        variant="standard"
-                        {...register('projectName')}
-                        error={!!errors.projectName}
-                        helperText={errors.projectName?.message}
-                    />
-                    <FormControl variant="standard" sx={{ minWidth: '100%' }} error={!!errors.projectType}>
-                        <InputLabel id="projectType">Project Type *</InputLabel>
-                        <Select
-                            labelId="projectType"
-                            id="projectType"
-                            label="Project Type"
+        <>
+            <Dialog open={open} onClose={onClose} fullWidth maxWidth="md" className={styles.updateModal}>
+                <DialogTitle>Update Project</DialogTitle>
+                <IconButton
+                    aria-label="close"
+                    onClick={onClose}
+                    sx={{
+                        position: 'absolute',
+                        right: 8,
+                        top: 8,
+                        color: (theme) => theme.palette.grey[700],
+                    }}
+                >
+                    <CloseIcon />
+                </IconButton>
+                <DialogContent>
+                    <DialogContentText sx={{ color: '#1C1C1C' }}>
+                        Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
+                    </DialogContentText>
+                    <form onSubmit={handleSubmit(handleUpdate)} className={styles.formContainer}>
+                        <TextField
+                            margin="dense"
+                            id="projectName"
+                            label="Project Name*"
+                            type="text"
                             fullWidth
-                            defaultValue={projectResult?.type}
-                            {...register('projectType')}
-                            error={!!errors.projectType}
-                        >
-                            <MenuItem value="">
-                                <em>None</em>
-                            </MenuItem>
-                            <MenuItem value="Web-project">Web-project</MenuItem>
-                            <MenuItem value="Game-project">Game-project</MenuItem>
-                            <MenuItem value="Film-project">Film-project</MenuItem>
-                            <MenuItem value="Audio-project">Audio-project</MenuItem>
-                            <MenuItem value="Computeranimation-project">Computeranimation-Project</MenuItem>
-                            <MenuItem value="Multimedia-project">Multimedia-project</MenuItem>
-                            <MenuItem value="other">other</MenuItem>
-                        </Select>
-                        <FormHelperText sx={{ color: (theme) => theme.palette.error.main }}>{errors.projectType?.message}</FormHelperText>
-                    </FormControl>
-                    <FormControl variant="standard" sx={{ minWidth: '100%' }} error={!!errors.projectSupervisor}>
-                        <InputLabel id="projectSupervisor">Project Supervisor *</InputLabel>
-                        <Select
-                            labelId="projectSupervisor"
-                            id="projectSupervisor"
-                            label="Project Supervisor"
+                            variant="standard"
+                            {...register('projectName')}
+                            error={!!errors.projectName}
+                            helperText={errors.projectName?.message}
+                        />
+                        <FormControl variant="standard" sx={{ minWidth: '100%' }} error={!!errors.projectType}>
+                            <InputLabel id="projectType">Project Type *</InputLabel>
+                            <Select
+                                labelId="projectType"
+                                id="projectType"
+                                label="Project Type"
+                                fullWidth
+                                defaultValue={projectResult?.type}
+                                {...register('projectType')}
+                                error={!!errors.projectType}
+                            >
+                                <MenuItem value="">
+                                    <em>None</em>
+                                </MenuItem>
+                                <MenuItem value="Web-project">Web-project</MenuItem>
+                                <MenuItem value="Game-project">Game-project</MenuItem>
+                                <MenuItem value="Film-project">Film-project</MenuItem>
+                                <MenuItem value="Audio-project">Audio-project</MenuItem>
+                                <MenuItem value="Computeranimation-project">Computeranimation-Project</MenuItem>
+                                <MenuItem value="Multimedia-project">Multimedia-project</MenuItem>
+                                <MenuItem value="other">other</MenuItem>
+                            </Select>
+                            <FormHelperText sx={{ color: (theme) => theme.palette.error.main }}>{errors.projectType?.message}</FormHelperText>
+                        </FormControl>
+                        <FormControl variant="standard" sx={{ minWidth: '100%' }} error={!!errors.projectSupervisor}>
+                            <InputLabel id="projectSupervisor">Project Supervisor *</InputLabel>
+                            <Select
+                                labelId="projectSupervisor"
+                                id="projectSupervisor"
+                                label="Project Supervisor"
+                                fullWidth
+                                defaultValue={projectResult?.supervisor}
+                                {...register('projectSupervisor')}
+                                error={!!errors.projectSupervisor}
+                            >
+                                <MenuItem value="">
+                                    <em>None</em>
+                                </MenuItem>
+                                <MenuItem value="Melanie Daveid">Melanie Daveid</MenuItem>
+                                <MenuItem value="Florian Jindra">Florian Jindra</MenuItem>
+                                <MenuItem value="Brigitte Jellinek">Brigitte Jellinek</MenuItem>
+                            </Select>
+                            <FormHelperText sx={{ color: (theme) => theme.palette.error.main }}>{errors.projectSupervisor?.message}</FormHelperText>
+                        </FormControl>
+                        <TextField
+                            margin="dense"
+                            id="projectLink"
+                            label="Project Link"
+                            type="text"
                             fullWidth
-                            defaultValue={projectResult?.supervisor}
-                            {...register('projectSupervisor')}
-                            error={!!errors.projectSupervisor}
+                            variant="standard"
+                            {...register('projectLink')}
+                            error={!!errors.projectLink}
+                            helperText={errors.projectLink?.message}
+                        />
+                        <TextField
+                            margin="dense"
+                            id="projectDescription"
+                            label="Project Description *"
+                            type="text"
+                            placeholder="Specify what your project is about..."
+                            fullWidth
+                            multiline
+                            maxRows={4}
+                            {...register('projectDescription')}
+                            error={!!errors.projectDescription}
+                            helperText={errors.projectDescription?.message}
+                        />
+                        <TextField
+                            margin="dense"
+                            id="projectSkills"
+                            label="Preferred skills and study program"
+                            type="text"
+                            placeholder="Specify desired team skills and relevant student courses for your project..."
+                            fullWidth
+                            multiline
+                            maxRows={4}
+                            {...register('projectSkills')}
+                            error={!!errors.projectSkills}
+                            helperText={errors.projectSkills?.message}
+                        />
+                        <Button
+                            component="label"
+                            role={undefined}
+                            variant="contained"
+                            tabIndex={-1}
+                            startIcon={<CloudUploadIcon />}
                         >
-                            <MenuItem value="">
-                                <em>None</em>
-                            </MenuItem>
-                            <MenuItem value="Melanie Daveid">Melanie Daveid</MenuItem>
-                            <MenuItem value="Florian Jindra">Florian Jindra</MenuItem>
-                            <MenuItem value="Brigitte Jellinek">Brigitte Jellinek</MenuItem>
-                        </Select>
-                        <FormHelperText sx={{ color: (theme) => theme.palette.error.main }}>{errors.projectSupervisor?.message}</FormHelperText>
-                    </FormControl>
-                    <TextField
-                        margin="dense"
-                        id="projectLink"
-                        label="Project Link"
-                        type="text"
-                        fullWidth
-                        variant="standard"
-                        {...register('projectLink')}
-                        error={!!errors.projectLink}
-                        helperText={errors.projectLink?.message}
-                    />
-                    <TextField
-                        margin="dense"
-                        id="projectDescription"
-                        label="Project Description *"
-                        type="text"
-                        placeholder="Specify what your project is about..."
-                        fullWidth
-                        multiline
-                        maxRows={4}
-                        {...register('projectDescription')}
-                        error={!!errors.projectDescription}
-                        helperText={errors.projectDescription?.message}
-                    />
-                    <TextField
-                        margin="dense"
-                        id="projectSkills"
-                        label="Preferred skills and study program"
-                        type="text"
-                        placeholder="Specify desired team skills and relevant student courses for your project..."
-                        fullWidth
-                        multiline
-                        maxRows={4}
-                        {...register('projectSkills')}
-                        error={!!errors.projectSkills}
-                        helperText={errors.projectSkills?.message}
-                    />
-                    <Button
-                        component="label"
-                        role={undefined}
-                        variant="contained"
-                        tabIndex={-1}
-                        startIcon={<CloudUploadIcon />}
-                    >
-                        Upload Project Logo
-                        <VisuallyHiddenInput type="file" />
-                    </Button>
-                    <Button
-                        component="label"
-                        role={undefined}
-                        variant="contained"
-                        tabIndex={-1}
-                        startIcon={<CloudUploadIcon />}
-                    >
-                        Upload Exposé
-                        <VisuallyHiddenInput type="file" />
-                    </Button>
-                    <DialogActions>
-                        <Button variant="contained" type="submit">
-                            Update
+                            Upload Project Logo
+                            <VisuallyHiddenInput type="file" />
                         </Button>
-                    </DialogActions>
-                </form>
-            </DialogContent>
+                        <Button
+                            component="label"
+                            role={undefined}
+                            variant="contained"
+                            tabIndex={-1}
+                            startIcon={<CloudUploadIcon />}
+                        >
+                            Upload Exposé
+                            <VisuallyHiddenInput type="file" />
+                        </Button>
+                        <DialogActions>
+                            <Button variant="contained" type="submit">
+                                Update
+                            </Button>
+                        </DialogActions>
+                    </form>
+                </DialogContent>
+            </Dialog>
             {successAlert && (
                 <Alert severity="success" onClose={handleCloseAlert} className={styles.alert}>
                     {'Your Project was successfully updated!'}
@@ -252,7 +251,7 @@ const ProjectUpdateDialog: React.FC<ProjectUpdateDialogProps> = ({ open, onClose
                     {serverErrorMessage}
                 </Alert>
             )}
-        </Dialog>
+        </>
     );
 };
 

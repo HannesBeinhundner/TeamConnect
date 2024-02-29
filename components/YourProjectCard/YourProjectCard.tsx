@@ -58,8 +58,6 @@ export default function YourProjectCard() {
         setErrorAlert(false)
     }
 
-
-
     const handleUpdateDialogOpen = () => {
         setUpdateDialogOpen(true);
     };
@@ -68,14 +66,14 @@ export default function YourProjectCard() {
         setUpdateDialogOpen(false);
     };
 
-    useEffect(() => {
-        const fetchProjectStatus = async () => {
-            const projectResult: any = await checkProject(sessionEmail);
-            projectResult ? setCheckProjectResult(true) : setCheckProjectResult(false)
-            setProjectResult(projectResult);
-            console.log(projectResult)
-        };
+    const fetchProjectStatus = async () => {
+        const projectResult: any = await checkProject(sessionEmail);
+        projectResult ? setCheckProjectResult(true) : setCheckProjectResult(false)
+        setProjectResult(projectResult);
+        console.log(projectResult)
+    };
 
+    useEffect(() => {
         fetchProjectStatus();
     }, []);
 
@@ -83,8 +81,6 @@ export default function YourProjectCard() {
         if (successAlert || errorAlert) {
             const timerId = setTimeout(() => {
                 handleCloseAlert();
-                setSucessAlert(false);
-                setErrorAlert(false);
             }, 3000);
 
             return () => clearTimeout(timerId);
@@ -131,11 +127,7 @@ export default function YourProjectCard() {
         setSucessAlert(true)
         reset()
         handleModalClose()
-        setTimeout(() => {
-            window.location.reload();
-        }, 3000);
-
-        // fetchProjectStatus again
+        fetchProjectStatus();
     }
 
     return (
@@ -153,6 +145,7 @@ export default function YourProjectCard() {
                     open={updateDialogOpen}
                     onClose={handleUpdateDialogClose}
                     projectResult={projectResult}
+                    reload={fetchProjectStatus}
                 />
             )
             }
