@@ -27,6 +27,7 @@ export const CreateProjectSchema = z.object({
 
 export type CreateProjectInputs = z.infer<typeof CreateProjectSchema>
 
+
 export const UpdateProjectSchema = z.object({
     projectName: z.string().min(1, { message: 'Project name is required' }),
     projectType: z.string().min(1, { message: 'Project type is required' }),
@@ -36,3 +37,12 @@ export const UpdateProjectSchema = z.object({
     projectLink: z.string().max(256, { message: 'Portfolio link is too long' }),
 });
 export type UpdateProjectInputs = z.infer<typeof UpdateProjectSchema>;
+
+export const ApplyFilterSchema = z.object({
+    projectSearch: z.string(),
+    projectType: z.string(),
+    projectStatus: z.string()
+});
+
+export type ApplyFilterInputs = z.infer<typeof ApplyFilterSchema>
+
