@@ -6,7 +6,7 @@
     height: 100%;
     width: 100%;
     display: grid;
-    grid-template-columns: 100px 1fr;
+    grid-template-columns: 90px 1fr;
     grid-template-rows: min-content;
 }
 
@@ -23,5 +23,6 @@
 }
 
 .mainArea {
-    // background-color: yellow;
+    //background-color: yellow;
+    overflow-x: hidden;
 }

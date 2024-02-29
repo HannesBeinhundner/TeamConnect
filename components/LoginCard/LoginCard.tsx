@@ -12,7 +12,7 @@ export default function LoginCard() {
             <Image
                 src={LoginImg}
                 alt="Illustration of a team working together"
-                width={400}
+                width={600}
             />
         </div>
     )
