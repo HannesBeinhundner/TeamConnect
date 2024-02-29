@@ -46,3 +46,10 @@ export const ApplyFilterSchema = z.object({
 
 export type ApplyFilterInputs = z.infer<typeof ApplyFilterSchema>
 
+export const FindTeamMemberSchema = z.object({
+    memberSearch: z.string(),
+    studyProgram: z.string(),
+});
+
+export type FindTeamMemberInputs = z.infer<typeof FindTeamMemberSchema>
+

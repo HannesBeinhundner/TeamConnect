@@ -14,7 +14,7 @@ import styles from "./ViewAllProjectsCard.module.scss";
 import Link from "next/link";
 import CustomProjectLogo from '@/images/customProjectLogo.svg'
 import { Button } from '@mui/material';
-import { getProjectUsers } from '../ViewAllProjects/GetProjectUsersAction';
+import { getProjectUsers } from './GetProjectUsersAction';
 
 //@ts-ignore
 export default function ViewAllProjectsCard({ projectResult }) {

@@ -8,34 +8,32 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import FormHelperText from '@mui/material/FormHelperText';
-import styles from "./ViewAllProjects.module.scss"
+import styles from "./FindTeamMembers.module.scss"
 import { useForm, SubmitHandler } from "react-hook-form"
 import { zodResolver } from '@hookform/resolvers/zod';
-import { ApplyFilterInputs, ApplyFilterSchema, CreateProjectSchema } from '@/app/lib/types'
-import { CreateProjectInputs } from '@/app/lib/types'
+import { FindTeamMemberInputs, FindTeamMemberSchema } from '@/app/lib/types'
 //import { checkProject } from './CheckProjectAction';
 import { signIn, signOut, useSession } from "next-auth/react";
 import { Box, Input, InputAdornment } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
-import { ApplyFilter } from './ApplyFilterAction';
-import ViewAllProjectsCard from '../ViewAllProjectsCard/ViewAllProjectsCard';
-import { projectTypes } from '@/app/lib/data';
+import FindTeamMembersCard from '../FindTeamMembersCard/FindTeamMembersCard';
+import { studyProgramTypes } from '@/app/lib/data';
+import { UserFilter } from './UserFilterAction';
 
-export default function ViewAllProjects() {
-    const [projectsResult, setProjectsResult] = useState<any>({});
+export default function FindTeamMembers() {
+    const [userResult, setUserResult] = useState<any>({});
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const data = {
-                    projectSearch: "",
-                    projectType: "",
-                    projectStatus: ""
+                    memberSearch: "",
+                    studyProgram: ""
                 };
-                const response = await ApplyFilter(data);
+                const response = await UserFilter(data);
     
                 if (response.success && Array.isArray(response.data)) {
-                    setProjectsResult(response.data);
+                    setUserResult(response.data);
                 } else {
                     console.error('Error: ApplyFilter did not return a successful response or data is not an array.');
                 }
@@ -57,18 +55,18 @@ export default function ViewAllProjects() {
         reset,
         watch,
         formState: { errors },
-    } = useForm<ApplyFilterInputs>({
-        resolver: zodResolver(ApplyFilterSchema)
+    } = useForm<FindTeamMemberInputs>({
+        resolver: zodResolver(FindTeamMemberSchema)
     })
     
-    const processForm: SubmitHandler<ApplyFilterInputs> = async data => {
+    const processForm: SubmitHandler<FindTeamMemberInputs> = async data => {
         try {
             // Call ApplyFilter with form data
-            const filteredProjects = await ApplyFilter(data);
+            const filteredUsers = await UserFilter(data);
     
-            if (filteredProjects && filteredProjects.success && Array.isArray(filteredProjects.data)) {
+            if (filteredUsers && filteredUsers.success && Array.isArray(filteredUsers.data)) {
                 // Set the filtered project data
-                setProjectsResult(filteredProjects.data);
+                setUserResult(filteredUsers.data);
             } else {
                 // Handle error if ApplyFilter didn't return expected data
                 console.error('Error: ApplyFilter did not return the expected data.');
@@ -86,7 +84,7 @@ export default function ViewAllProjects() {
     return (
         <div className={styles.container}>
             <div className={styles.headerArea}>
-                <h5>View All Projects</h5>
+                <h5>Find Team Members</h5>
             </div>
             <div className={styles.contentArea}>
                 <form onSubmit={handleSubmit(processForm)} className={styles.filterArea}>
@@ -96,50 +94,30 @@ export default function ViewAllProjects() {
                         />
                         <TextField
                             sx={{ minWidth: "100%" }}
-                            id="projectSearch" 
-                            label="projectSearch" 
+                            id="memberSearch" 
+                            label="Search for member..." 
                             variant="standard" 
-                            {...register('projectSearch')}
+                            {...register('memberSearch')}
                         />
                     </Box>
                     <FormControl variant="standard" sx={{ minWidth: "15%", maxWidth: "70%" }}>
-                        <InputLabel id="projectType">Project Type *</InputLabel>
+                        <InputLabel id="studyProgram">Study Program</InputLabel>
                         <Select
-                            labelId="projectType"
-                            id="projectType"
-                            label="Project Type"
+                            labelId="studyProgram"
+                            id="studyProgram"
+                            label="studyProgram"
                             fullWidth
-                            {...register('projectType')}
-                            // error={!!errors.projectType}
+                            {...register('studyProgram')}
                         >
                             <MenuItem value="">
                                 <em>None</em>
                             </MenuItem>
-                            <MenuItem value={projectTypes.web}>{projectTypes.web}</MenuItem>
-                            <MenuItem value={projectTypes.game}>{projectTypes.game}</MenuItem>
-                            <MenuItem value={projectTypes.film}>{projectTypes.film}</MenuItem>
-                            <MenuItem value={projectTypes.audio}>{projectTypes.audio}</MenuItem>
-                            <MenuItem value={projectTypes.computeranimation}>{projectTypes.computeranimation}</MenuItem>
-                            <MenuItem value={projectTypes.communicationdesign}>{projectTypes.communicationdesign}</MenuItem>
-                            <MenuItem value={projectTypes.other}>{projectTypes.other}</MenuItem>
-                        </Select>
-                        <FormHelperText sx={{ color: (theme) => theme.palette.error.main }}></FormHelperText>
-                    </FormControl>
-                    <FormControl variant="standard" sx={{ minWidth: "15%", maxWidth: "70%" }}>
-                        <InputLabel id="projectStatus">Project Status *</InputLabel>
-                        <Select
-                            labelId="projectStatus"
-                            id="projectStatus"
-                            label="projectStatus"
-                            fullWidth
-                            {...register('projectStatus')}
-                            error={!!errors.projectType}
-                        >
-                            <MenuItem value="">
-                                <em>None</em>
-                            </MenuItem>
-                            <MenuItem value={"Accepted"}>Accepted</MenuItem>
-                            <MenuItem value={"Declined"}>Declined</MenuItem>
+                            <MenuItem value={studyProgramTypes.web}>{studyProgramTypes.web}</MenuItem>
+                            <MenuItem value={studyProgramTypes.game}>{studyProgramTypes.game}</MenuItem>
+                            <MenuItem value={studyProgramTypes.film}>{studyProgramTypes.film}</MenuItem>
+                            <MenuItem value={studyProgramTypes.audio}>{studyProgramTypes.audio}</MenuItem>
+                            <MenuItem value={studyProgramTypes.computeranimation}>{studyProgramTypes.computeranimation}</MenuItem>
+                            <MenuItem value={studyProgramTypes.communicationdesign}>{studyProgramTypes.communicationdesign}</MenuItem>
                         </Select>
                         <FormHelperText sx={{ color: (theme) => theme.palette.error.main }}></FormHelperText>
                     </FormControl>
@@ -150,8 +128,8 @@ export default function ViewAllProjects() {
                     </Button>
                 </form>
                 <div className={styles.cardsArea}>
-                    {Array.isArray(projectsResult) && projectsResult.map((project: any) => (
-                        <ViewAllProjectsCard key={project.id} projectResult={project} />
+                    {Array.isArray(userResult) && userResult.map((user: any) => (
+                        <FindTeamMembersCard key={user.id} userResult={user} />
                     ))}
                 </div>
                 </div>
