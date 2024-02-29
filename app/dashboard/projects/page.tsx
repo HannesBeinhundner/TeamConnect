@@ -7,9 +7,8 @@ import OptionsArea from "@/components/OptionsArea/OptionsArea";
 import findTeamMembersImg from "@/images/findTeamMembers.svg";
 import backToDashboardImg from "@/images/backToDashboard.svg";
 import NavigationButton from "@/components/NavigationButton/NavigationButton";
-import YourProjectCard from "@/components/YourProjectCard/YourProjectCard";
-
 import styles from "@/styles/dashboard.module.scss"
+import ViewAllProjects from "@/components/ViewAllProjects/ViewAllProjects";
 
 
 export default async function Projects() {
@@ -41,7 +40,7 @@ export default async function Projects() {
                         altText="Illustration of a team working together"
                         buttonText="Find team members"
                     />}
-                    bottomLeftComponent={<YourProjectCard />}
+                    bottomLeftComponent={<ViewAllProjects />}
                 />
             </div>
         </div>
