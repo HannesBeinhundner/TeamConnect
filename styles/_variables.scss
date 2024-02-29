@@ -22,5 +22,6 @@ $inner-shadow: inset 1px 1px 15px rgba(0, 0, 0, 0.25);
 
 // BACKGROUNDS
 // $background-red: linear-gradient(129deg, $grey-dark 38%, rgba(31, 20, 22, 1) 100%);
-$background-container: linear-gradient(129deg, $grey-dark 38%, #285381 100%);
+$background-container: linear-gradient(-50deg, $grey-dark 10%, #285381 90%);
+$background-container-login: linear-gradient(160deg, $grey-dark 50%, #285381 100%);
 $background-button: linear-gradient(180deg, $grey-light 38%, $blue 100%);
