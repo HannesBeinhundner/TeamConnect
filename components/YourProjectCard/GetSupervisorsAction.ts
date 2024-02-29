@@ -12,7 +12,6 @@ export async function getSupervisors() {
             return { success: false, error: 'Project not found.' };
         }
 
-        console.log(supervisors)
         return { success: true, data: supervisors };
     } catch (error) {
         console.error(error);
