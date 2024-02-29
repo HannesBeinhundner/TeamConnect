@@ -18,8 +18,36 @@ import { signIn, signOut, useSession } from "next-auth/react";
 import { Box, Input, InputAdornment } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { ApplyFilter } from './ApplyFilterAction';
+import ViewAllProjectsCard from '../ViewAllProjectsCard/ViewAllProjectsCard';
 
 export default function ViewAllProjects() {
+    const [projectsResult, setProjectsResult] = useState<any>({});
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const data = {
+                    projectSearch: "",
+                    projectType: "",
+                    projectStatus: ""
+                };
+                const response = await ApplyFilter(data);
+    
+                if (response.success && Array.isArray(response.data)) {
+                    setProjectsResult(response.data);
+                } else {
+                    console.error('Error: ApplyFilter did not return a successful response or data is not an array.');
+                }
+            } catch (error) {
+                console.error('Error fetching project data:', error);
+            }
+        };
+    
+        fetchData();
+    
+    }, []);
+    
+    
 
     const {
         register,
@@ -33,15 +61,26 @@ export default function ViewAllProjects() {
     })
     
     const processForm: SubmitHandler<ApplyFilterInputs> = async data => {
-        const result = await ApplyFilter(data)
-
-        if (!result) {
-            alert("Something went wrong")
-            return
+        try {
+            // Call ApplyFilter with form data
+            const filteredProjects = await ApplyFilter(data);
+    
+            if (filteredProjects && filteredProjects.success && Array.isArray(filteredProjects.data)) {
+                // Set the filtered project data
+                setProjectsResult(filteredProjects.data);
+            } else {
+                // Handle error if ApplyFilter didn't return expected data
+                console.error('Error: ApplyFilter did not return the expected data.');
+            }
+    
+            // Reset the form
+            reset();
+        } catch (error) {
+            console.error('Error processing form:', error);
+            // Handle error if there's an issue with ApplyFilter or resetting the form
+            alert("Something went wrong");
         }
-
-        reset()
-    }
+    };
 
     return (
         <div className={styles.container}>
@@ -108,7 +147,12 @@ export default function ViewAllProjects() {
                         type="submit">
                         Apply Filter
                     </Button>
-                </form>          
+                </form>
+                <div className={styles.cardsArea}>
+                    {Array.isArray(projectsResult) && projectsResult.map((project: any) => (
+                        <ViewAllProjectsCard key={project.id} projectResult={project} />
+                    ))}
+                </div>
                 </div>
             </div>
     )

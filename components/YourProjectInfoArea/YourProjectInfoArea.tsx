@@ -1,5 +1,3 @@
-// YourProjectInfoArea.jsx
-
 import React from 'react';
 import Image from "next/image";
 import Chip from '@/components/Chip/Chip';

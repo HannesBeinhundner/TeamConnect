@@ -5,13 +5,14 @@ import { ReactNode } from "react";
 interface ChipProps {
     icon: ReactNode;
     text: string;
-}
-
-export default function Chip({ icon, text }: ChipProps) {
+    className?: string;
+  }
+  
+  export default function Chip({ icon, text, className }: ChipProps) {
     return (
-        <div className={styles.container}>
-            {icon}
-            <p>{text}</p>
-        </div>
-    )
-}
+      <div className={`${styles.container} ${className}`}>
+        {icon}
+        <p>{text}</p>
+      </div>
+    );
+  }
