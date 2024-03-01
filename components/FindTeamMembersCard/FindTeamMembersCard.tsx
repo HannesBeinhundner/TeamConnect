@@ -26,7 +26,7 @@ export default function FindTeamMembersCard({ userResult }) {
                         }}
                     />
                 </Link>
-                <h1>{userResult?.name}</h1>
+                <h2>{userResult?.name}</h2>
             </div>
             <div className={styles.propertyArea}>
                 <Chip className={styles.chipColor} text={userResult?.major} icon={<SchoolIcon fontSize='small' />} />
@@ -38,10 +38,10 @@ export default function FindTeamMembersCard({ userResult }) {
                 <p>{userResult?.description}</p>
                 <div className={styles.requestButton}>
                     <Button variant="contained">
-                            Contact
+                        Contact
                     </Button>
                     <Button variant="contained">
-                            Invite to Join
+                        Invite to Join
                     </Button>
                 </div>
             </div>
