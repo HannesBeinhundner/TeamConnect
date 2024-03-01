@@ -27,9 +27,11 @@ export async function checkProject(sessionEmail: string | null | undefined) {
                         projectId: project.id,
                     },
                 })
-                //@ts-ignore
-                project = { ...project, users: joinedUsers };
-                return project;
+                if (joinedUsers) {
+                    //project = { ...project, users: joinedUsers };
+                    return { ...project, users: joinedUsers };
+                }
+
             }
         }
 
