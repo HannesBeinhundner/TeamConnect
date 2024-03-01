@@ -31,7 +31,7 @@ export default function FindTeamMembers() {
                     studyProgram: ""
                 };
                 const response = await UserFilter(data);
-    
+
                 if (response.success && Array.isArray(response.data)) {
                     setUserResult(response.data);
                 } else {
@@ -41,12 +41,12 @@ export default function FindTeamMembers() {
                 console.error('Error fetching project data:', error);
             }
         };
-    
+
         fetchData();
-    
+
     }, []);
-    
-    
+
+
 
     const {
         register,
@@ -58,12 +58,12 @@ export default function FindTeamMembers() {
     } = useForm<FindTeamMemberInputs>({
         resolver: zodResolver(FindTeamMemberSchema)
     })
-    
+
     const processForm: SubmitHandler<FindTeamMemberInputs> = async data => {
         try {
             // Call ApplyFilter with form data
             const filteredUsers = await UserFilter(data);
-    
+
             if (filteredUsers && filteredUsers.success && Array.isArray(filteredUsers.data)) {
                 // Set the filtered project data
                 setUserResult(filteredUsers.data);
@@ -71,7 +71,7 @@ export default function FindTeamMembers() {
                 // Handle error if ApplyFilter didn't return expected data
                 console.error('Error: ApplyFilter did not return the expected data.');
             }
-    
+
             // Reset the form
             reset();
         } catch (error) {
@@ -88,19 +88,19 @@ export default function FindTeamMembers() {
             </div>
             <div className={styles.contentArea}>
                 <form onSubmit={handleSubmit(processForm)} className={styles.filterArea}>
-                    <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
-                        <SearchIcon 
+                    <Box sx={{ display: 'flex', alignItems: 'flex-end', minWidth: "30%" }}>
+                        <SearchIcon
                             sx={{ color: 'action.active', mr: 1, my: 0.5 }}
                         />
                         <TextField
                             sx={{ minWidth: "100%" }}
-                            id="memberSearch" 
-                            label="Search for member..." 
-                            variant="standard" 
+                            id="memberSearch"
+                            label="Search for member..."
+                            variant="standard"
                             {...register('memberSearch')}
                         />
                     </Box>
-                    <FormControl variant="standard" sx={{ minWidth: "15%", maxWidth: "70%" }}>
+                    <FormControl variant="standard" sx={{ width: "25%" }}>
                         <InputLabel id="studyProgram">Study Program</InputLabel>
                         <Select
                             labelId="studyProgram"
@@ -121,8 +121,8 @@ export default function FindTeamMembers() {
                         </Select>
                         <FormHelperText sx={{ color: (theme) => theme.palette.error.main }}></FormHelperText>
                     </FormControl>
-                    <Button 
-                        variant="contained" 
+                    <Button
+                        variant="contained"
                         type="submit">
                         Apply Filter
                     </Button>
@@ -132,7 +132,7 @@ export default function FindTeamMembers() {
                         <FindTeamMembersCard key={user.id} userResult={user} />
                     ))}
                 </div>
-                </div>
             </div>
+        </div>
     )
 }

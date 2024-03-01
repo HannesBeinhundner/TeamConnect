@@ -85,7 +85,7 @@ export default function StudentStatistics(props: CircularProgressProps & { value
             </div>
             <div className={styles.contentArea}>
                 <div className={styles.projectChart}>
-                    <div className='border border-gray-400 pt-0 rounded-xl w-full h-fit my-auto shadow-xl pb-2 test'>
+                    <div className='border border-gray-400 pt-0 rounded-xl w-full h-fit my-auto shadow-xl pb-2 chartSize'>
                         <canvas id='myChart' style={{ width: '100%', maxWidth: '370px' }}></canvas>
                     </div>
                 </div>

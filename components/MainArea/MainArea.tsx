@@ -15,18 +15,22 @@ export default function MainArea({
     bottomRightComponent,
 }: MainAreaProps) {
     return (
-        <div className={styles.container}>
+        <div className={`${styles.container} ${bottomRightComponent ? '' : styles.containerWithScroll}`}>
+
+
             <div className={styles.topLeft}>{topLeftComponent}</div>
             <div className={styles.topRight}>{topRightComponent}</div>
-            {bottomLeftComponent && bottomRightComponent ? (
-                <>
-                    <div className={styles.bottomLeft}>{bottomLeftComponent}</div>
-                    <div className={styles.bottomRight}>{bottomRightComponent}
-                    </div>
-                </>
-            ) : (
-                <div className={styles.bottomCenter}>{bottomLeftComponent}</div>
-            )}
-        </div>
+            {
+                bottomLeftComponent && bottomRightComponent ? (
+                    <>
+                        <div className={styles.bottomLeft}>{bottomLeftComponent}</div>
+                        <div className={styles.bottomRight}>{bottomRightComponent}
+                        </div>
+                    </>
+                ) : (
+                    <div className={styles.bottomCenter}>{bottomLeftComponent}</div>
+                )
+            }
+        </div >
     );
 }

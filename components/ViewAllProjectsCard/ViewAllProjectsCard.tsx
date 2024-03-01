@@ -25,16 +25,16 @@ export default function ViewAllProjectsCard({ projectResult }) {
         console.log(students)
         setProjectUsers(students);
     };
- 
+
     useEffect(() => {
         fetchProjectUsers();
     }, []);
-    
+
     return (
         <div className={styles.projectInformationArea}>
             <div className={styles.titleArea}>
                 <Image src={CustomProjectLogo} alt="Custom Logo" width={53} />
-                <h1>{projectResult?.name}</h1>
+                <h2>{projectResult?.name}</h2>
             </div>
             <div className={styles.propertyArea}>
                 <Chip className={styles.chipColor} text={projectResult?.status} icon={<CheckCircleOutlineIcon fontSize='small' sx={{ color: 'success.main' }} />} />
@@ -49,7 +49,7 @@ export default function ViewAllProjectsCard({ projectResult }) {
                 <p>{projectResult?.description}</p>
                 <div className={styles.requestButton}>
                     <Button variant="contained">
-                            Request to Join
+                        Request to Join
                     </Button>
                 </div>
             </div>

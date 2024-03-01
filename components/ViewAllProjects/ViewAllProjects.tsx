@@ -33,7 +33,7 @@ export default function ViewAllProjects() {
                     projectStatus: ""
                 };
                 const response = await ApplyFilter(data);
-    
+
                 if (response.success && Array.isArray(response.data)) {
                     setProjectsResult(response.data);
                 } else {
@@ -43,12 +43,12 @@ export default function ViewAllProjects() {
                 console.error('Error fetching project data:', error);
             }
         };
-    
+
         fetchData();
-    
+
     }, []);
-    
-    
+
+
 
     const {
         register,
@@ -60,12 +60,12 @@ export default function ViewAllProjects() {
     } = useForm<ApplyFilterInputs>({
         resolver: zodResolver(ApplyFilterSchema)
     })
-    
+
     const processForm: SubmitHandler<ApplyFilterInputs> = async data => {
         try {
             // Call ApplyFilter with form data
             const filteredProjects = await ApplyFilter(data);
-    
+
             if (filteredProjects && filteredProjects.success && Array.isArray(filteredProjects.data)) {
                 // Set the filtered project data
                 setProjectsResult(filteredProjects.data);
@@ -73,7 +73,7 @@ export default function ViewAllProjects() {
                 // Handle error if ApplyFilter didn't return expected data
                 console.error('Error: ApplyFilter did not return the expected data.');
             }
-    
+
             // Reset the form
             reset();
         } catch (error) {
@@ -90,19 +90,19 @@ export default function ViewAllProjects() {
             </div>
             <div className={styles.contentArea}>
                 <form onSubmit={handleSubmit(processForm)} className={styles.filterArea}>
-                    <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
-                        <SearchIcon 
+                    <Box sx={{ display: 'flex', alignItems: 'flex-end', minWidth: "22%" }}>
+                        <SearchIcon
                             sx={{ color: 'action.active', mr: 1, my: 0.5 }}
                         />
                         <TextField
                             sx={{ minWidth: "100%" }}
-                            id="projectSearch" 
-                            label="projectSearch" 
-                            variant="standard" 
+                            id="projectSearch"
+                            label="Project Search"
+                            variant="standard"
                             {...register('projectSearch')}
                         />
                     </Box>
-                    <FormControl variant="standard" sx={{ minWidth: "15%", maxWidth: "70%" }}>
+                    <FormControl variant="standard" sx={{ width: "22%" }}>
                         <InputLabel id="projectType">Project Type *</InputLabel>
                         <Select
                             labelId="projectType"
@@ -110,7 +110,7 @@ export default function ViewAllProjects() {
                             label="Project Type"
                             fullWidth
                             {...register('projectType')}
-                            // error={!!errors.projectType}
+                        // error={!!errors.projectType}
                         >
                             <MenuItem value="">
                                 <em>None</em>
@@ -125,7 +125,7 @@ export default function ViewAllProjects() {
                         </Select>
                         <FormHelperText sx={{ color: (theme) => theme.palette.error.main }}></FormHelperText>
                     </FormControl>
-                    <FormControl variant="standard" sx={{ minWidth: "15%", maxWidth: "70%" }}>
+                    <FormControl variant="standard" sx={{ width: "22%" }}>
                         <InputLabel id="projectStatus">Project Status *</InputLabel>
                         <Select
                             labelId="projectStatus"
@@ -143,8 +143,8 @@ export default function ViewAllProjects() {
                         </Select>
                         <FormHelperText sx={{ color: (theme) => theme.palette.error.main }}></FormHelperText>
                     </FormControl>
-                    <Button 
-                        variant="contained" 
+                    <Button
+                        variant="contained" sx={{ minWidth: "max-content" }}
                         type="submit">
                         Apply Filter
                     </Button>
@@ -154,7 +154,7 @@ export default function ViewAllProjects() {
                         <ViewAllProjectsCard key={project.id} projectResult={project} />
                     ))}
                 </div>
-                </div>
             </div>
+        </div>
     )
 }
