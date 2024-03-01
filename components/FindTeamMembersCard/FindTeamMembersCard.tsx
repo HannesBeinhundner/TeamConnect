@@ -16,7 +16,7 @@ export default function FindTeamMembersCard({ userResult }) {
     return (
         <div className={styles.projectInformationArea}>
             <div className={styles.titleArea}>
-                <Link href="/profile" className={styles.profile}>
+                <Link href="#" className={styles.profile}>
                     <Image
                         className={styles.profile}
                         src={ProfilePicture}

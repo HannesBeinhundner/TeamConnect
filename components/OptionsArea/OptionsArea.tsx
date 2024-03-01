@@ -22,7 +22,7 @@ export default function OptionsArea() {
                 <LogoutIcon />
             </IconButton>
             <NotificationsIcon />
-            <Link href="/profile" className={styles.profile}>
+            <Link href="#" className={styles.profile}>
                 <Image
                     className={styles.profile}
                     src={ProfileGirl}
