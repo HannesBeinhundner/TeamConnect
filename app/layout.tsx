@@ -14,8 +14,8 @@ const defaultUrl = process.env.PRODUCTION
 
 export const metadata = {
   metadataBase: new URL(defaultUrl),
-  title: "Next.js and Supabase Starter Kit",
-  description: "The fastest way to build apps with Next.js and Supabase",
+  title: "TeamConnect",
+  description: "Simplify the interdisciplinary team and project finding phase",
 };
 
 const inter = Inter({ subsets: ['latin'] })

@@ -36,7 +36,7 @@ export default function StudentStatistics(props: CircularProgressProps & { value
                     borderColor: [
                         "#007DFF",
                         "#0057B2",
-                        "#FF6666", // Light Red
+                        "#cf2b2b", // Light Red
                         "#6F2931",
                         "#CC0000", // Dark Red
                         "#66B2FF", // Light Blue
@@ -46,7 +46,7 @@ export default function StudentStatistics(props: CircularProgressProps & { value
                     backgroundColor: [
                         "#007DFF",
                         "#0057B2",
-                        "#FF6666", // Light Red
+                        "#cf2b2b", // Light Red
                         "#6F2931",
                         "#CC0000", // Dark Red
                         "#66B2FF", // Light Blue
@@ -66,15 +66,13 @@ export default function StudentStatistics(props: CircularProgressProps & { value
                     }],
                 },
                 legend: {
-                    position: 'bottom',
+                    position: 'right',
                     labels: {
                         fontSize: 10, // Adjust the legend label font size
                         boxWidth: 15, // Adjust the width of the colored box in the legend label
                     },
                 },
             },
-
-
         });
     }, [])
 

@@ -8,11 +8,11 @@
     border: 1px 1px 0 0 solid $grey-light;
     height: 100%;
     overflow-y: auto;
-    padding: 1.35rem;
+    padding: 1.5rem;
     display: grid;
     grid-template-columns: repeat(12, 1fr);
     grid-template-rows: min-content auto;
-    gap: 1.2rem;
+    gap: 1.6rem;
     overflow-y: hidden;
 }
 

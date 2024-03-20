@@ -38,6 +38,13 @@ export const UpdateProjectSchema = z.object({
 });
 export type UpdateProjectInputs = z.infer<typeof UpdateProjectSchema>;
 
+export const UpdateProfileSchema = z.object({
+    profileName: z.string().min(1, { message: 'Project name is required' }),
+    profileExpertise: z.string().min(1, { message: 'Project type is required' }),
+    profileDescription: z.string().max(1000, { message: 'Your skills and intrests are too long' }),
+});
+export type UpdateProfileInputs = z.infer<typeof UpdateProfileSchema>;
+
 export const ApplyFilterSchema = z.object({
     projectSearch: z.string(),
     projectType: z.string(),

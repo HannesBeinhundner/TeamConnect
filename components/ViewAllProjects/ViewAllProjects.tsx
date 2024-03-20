@@ -6,16 +6,13 @@ import TextField from '@mui/material/TextField';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
+import Select from '@mui/material/Select';
 import FormHelperText from '@mui/material/FormHelperText';
 import styles from "./ViewAllProjects.module.scss"
 import { useForm, SubmitHandler } from "react-hook-form"
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ApplyFilterInputs, ApplyFilterSchema, CreateProjectSchema } from '@/app/lib/types'
-import { CreateProjectInputs } from '@/app/lib/types'
-//import { checkProject } from './CheckProjectAction';
-import { signIn, signOut, useSession } from "next-auth/react";
-import { Box, Input, InputAdornment } from '@mui/material';
+import { Box } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { ApplyFilter } from './ApplyFilterAction';
 import ViewAllProjectsCard from '../ViewAllProjectsCard/ViewAllProjectsCard';
@@ -73,9 +70,6 @@ export default function ViewAllProjects() {
                 // Handle error if ApplyFilter didn't return expected data
                 console.error('Error: ApplyFilter did not return the expected data.');
             }
-
-            // Reset the form
-            reset();
         } catch (error) {
             console.error('Error processing form:', error);
             // Handle error if there's an issue with ApplyFilter or resetting the form
@@ -103,7 +97,7 @@ export default function ViewAllProjects() {
                         />
                     </Box>
                     <FormControl variant="standard" sx={{ width: "22%" }}>
-                        <InputLabel id="projectType">Project Type *</InputLabel>
+                        <InputLabel id="projectType">Project Type</InputLabel>
                         <Select
                             labelId="projectType"
                             id="projectType"
@@ -126,7 +120,7 @@ export default function ViewAllProjects() {
                         <FormHelperText sx={{ color: (theme) => theme.palette.error.main }}></FormHelperText>
                     </FormControl>
                     <FormControl variant="standard" sx={{ width: "22%" }}>
-                        <InputLabel id="projectStatus">Project Status *</InputLabel>
+                        <InputLabel id="projectStatus">Project Status</InputLabel>
                         <Select
                             labelId="projectStatus"
                             id="projectStatus"

@@ -11,7 +11,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { styled } from '@mui/material/styles';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import OpenInFullIcon from '@mui/icons-material/OpenInFull';
+import SettingsIcon from '@mui/icons-material/Settings';
 import InputLabel from '@mui/material/InputLabel';
 import Alert from '@mui/material/Alert'
 import MenuItem from '@mui/material/MenuItem';
@@ -77,7 +77,6 @@ export default function YourProjectCard() {
 
         //Fetch Supervisors
         const supervisorsResult: any = await getSupervisors();
-        console.log(supervisorsResult.data)
         setProjectSupervisors(supervisorsResult.data || []);
     };
 
@@ -144,19 +143,20 @@ export default function YourProjectCard() {
                 <h5>Your Project</h5>
                 {checkProjectResult ? (
                     <IconButton aria-label="expand" sx={{ color: '#1C1C1C' }} onClick={handleUpdateDialogOpen}>
-                        <OpenInFullIcon fontSize="small" />
+                        <SettingsIcon fontSize="small" />
                     </IconButton>
                 ) : ''}
             </div>
-            {checkProjectResult && projectResult && (  // Ensure projectResult is not undefined or null
-                <ProjectUpdateDialog
-                    open={updateDialogOpen}
-                    onClose={handleUpdateDialogClose}
-                    projectResult={projectResult}
-                    reloadComponent={fetchProjectStatus}
-                    projectSupervisors={projectSupervisors}
-                />
-            )
+            {
+                checkProjectResult && projectResult && (  // Ensure projectResult is not undefined or null
+                    <ProjectUpdateDialog
+                        open={updateDialogOpen}
+                        onClose={handleUpdateDialogClose}
+                        projectResult={projectResult}
+                        reloadComponent={fetchProjectStatus}
+                        projectSupervisors={projectSupervisors}
+                    />
+                )
             }
 
             <div className={styles.contentArea}>

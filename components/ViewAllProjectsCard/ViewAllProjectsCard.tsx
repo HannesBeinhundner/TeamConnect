@@ -41,7 +41,7 @@ export default function ViewAllProjectsCard({ projectResult }) {
                 <Chip className={styles.chipColor} text={projectResult?.type} icon={<CategoryIcon fontSize='small' />} />
                 <Chip className={styles.chipColor} text={projectResult?.supervisor} icon={<AssignmentIndIcon fontSize='small' />} />
                 <Chip className={styles.chipColor} text={projectUsers} icon={<AssignmentIndIcon fontSize='small' />} />
-                <Link href={"https://" + projectResult?.link} className={styles.chipLink} target="_blank" >
+                <Link href={(projectResult?.link && (projectResult.link.startsWith("https://") || projectResult.link.startsWith("http://"))) ? projectResult.link : "https://" + projectResult?.link} className={styles.chipLink} target="_blank">
                     <Chip className={styles.chipColor} text={projectResult?.link} icon={<LinkIcon fontSize='small' sx={{ color: '#000000DE' }} />} />
                 </Link>
             </div>

@@ -6,21 +6,24 @@ import TextField from '@mui/material/TextField';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
+import Select from '@mui/material/Select';
 import FormHelperText from '@mui/material/FormHelperText';
 import styles from "./FindTeamMembers.module.scss"
 import { useForm, SubmitHandler } from "react-hook-form"
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FindTeamMemberInputs, FindTeamMemberSchema } from '@/app/lib/types'
-//import { checkProject } from './CheckProjectAction';
-import { signIn, signOut, useSession } from "next-auth/react";
-import { Box, Input, InputAdornment } from '@mui/material';
+import { Box } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import FindTeamMembersCard from '../FindTeamMembersCard/FindTeamMembersCard';
 import { studyProgramTypes } from '@/app/lib/data';
 import { UserFilter } from './UserFilterAction';
 
-export default function FindTeamMembers() {
+interface Props {
+    session: any;
+}
+
+export default function FindTeamMembers({ session }: Props) {
+
     const [userResult, setUserResult] = useState<any>({});
 
     useEffect(() => {
@@ -71,9 +74,6 @@ export default function FindTeamMembers() {
                 // Handle error if ApplyFilter didn't return expected data
                 console.error('Error: ApplyFilter did not return the expected data.');
             }
-
-            // Reset the form
-            reset();
         } catch (error) {
             console.error('Error processing form:', error);
             // Handle error if there's an issue with ApplyFilter or resetting the form
@@ -128,9 +128,14 @@ export default function FindTeamMembers() {
                     </Button>
                 </form>
                 <div className={styles.cardsArea}>
-                    {Array.isArray(userResult) && userResult.map((user: any) => (
-                        <FindTeamMembersCard key={user.id} userResult={user} />
-                    ))}
+                    {
+
+                        Array.isArray(userResult) && userResult.map((user: any) => (
+                            //Filter own user from the list
+                            session?.user?.email !== user.email &&
+                            <FindTeamMembersCard key={user.id} userResult={user} />
+                        ))
+                    }
                 </div>
             </div>
         </div>
