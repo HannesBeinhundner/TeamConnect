@@ -1,4 +1,5 @@
 import GitHubProvider from "next-auth/providers/github";
+import GoogleProvider from "next-auth/providers/google";
 import { PrismaAdapter } from "@auth/prisma-adapter"
 import { prisma } from "@/prisma";
 
@@ -48,14 +49,39 @@ export const options = {
             },
             token: 'https://auth.projects.multimediatechnology.at/oauth/token',
         },
-        // GitHubProvider({
-        //     clientId: process.env.GITHUB_ID,
-        //     clientSecret: process.env.GITHUB_SECRET,
-        // }),
+        GitHubProvider({
+            clientId: process.env.GITHUB_ID,
+            clientSecret: process.env.GITHUB_SECRET,
+        }),
+        GoogleProvider({
+            clientId: process.env.GOOGLE_ID,
+            clientSecret: process.env.GOOGLE_SECRET,
+        }),
     ],
+    session: {
+        strategy: "jwt",
+    },
     secret: process.env.SECRET,
-    // strategy: "jwt",
+
     callbacks: {
+        // async signIn({ account, profile }) {
+        //     if (!profile?.email) {
+        //         throw new Error('No email returned from the identity provider')
+        //     }
+
+        //     await prisma.user.upsert({
+        //         where: { email: profile.email },
+        //         create: {
+        //             email: profile.email,
+        //             name: profile.name,
+        //         },
+        //         update: {
+        //             name: profile.name,
+        //         }
+        //     })
+
+        //     return true
+        // },
         async jwt({ token, user }) {
             //if (user) token.role = user.role;
             return token;

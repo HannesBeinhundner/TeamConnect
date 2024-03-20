@@ -24,7 +24,7 @@ export default async function Dashboard() {
                 <TopArea />
             </div>
             <div className={styles.optionsArea}>
-                <OptionsArea />
+                <OptionsArea session={session} />
             </div>
             <div className={styles.mainArea}>
                 <MainArea

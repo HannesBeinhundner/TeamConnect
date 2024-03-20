@@ -40,7 +40,7 @@ export default async function Projects() {
                         altText="Illustration of a team working together"
                         buttonText="View all projects"
                     />}
-                    bottomLeftComponent={<FindTeamMembers />}
+                    bottomLeftComponent={<FindTeamMembers session={session} />}
                 />
             </div>
         </div>

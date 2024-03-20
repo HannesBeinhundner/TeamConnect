@@ -8,5 +8,8 @@
     justify-content: center;
     align-items: center;
     gap: 5rem;
-    background: $background-container-login;
+    // background: $background-container-login;
+    background-attachment: fixed;
+    background-image: url("../../images/landingpageBackground.svg");
+    background-size: cover;
 }
