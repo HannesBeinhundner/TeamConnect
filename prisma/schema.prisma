@@ -22,17 +22,49 @@ model Configuration {
   milestones Milestone[]
 }
 
+model Event {
+  id               String             @id @default(cuid())
+  name             String             @db.VarChar(256)
+  isPartOfEvent    Boolean            @default(true)
+  hasMilestones    Boolean            @default(false)
+  admin            String?
+  user             User?              @relation(fields: [admin], references: [id], onDelete: SetNull)
+  EventProjectType EventProjectType[]
+  EventExpertise   EventExpertise[]
+  Project          Project[]
+}
+
+model EventProjectType {
+  id      Int     @id @default(autoincrement())
+  name    String  @db.VarChar(256)
+  eventId String?
+  event   Event?  @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  @@unique([eventId, name], name: "eventId_name")
+}
+
+model EventExpertise {
+  id      Int     @id @default(autoincrement())
+  name    String  @db.VarChar(256)
+  eventId String?
+  event   Event?  @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  @@unique([eventId, name], name: "eventId_name")
+}
+
 model Project {
-  id          Int    @id @default(autoincrement())
-  name        String @unique @db.VarChar(256)
-  type        String @db.VarChar(256)
-  supervisor  String @db.VarChar(256)
-  description String @db.Text
-  skills      String @db.Text
-  file        String @db.VarChar(256)
-  link        String @db.VarChar(256)
-  status      String @db.VarChar(256)
-  image       String @db.VarChar(256)
+  id          Int     @id @default(autoincrement())
+  name        String  @unique @db.VarChar(256)
+  type        String  @db.VarChar(256)
+  supervisor  String  @db.VarChar(256)
+  description String  @db.Text
+  skills      String  @db.Text
+  file        String  @db.VarChar(256)
+  link        String  @db.VarChar(256)
+  status      String  @db.VarChar(256)
+  image       String  @db.VarChar(256)
+  eventId     String?
+  event       Event?  @relation(fields: [eventId], references: [id], onDelete: SetNull)
   User        User[]
 }
 
@@ -84,6 +116,7 @@ model User {
   projectId     Int?
   projectAdmin  Boolean   @default(false)
   project       Project?  @relation(fields: [projectId], references: [id], onDelete: SetNull)
+  Event         Event[]
 }
 
 model VerificationToken {

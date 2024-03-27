@@ -28,7 +28,7 @@ export default function OptionsArea({ session }: Props) {
     const fetchProfileStatus = async () => {
         const profileResult: any = await getProfile(session.user.email);
         setProfileResult(profileResult);
-        console.log(profileResult.data)
+        // console.log(profileResult.data)
     };
 
     useEffect(() => {
@@ -42,7 +42,7 @@ export default function OptionsArea({ session }: Props) {
     const handleUpdateDialogClose = () => {
         setUpdateDialogOpen(false);
     };
-    console.log(session.user.image)
+    // console.log(session.user.image)
     return (
         <div className={styles.container}>
             <IconButton aria-label="logout" onClick={() => signOut()} sx={{ color: '#1C1C1C' }}>

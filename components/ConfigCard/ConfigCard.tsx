@@ -1,32 +1,22 @@
 "use client"
 
 import React, { useState, useEffect } from 'react';
-import ReactDOM from 'react-dom';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import Link from "next/link";
+import { Tooltip } from '@mui/material'
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import { styled } from '@mui/material/styles';
-import InputLabel from '@mui/material/InputLabel';
 import Alert from '@mui/material/Alert'
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
 import IconButton from '@mui/material/IconButton';
-import FormHelperText from '@mui/material/FormHelperText';
 import CloseIcon from '@mui/icons-material/Close';
 import styles from "./ConfigCard.module.scss"
 import { useForm, SubmitHandler, Controller } from "react-hook-form"
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useSession } from "next-auth/react";
-import YourProjectInformationArea from '../YourProjectInfoArea/YourProjectInfoArea';
-import ProjectUpdateDialog from '@/components/ProjectUpdateDialog/ProjectUpdateDialog';
-import { projectTypes } from '@/app/lib/data'
-
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -47,34 +37,24 @@ import { MuiChipsInput } from 'mui-chips-input'
 import { CreateEventSchema } from '@/app/lib/types'
 import { CreateEventInputs } from '@/app/lib/types'
 import { addEvent } from './AddEventAction';
+import { getEvents } from './GetEventsAction';
+import EventUpdateDialog from '../EventUpdateDialog/EventUpdateDialog';
 
-
-function createData(
-    name: string,
-    users: number,
-    projects: number,
-    link: string,
-) {
-    return { name, users, projects, link };
-}
-
-const rows = [
-    createData('Hackathon 2024', 77, 12, 'https://teamconnect.com/invite/a2sdlkjfh'),
-    createData('MMP3 Salzburg', 77, 12, 'https://teamconnect.com/invite/a2sdlkjfh'),
-];
 
 export default function ConfigCard() {
     const { data: session } = useSession();
     const sessionEmail = session?.user?.email;
 
     const [openCreate, setOpenCreate] = useState(false);
-    const [openUpdate, setOpenUpdate] = useState(false);
+    const [openUpdate, setOpenUpdate] = useState<Record<string, boolean>>({});
     const [errorAlert, setErrorAlert] = useState(false)
     const [successAlert, setSucessAlert] = useState(false)
     const [serverErrorMessage, setServerErrorMessage] = useState("")
-    const [copyState, setCopyState] = useState(false);
+    const [copiedEventId, setCopiedEventId] = useState<string | null>(null);
     const [projectTypeChips, setProjectTypeChips] = useState<string[]>([])
     const [expertiseChips, setExpertiseChips] = useState<string[]>([])
+    const [checkEventResult, setCheckEventResult] = useState(false);
+    const [eventResult, setEventResult] = useState<any>([]);
 
 
     const handleProjectTypeChange = (newChips: string[]) => {
@@ -93,19 +73,51 @@ export default function ConfigCard() {
         reset()
         setOpenCreate(false);
     };
-    const handleUpdateOpen = () => {
-        setOpenUpdate(true);
+
+    const handleUpdateOpen = (id: string) => {
+        setOpenUpdate(prevState => ({ ...prevState, [id]: true }));
     };
 
-    const handleUpdateClose = () => {
-        //reset()
-        setOpenUpdate(false);
+    const handleUpdateClose = (id: string) => {
+        setOpenUpdate(prevState => ({ ...prevState, [id]: false }));
     };
 
     const handleCloseAlert = () => {
         setSucessAlert(false)
         setErrorAlert(false)
     }
+
+    const handleTooltipOpen = (eventId: string) => {
+        setCopiedEventId(eventId);
+        setTimeout(() => {
+            handleTooltipClose();
+        }, 2000);
+    };
+
+    const handleTooltipClose = () => {
+        setCopiedEventId(null);
+    }
+
+    useEffect(() => {
+        if (successAlert || errorAlert) {
+            const timerId = setTimeout(() => {
+                handleCloseAlert();
+            }, 3000);
+
+            return () => clearTimeout(timerId);
+        }
+    }, [successAlert, errorAlert]);
+
+    const fetchEvents = async () => {
+        const eventResult: any = await getEvents(sessionEmail);
+        eventResult ? setCheckEventResult(true) : setCheckEventResult(false)
+        setEventResult(eventResult);
+        console.log(eventResult)
+    };
+
+    useEffect(() => {
+        fetchEvents();
+    }, []);
 
     const {
         register,
@@ -121,22 +133,23 @@ export default function ConfigCard() {
 
     const processForm: SubmitHandler<CreateEventInputs> = async data => {
         console.log(data)
-        // const result = await addEvent(data, sessionEmail)
+        const result = await addEvent(data, sessionEmail)
 
-        // if (!result) {
-        //     alert("Something went wrong")
-        //     return
-        // }
+        if (!result) {
+            alert("Something went wrong")
+            return
+        }
 
-        // if (result.error) {
-        //     setServerErrorMessage(result.error.toString())
-        //     setErrorAlert(true)
-        //     return
-        // }
+        if (result.error) {
+            setServerErrorMessage(result.error.toString())
+            setErrorAlert(true)
+            return
+        }
 
-        // setSucessAlert(true)
-        // reset()
-        // handleCreateClose()
+        setSucessAlert(true)
+        reset()
+        handleCreateClose()
+        fetchEvents()
     }
 
     return (
@@ -146,7 +159,6 @@ export default function ConfigCard() {
             </div>
             <div className={styles.contentArea}>
                 <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.Stet clita kasd gubergren, no sea taLorem ipsum dolor sit amet, consetetur sadipscing elitrLorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor</p>
-
                 <TableContainer component={Paper} sx={{ backgroundColor: 'transparent' }}>
                     <Table sx={{ minWidth: 650 }} aria-label="event table">
                         <TableHead>
@@ -173,43 +185,59 @@ export default function ConfigCard() {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {rows.map((row) => (
-                                <TableRow
-                                    key={row.name}
-                                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                >
-                                    <TableCell component="th" scope="row">
-                                        <Link href="/test">
-                                            <b>{row.name}</b>
-                                        </Link>
-                                    </TableCell>
-                                    <TableCell align="right">
+                            {
+                                eventResult && eventResult.map((event: any) => (
 
-                                        {row.users}</TableCell>
-                                    <TableCell align="right">{row.projects}</TableCell>
-                                    <TableCell align="right">
-                                        <CopyToClipboard text={row.link.toString()} onCopy={() => setCopyState(true)}>
-                                            <div className={styles.copyLinkWrapper}>
-                                                <ContentCopyIcon fontSize='small' />
-                                                <span>{row.link}</span>
-                                            </div>
-                                        </CopyToClipboard>
-                                    </TableCell>
-                                    <TableCell align="right">
-                                        <IconButton aria-label="open Modal" sx={{ color: '#1C1C1C' }} onClick={handleUpdateOpen}>
-                                            <EditIcon fontSize='small' />
-                                        </IconButton>
-                                        <Dialog
-                                            open={openUpdate}
-                                            onClose={handleUpdateClose}
-                                            fullWidth={true}
-                                            maxWidth={"md"}
-                                            className={styles.createModal}
-                                        >
-                                        </Dialog>
-                                    </TableCell>
-                                </TableRow>
-                            ))}
+                                    <TableRow
+                                        key={event.id}
+                                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                    >
+                                        <TableCell component="th" scope="row">
+                                            <Link href={`${window.location.origin}/${event.id}/dashboard`}>
+                                                <b>{event.name}</b>
+                                            </Link>
+                                        </TableCell>
+                                        <TableCell align="right">
+                                            {event.usersCount}
+                                        </TableCell>
+                                        <TableCell align="right">{event.projectsCount}</TableCell>
+                                        <TableCell align="right">
+                                            <CopyToClipboard text={`${window.location.origin}/sign-in/${event.id}`} onCopy={() => handleTooltipOpen(event.id)}>
+                                                <Tooltip
+                                                    PopperProps={{
+                                                        disablePortal: true
+                                                    }}
+                                                    open={copiedEventId === event.id}
+                                                    title="Copied"
+                                                    placement="top"
+                                                >
+                                                    <div className={styles.copyLinkWrapper}>
+                                                        <span>
+                                                            {`${window.location.origin}/sign-in/${event.id}`}
+                                                        </span>
+                                                        <IconButton aria-label="open Modal" sx={{ color: '#1C1C1C' }}>
+                                                            <ContentCopyIcon fontSize='small' />
+                                                        </IconButton>
+                                                    </div>
+                                                </Tooltip>
+                                            </CopyToClipboard>
+                                        </TableCell>
+                                        <TableCell align="right">
+                                            <IconButton aria-label="open Modal" sx={{ color: '#1C1C1C' }} onClick={() => handleUpdateOpen(event.id)}>
+                                                <EditIcon fontSize='small' />
+                                            </IconButton>
+                                            {
+                                                checkEventResult && eventResult && <EventUpdateDialog
+                                                    open={openUpdate[event.id] || false}
+                                                    onClose={() => handleUpdateClose(event.id)}
+                                                    eventResult={event}
+                                                    reloadComponent={fetchEvents}
+                                                />
+                                            }
+                                        </TableCell>
+                                    </TableRow>
+                                ))
+                            }
                         </TableBody>
                     </Table>
                 </TableContainer>
@@ -223,7 +251,7 @@ export default function ConfigCard() {
                     maxWidth={"md"}
                     className={styles.createModal}
                 >
-                    <DialogTitle>Create Project</DialogTitle>
+                    <DialogTitle>Create Event</DialogTitle>
                     <IconButton
                         aria-label="close"
                         onClick={handleCreateClose}
@@ -296,7 +324,7 @@ export default function ConfigCard() {
                         </Alert>
                     )
                 }
-            </div >
-        </div >
+            </div>
+        </div>
     );
 }

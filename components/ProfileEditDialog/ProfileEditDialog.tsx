@@ -22,7 +22,6 @@ import { UpdateProfileSchema } from '@/app/lib/types';
 import { UpdateProfileInputs } from '@/app/lib/types';
 import styles from './ProfileEditDialog.module.scss';
 import { updateProfile } from './UpdateProfileAction';
-import { getProfile } from '../OptionsArea/GetProfileAction';
 import { studyProgramTypes } from '@/app/lib/data'
 
 interface ProfileUpdateDialogProps {
@@ -43,8 +42,6 @@ const ProfileEditDialog: React.FC<ProfileUpdateDialogProps> = ({ open, onClose, 
         setSuccessAlert(false);
         setErrorAlert(false);
     };
-
-    console.log(profileResult?.name)
 
     useEffect(() => {
         if (successAlert || errorAlert) {
@@ -146,28 +143,6 @@ const ProfileEditDialog: React.FC<ProfileUpdateDialogProps> = ({ open, onClose, 
                             </Select>
                             <FormHelperText sx={{ color: (theme) => theme.palette.error.main }}>{errors.profileExpertise?.message}</FormHelperText>
                         </FormControl>
-                        {/* <FormControl variant="standard" sx={{ minWidth: '100%' }} error={!!errors.projectSupervisor}>
-                            <InputLabel id="projectSupervisor">Project Supervisor *</InputLabel>
-                            <Select
-                                labelId="projectSupervisor"
-                                id="projectSupervisor"
-                                label="Project Supervisor"
-                                fullWidth
-                                defaultValue={projectResult?.supervisor}
-                                {...register('projectSupervisor')}
-                                error={!!errors.projectSupervisor}
-                            >
-                                <MenuItem value="">
-                                    <em>None</em>
-                                </MenuItem>
-                                {projectSupervisors && projectSupervisors.map((supervisor: any) => (
-                                    <MenuItem key={supervisor.id} value={supervisor.name}>
-                                        {supervisor.name}
-                                    </MenuItem>
-                                ))}
-                            </Select>
-                            <FormHelperText sx={{ color: (theme) => theme.palette.error.main }}>{errors.profileExpertise?.message}</FormHelperText>
-                        </FormControl> */}
                         <TextField
                             margin="dense"
                             id="profileDescription"
