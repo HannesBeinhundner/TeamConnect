@@ -1,0 +1,71 @@
+@import "_variables.scss";
+@import "_mixins.scss";
+
+.container {
+    @include card;
+    background-color: $grey-light;
+    height: 100%;
+}
+
+.headerArea {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+
+    .expandLink {
+        text-decoration: none;
+        color: $black-light;
+    }
+}
+
+.contentArea {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    //align-items: center;
+    gap: 1.5rem;
+
+    .tableHeaderWrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 0.5rem;
+
+    }
+
+    th {
+        a {
+            color: $black-light;
+            text-decoration: none;
+        }
+    }
+
+    .copyLinkWrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 0.5rem;
+        cursor: pointer;
+    }
+
+    .createButton {
+        align-self: flex-end;
+        width: max-content;
+    }
+}
+
+.formContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+}
+
+.alert {
+    position: absolute;
+    top: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+}

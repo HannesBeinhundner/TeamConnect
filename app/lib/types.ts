@@ -38,6 +38,16 @@ export const UpdateProjectSchema = z.object({
 });
 export type UpdateProjectInputs = z.infer<typeof UpdateProjectSchema>;
 
+export const CreateEventSchema = z.object({
+    eventName: z.string().min(1, { message: 'Event name is required' }),
+    isPartOfEvent: z.boolean(),
+    hasMilestones: z.boolean(),
+    eventProjectType: z.array(z.string()).min(1, { message: 'At least one event project type must be selected' }),
+    eventExpertise: z.array(z.string()).min(1, { message: 'At least one user expertise must be selected' }),
+});
+
+export type CreateEventInputs = z.infer<typeof CreateEventSchema>
+
 export const UpdateProfileSchema = z.object({
     profileName: z.string().min(1, { message: 'Project name is required' }),
     profileExpertise: z.string().min(1, { message: 'Project type is required' }),

@@ -4,14 +4,15 @@ import { options } from "@/app/api/auth/[...nextauth]/options"
 import TopArea from "@/components/TopArea/TopArea";
 import MainArea from "@/components/MainArea/MainArea";
 import OptionsArea from "@/components/OptionsArea/OptionsArea";
+import YourProjectCard from "@/components/YourProjectCard/YourProjectCard";
+import StudentStatistics from "@/components/StudentStatistics/StudentStatistics";
 import findTeamMembersImg from "@/images/findTeamMembers.svg";
-import backToDashboardImg from "@/images/backToDashboard.svg";
+import viewAllProjectsImg from "@/images/viewAllProjects.svg";
 import NavigationButton from "@/components/NavigationButton/NavigationButton";
-import styles from "@/styles/dashboard.module.scss"
-import ViewAllProjects from "@/components/ViewAllProjects/ViewAllProjects";
+import styles from "@/styles/dashboard.module.scss";
+import ConfigCard from "@/components/ConfigCard/ConfigCard";
 
-
-export default async function Projects() {
+export default async function Config() {
     // @ts-ignore
     const session = await getServerSession(options);
     if (!session || !session.user) {
@@ -28,21 +29,9 @@ export default async function Projects() {
             </div>
             <div className={styles.mainArea}>
                 <MainArea
-                    topRightComponent={<NavigationButton
-                        href="../"
-                        imgSrc={backToDashboardImg}
-                        altText="Illustration of a team celebrating together"
-                        buttonText="Back to Dashboard"
-                    />}
-                    topLeftComponent={<NavigationButton
-                        href="../dashboard/members"
-                        imgSrc={findTeamMembersImg}
-                        altText="Illustration of a team working together"
-                        buttonText="Find team members"
-                    />}
-                    bottomLeftComponent={<ViewAllProjects />}
+                    bottomLeftComponent={<ConfigCard />}
                 />
             </div>
         </div>
-    )
+    );
 }

@@ -3,7 +3,6 @@
 import { CreateProjectSchema } from '@/app/lib/types'
 import { CreateProjectInputs } from '@/app/lib/types'
 import { prisma } from "@/prisma";
-import { Prisma } from '@prisma/client'
 
 export async function addEntry(inputData: CreateProjectInputs, sessionEmail: string | null | undefined) {
 
@@ -56,7 +55,7 @@ export async function addEntry(inputData: CreateProjectInputs, sessionEmail: str
             // revalidatePath("/")
             return { success: true, data: result.data };
         }
-    } catch (error:any) {
+    } catch (error: any) {
         if (error.code === 'P2002') {
             // Unique constraint violation error (P2002)
             return { success: false, error: 'Project name must be unique.' };
