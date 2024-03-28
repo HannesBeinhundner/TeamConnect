@@ -28,7 +28,6 @@ export default async function Invite({ params }: { params: any }) {
                 }
             });
 
-
             redirect(`/${eventId}`);  //HAS EVENT AND SESSION -> Redirect to dashboard
         }
         else {

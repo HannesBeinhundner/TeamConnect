@@ -25,13 +25,9 @@ export default async function Dashboard({ params }) {
     }
     const sessionEmail = session?.user?.email ?? undefined;
 
-
-
-    //Check if eventId is valid and exists in the database, if not redirect to config so user can create an event
+    //Get information if the eventId in param is valid and passed
     const eventData: any = await getEvent(paramEventId);
     let paramEventIdIsValid = eventData ? true : false;
-
-    //let eventData: any = null;
 
     //Get current User iformation
     const user = await prisma.user.findUnique({
@@ -49,11 +45,18 @@ export default async function Dashboard({ params }) {
                 data: {
                     eventId: paramEventId
                 }
-            });
+            }).catch((err) => {
+                console.error("Failed to update user:", err);
+            });;
 
         } else {
             //otherwise redirect to config, beacuse the user was not invited to an event
             redirect("/config");
+        }
+    } else {
+        // User has an eventId set, but the eventId in the params is not valid
+        if (!paramEventIdIsValid) {
+            redirect("./");
         }
     }
 
