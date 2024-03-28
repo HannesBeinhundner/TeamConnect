@@ -18,7 +18,7 @@ import { ApplyFilter } from './ApplyFilterAction';
 import ViewAllProjectsCard from '../ViewAllProjectsCard/ViewAllProjectsCard';
 import { projectTypes } from '@/app/lib/data';
 
-export default function ViewAllProjects() {
+export default function ViewAllProjects({ eventId }: { eventId: any }) {
     const [projectsResult, setProjectsResult] = useState<any>({});
 
     useEffect(() => {
@@ -27,9 +27,9 @@ export default function ViewAllProjects() {
                 const data = {
                     projectSearch: "",
                     projectType: "",
-                    projectStatus: ""
+                    projectStatus: "",
                 };
-                const response = await ApplyFilter(data);
+                const response = await ApplyFilter(data, eventId);
 
                 if (response.success && Array.isArray(response.data)) {
                     setProjectsResult(response.data);
@@ -61,7 +61,7 @@ export default function ViewAllProjects() {
     const processForm: SubmitHandler<ApplyFilterInputs> = async data => {
         try {
             // Call ApplyFilter with form data
-            const filteredProjects = await ApplyFilter(data);
+            const filteredProjects = await ApplyFilter(data, eventId);
 
             if (filteredProjects && filteredProjects.success && Array.isArray(filteredProjects.data)) {
                 // Set the filtered project data

@@ -3,8 +3,8 @@
 import { FindTeamMemberInputs, FindTeamMemberSchema } from '@/app/lib/types'
 import { prisma } from "@/prisma";
 
-export async function UserFilter(inputData: FindTeamMemberInputs) {
-    
+export async function UserFilter(inputData: FindTeamMemberInputs, eventId: any) {
+
     console.log(inputData)
     const result = FindTeamMemberSchema.safeParse(inputData);
 
@@ -12,6 +12,7 @@ export async function UserFilter(inputData: FindTeamMemberInputs) {
         if (result.success) {
 
             const filter: any = {};
+            filter.eventId = eventId;
 
             if (inputData.memberSearch) {
                 filter.name = {

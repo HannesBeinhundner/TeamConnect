@@ -20,9 +20,10 @@ import { UserFilter } from './UserFilterAction';
 
 interface Props {
     session: any;
+    eventId: any;
 }
 
-export default function FindTeamMembers({ session }: Props) {
+export default function FindTeamMembers({ session, eventId }: Props) {
 
     const [userResult, setUserResult] = useState<any>({});
 
@@ -33,7 +34,7 @@ export default function FindTeamMembers({ session }: Props) {
                     memberSearch: "",
                     studyProgram: ""
                 };
-                const response = await UserFilter(data);
+                const response = await UserFilter(data, eventId);
 
                 if (response.success && Array.isArray(response.data)) {
                     setUserResult(response.data);
@@ -46,10 +47,7 @@ export default function FindTeamMembers({ session }: Props) {
         };
 
         fetchData();
-
     }, []);
-
-
 
     const {
         register,
@@ -65,7 +63,7 @@ export default function FindTeamMembers({ session }: Props) {
     const processForm: SubmitHandler<FindTeamMemberInputs> = async data => {
         try {
             // Call ApplyFilter with form data
-            const filteredUsers = await UserFilter(data);
+            const filteredUsers = await UserFilter(data, eventId);
 
             if (filteredUsers && filteredUsers.success && Array.isArray(filteredUsers.data)) {
                 // Set the filtered project data

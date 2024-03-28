@@ -3,8 +3,8 @@
 import { ApplyFilterInputs, ApplyFilterSchema } from '@/app/lib/types'
 import { prisma } from "@/prisma";
 
-export async function ApplyFilter(inputData: ApplyFilterInputs) {
-    
+export async function ApplyFilter(inputData: ApplyFilterInputs, eventId: any) {
+
     console.log(inputData)
     const result = ApplyFilterSchema.safeParse(inputData);
 
@@ -18,6 +18,7 @@ export async function ApplyFilter(inputData: ApplyFilterInputs) {
             // })
 
             const filter: any = {};
+            filter.eventId = eventId;
 
             if (inputData.projectSearch) {
                 filter.name = {

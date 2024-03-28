@@ -34,7 +34,6 @@ export default async function Dashboard({ params }) {
         where: { email: sessionEmail }
     });
 
-
     //Check if user has no eventId set
     if (!user?.eventId) {
         //Check if eventId in params is valid
