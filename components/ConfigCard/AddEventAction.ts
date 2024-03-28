@@ -6,7 +6,7 @@ import { prisma } from "@/prisma";
 
 export async function addEvent(inputData: CreateEventInputs, sessionEmail: string | null | undefined) {
 
-    const result = CreateEventSchema.safeParse(inputData);
+    const result = CreateEventSchema.safeParse(inputData)
 
     try {
         if (result.success) {
@@ -14,19 +14,13 @@ export async function addEvent(inputData: CreateEventInputs, sessionEmail: strin
                 return
             }
 
-            const user = await prisma.user.findUnique({
-                where: {
-                    email: sessionEmail,
-                },
-            })
-
             //Create Event
             const createdEvent = await prisma.event.create({
                 data: {
                     name: inputData.eventName,
                     isPartOfEvent: inputData.isPartOfEvent,
                     hasMilestones: inputData.hasMilestones,
-                    admin: user?.id,
+                    adminEmail: sessionEmail,
                 },
                 select: {
                     id: true, // Include the 'id' field in the selection
@@ -58,11 +52,6 @@ export async function addEvent(inputData: CreateEventInputs, sessionEmail: strin
             return { success: true, data: result.data };
         }
     } catch (error: any) {
-        if (error.code === 'P2002') {
-            // Unique constraint violation error (P2002)
-            return { success: false, error: 'Project name must be unique.' };
-        }
-
         console.error(error);
         return { success: false, error: 'An unexpected error occurred.' };
     }

@@ -4,7 +4,7 @@ import { CreateProjectSchema } from '@/app/lib/types'
 import { CreateProjectInputs } from '@/app/lib/types'
 import { prisma } from "@/prisma";
 
-export async function addEntry(inputData: CreateProjectInputs, sessionEmail: string | null | undefined) {
+export async function addEntry(inputData: CreateProjectInputs, sessionEmail: string | null | undefined, eventId: any) {
 
     const result = CreateProjectSchema.safeParse(inputData);
 
@@ -36,6 +36,7 @@ export async function addEntry(inputData: CreateProjectInputs, sessionEmail: str
                     image: "testImage",
                     link: inputData.projectLink,
                     status: "not accepted",
+                    eventId: eventId,
                 },
                 select: {
                     id: true, // Include the 'id' field in the selection

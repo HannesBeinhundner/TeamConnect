@@ -23,16 +23,17 @@ const stepLabelStyle = {
     },
 };
 
-export default function TopArea() {
+export default function TopArea({ eventData }: { eventData: any }) {
     return (
         <div className={styles.container}>
-            <Link href="/" className={styles.logoLink}>
+            <a href="/" className={styles.logoLink}>
                 <Image
                     src={LogoDarkImg}
                     alt="TeamConnect Logo"
                     width={220}
                 />
-            </Link>
+                <h3>{eventData?.name ? `Event: ${eventData?.name}` : ""}</h3>
+            </a>
             <Box sx={{ width: '100%' }}>
                 <Stepper activeStep={1} alternativeLabel sx={stepLabelStyle}>
                     {steps.map((step, index) => (

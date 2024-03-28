@@ -9,33 +9,40 @@ import backToDashboardImg from "@/images/backToDashboard.svg";
 import NavigationButton from "@/components/NavigationButton/NavigationButton";
 import styles from "@/styles/dashboard.module.scss"
 import ViewAllProjects from "@/components/ViewAllProjects/ViewAllProjects";
+import { getEvent } from '@/app/lib/GetEventAction';
 
-
-export default async function Projects() {
+export default async function Projects({ params }: { params: any }) {
+    const eventId = params.eventId;
+    console.log(eventId);
     // @ts-ignore
     const session = await getServerSession(options);
     if (!session || !session.user) {
         redirect("/");
     }
 
+    const eventData: any = await getEvent(eventId);
+    if (!eventData) {
+        redirect("/");
+    }
+
     return (
         <div className={styles.container}>
             <div className={styles.topArea}>
-                <TopArea />
+                <TopArea eventData={eventData} />
             </div>
             <div className={styles.optionsArea}>
-                <OptionsArea session={session} />
+                <OptionsArea session={session} eventData={eventData} />
             </div>
             <div className={styles.mainArea}>
                 <MainArea
                     topRightComponent={<NavigationButton
-                        href="../"
+                        href="./"
                         imgSrc={backToDashboardImg}
                         altText="Illustration of a team celebrating together"
                         buttonText="Back to Dashboard"
                     />}
                     topLeftComponent={<NavigationButton
-                        href="../dashboard/members"
+                        href="./members"
                         imgSrc={findTeamMembersImg}
                         altText="Illustration of a team working together"
                         buttonText="Find team members"

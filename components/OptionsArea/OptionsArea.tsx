@@ -5,6 +5,7 @@ import styles from "./OptionsArea.module.scss"
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import IconButton from '@mui/material/IconButton';
+import SettingsIcon from '@mui/icons-material/Settings';
 import LogoutIcon from '@mui/icons-material/Logout';
 import Switch from '@mui/material/Switch';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -18,9 +19,10 @@ import { getProfile } from './GetProfileAction';
 
 interface Props {
     session: any;
+    eventData?: any;
 }
 
-export default function OptionsArea({ session }: Props) {
+export default function OptionsArea({ session, eventData }: Props) {
 
     const [updateDialogOpen, setUpdateDialogOpen] = useState(false);
     const [profileResult, setProfileResult] = useState<any>([]);
@@ -28,7 +30,6 @@ export default function OptionsArea({ session }: Props) {
     const fetchProfileStatus = async () => {
         const profileResult: any = await getProfile(session.user.email);
         setProfileResult(profileResult);
-        // console.log(profileResult.data)
     };
 
     useEffect(() => {
@@ -42,9 +43,19 @@ export default function OptionsArea({ session }: Props) {
     const handleUpdateDialogClose = () => {
         setUpdateDialogOpen(false);
     };
-    // console.log(session.user.image)
+
     return (
         <div className={styles.container}>
+            {
+                //Check if current user is admin of event, if so show Link to config page
+                session.user.email === eventData?.adminEmail ? (
+                    <Link href={`/${eventData.id}/config`}>
+                        <IconButton aria-label="config" sx={{ color: '#1C1C1C' }}>
+                            <SettingsIcon />
+                        </IconButton>
+                    </Link>
+                ) : null
+            }
             <IconButton aria-label="logout" onClick={() => signOut()} sx={{ color: '#1C1C1C' }}>
                 <LogoutIcon />
             </IconButton>

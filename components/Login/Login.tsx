@@ -12,27 +12,29 @@ import GitHubIcon from '@mui/icons-material/GitHub';
 import XIcon from '@mui/icons-material/X';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 
-function AuthButton() {
-    // const { data: session } = useSession();
-    // if (session) {
-    //     return (
-    //         redirect("/dashboard")
-    //     );
-    // }
+function AuthButtons({ eventId }: { eventId: any }) {
+
     return (
         <>
-            {/* NOT SINGED IN */}
-            <Button variant="contained" color="primary" onClick={() => signIn("teamconnect")}>Sign in with FH</Button>
-            <Button variant="contained" color="primary" onClick={() => signIn("google")} startIcon={<GoogleIcon />} >Sign in with Google</Button>
-            <Button variant="contained" color="primary" onClick={() => signIn("github")} startIcon={<GitHubIcon />}> Sign in with Github</Button>
-            <Button variant="contained" color="primary" onClick={() => signIn("facebook")} startIcon={<FacebookIcon />} >Sign in with Facebook</Button>
-            <Button variant="contained" color="primary" onClick={() => signIn("twitter")} startIcon={<XIcon />}> Sign in with X</Button>
-            <Button variant="contained" color="primary" onClick={() => signIn("linkedin")} startIcon={<LinkedInIcon />}> Sign in with LinkedIn</Button>
+            {eventId ? (
+                // Login via invite Link
+                <Button variant="contained" color="primary" onClick={() => signIn("google", { callbackUrl: `${window.location.origin}/${eventId}` })} startIcon={<GoogleIcon />} >Sign in with Google</Button>
+            ) : (
+                // normal Login
+                <>
+                    <Button variant="contained" color="primary" onClick={() => signIn("teamconnect")}>Sign in with FH</Button>
+                    <Button variant="contained" color="primary" onClick={() => signIn("google")} startIcon={<GoogleIcon />} >Sign in with Google</Button>
+                    <Button variant="contained" color="primary" onClick={() => signIn("github")} startIcon={<GitHubIcon />}> Sign in with Github</Button>
+                    <Button variant="contained" color="primary" onClick={() => signIn("facebook")} startIcon={<FacebookIcon />} >Sign in with Facebook</Button>
+                    <Button variant="contained" color="primary" onClick={() => signIn("twitter")} startIcon={<XIcon />}> Sign in with X</Button>
+                    <Button variant="contained" color="primary" onClick={() => signIn("linkedin")} startIcon={<LinkedInIcon />}> Sign in with LinkedIn</Button>
+                </>
+            )}
         </>
     );
 }
 
-export default function Login() {
+export default function Login({ eventId }: { eventId: any }) {
     return (
         <div className={styles.container}>
             <Link href="/" className={styles.logoLink}>
@@ -43,7 +45,7 @@ export default function Login() {
                 />
                 <p>simplify the interdisciplinary team and project finding phase</p>
             </Link>
-            <AuthButton />
+            <AuthButtons eventId={eventId} />
             <p className={styles.informationLink}>Need more information? <Link href="https://teamconnect-home.vercel.app/" target="_blank">Click here</Link></p>
         </div>
     )

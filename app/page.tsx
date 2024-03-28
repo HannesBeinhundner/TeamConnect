@@ -2,18 +2,27 @@ import { getServerSession } from "next-auth";
 import { options } from "@/app/api/auth/[...nextauth]/options"
 import LoginCard from "@/components/LoginCard/LoginCard";
 import { redirect } from "next/navigation";
+import { prisma } from "@/prisma";
 
 
 export default async function Home() {
   // @ts-ignore
-  const session = await getServerSession(options);
+  const session = await getServerSession(options)
+  const sessionEmail = session?.user?.email
+  let user
+
+  sessionEmail && (user = await prisma.user.findUnique({
+    where: {
+      email: sessionEmail,
+    },
+  }));
 
   return (
     <>
-      {session?.user?.name ? (
-        redirect("/dashboard")  //HAS SESSION -> Redirect to dashboard
+      {user ? (
+        redirect(`/${user?.eventId}`)  //HAS SESSION -> Redirect to dashboard
       ) : (
-        <LoginCard /> //HAS NO SESSION -> Show the login mask
+        <LoginCard eventId={null} /> //HAS NO SESSION -> Show the login mask
       )}
     </>
   );

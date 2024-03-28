@@ -82,6 +82,21 @@ export const options = {
 
         //     return true
         // },
+        // async signIn({ user, account, profile, email, credentials }) {
+        //     console.log(user)
+        //     console.log(account)
+        //     const urlParams = new URL(account.callbackUrl).searchParams;
+        //     const eventId = urlParams.get('eventId');
+        //     console.log(eventId)
+        //     if (user) {
+        //         await prisma.user.update({
+        //             where: { id: user.id },
+        //             data: { eventId: eventId },
+        //         });
+        //     }
+
+        //     return true;
+        // },
         async jwt({ token, user }) {
             //if (user) token.role = user.role;
             return token;

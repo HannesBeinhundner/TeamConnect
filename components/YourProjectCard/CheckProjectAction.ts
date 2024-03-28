@@ -2,7 +2,7 @@
 
 import { prisma } from "@/prisma";
 
-export async function checkProject(sessionEmail: string | null | undefined) {
+export async function checkProject(sessionEmail: string | null | undefined, eventId: any) {
     try {
         if (!sessionEmail) {
             return
@@ -18,6 +18,7 @@ export async function checkProject(sessionEmail: string | null | undefined) {
             let project = await prisma.project.findUnique({
                 where: {
                     id: user.projectId,
+                    eventId: eventId,
                 },
             })
 

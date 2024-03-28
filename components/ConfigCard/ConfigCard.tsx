@@ -193,7 +193,7 @@ export default function ConfigCard() {
                                         sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                                     >
                                         <TableCell component="th" scope="row">
-                                            <Link href={`${window.location.origin}/${event.id}/dashboard`}>
+                                            <Link href={`${window.location.origin}/${event.id}`}>
                                                 <b>{event.name}</b>
                                             </Link>
                                         </TableCell>
@@ -202,7 +202,7 @@ export default function ConfigCard() {
                                         </TableCell>
                                         <TableCell align="right">{event.projectsCount}</TableCell>
                                         <TableCell align="right">
-                                            <CopyToClipboard text={`${window.location.origin}/sign-in/${event.id}`} onCopy={() => handleTooltipOpen(event.id)}>
+                                            <CopyToClipboard text={`${window.location.origin}/invite/${event.id}`} onCopy={() => handleTooltipOpen(event.id)}>
                                                 <Tooltip
                                                     PopperProps={{
                                                         disablePortal: true
@@ -213,7 +213,7 @@ export default function ConfigCard() {
                                                 >
                                                     <div className={styles.copyLinkWrapper}>
                                                         <span>
-                                                            {`${window.location.origin}/sign-in/${event.id}`}
+                                                            {`${window.location.origin}/invite/${event.id}`}
                                                         </span>
                                                         <IconButton aria-label="open Modal" sx={{ color: '#1C1C1C' }}>
                                                             <ContentCopyIcon fontSize='small' />

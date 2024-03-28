@@ -33,8 +33,8 @@ import YourProjectInformationArea from '../YourProjectInfoArea/YourProjectInfoAr
 import ProjectUpdateDialog from '@/components/ProjectUpdateDialog/ProjectUpdateDialog';
 import { projectTypes } from '@/app/lib/data'
 
-
-export default function YourProjectCard() {
+// @ts-ignore
+export default function YourProjectCard({ eventId }) {
     const { data: session } = useSession();
     const sessionEmail = session?.user?.email;
     const [checkProjectResult, setCheckProjectResult] = useState(false);
@@ -70,7 +70,7 @@ export default function YourProjectCard() {
     };
 
     const fetchProjectStatus = async () => {
-        const projectResult: any = await checkProject(sessionEmail);
+        const projectResult: any = await checkProject(sessionEmail, eventId);
         projectResult ? setCheckProjectResult(true) : setCheckProjectResult(false)
         setProjectResult(projectResult);
         console.log(projectResult)
@@ -118,7 +118,7 @@ export default function YourProjectCard() {
     })
 
     const processForm: SubmitHandler<CreateProjectInputs> = async data => {
-        const result = await addEntry(data, sessionEmail)
+        const result = await addEntry(data, sessionEmail, eventId)
 
         if (!result) {
             alert("Something went wrong")
