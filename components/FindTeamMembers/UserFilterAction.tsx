@@ -19,11 +19,9 @@ export async function UserFilter(inputData: FindTeamMemberInputs, eventId: any) 
                     contains: inputData.memberSearch
                 };
             }
-            if (inputData.studyProgram) {
-                filter.major = inputData.studyProgram;
+            if (inputData.expertise) {
+                filter.expertise = inputData.expertise;
             }
-
-            filter.status = "STUD";
 
             const users = await prisma.user.findMany({
                 where: filter

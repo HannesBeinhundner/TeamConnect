@@ -16,13 +16,15 @@ import { Box } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { ApplyFilter } from './ApplyFilterAction';
 import ViewAllProjectsCard from '../ViewAllProjectsCard/ViewAllProjectsCard';
-import { projectTypes } from '@/app/lib/data';
+import { getProjectTypes } from '@/app/lib/GetProjectTypesAction';
 
 export default function ViewAllProjects({ eventId }: { eventId: any }) {
     const [projectsResult, setProjectsResult] = useState<any>({});
+    const [projectTypes, setProjectTypes] = useState<any>([]);
+
 
     useEffect(() => {
-        const fetchData = async () => {
+        const fetchProjects = async () => {
             try {
                 const data = {
                     projectSearch: "",
@@ -41,11 +43,14 @@ export default function ViewAllProjects({ eventId }: { eventId: any }) {
             }
         };
 
-        fetchData();
+        const fetchProjectTypes = async () => {
+            const projectTypes: any = await getProjectTypes(eventId);
+            setProjectTypes(projectTypes);
+        };
 
+        fetchProjects();
+        fetchProjectTypes();
     }, []);
-
-
 
     const {
         register,
@@ -109,13 +114,11 @@ export default function ViewAllProjects({ eventId }: { eventId: any }) {
                             <MenuItem value="">
                                 <em>None</em>
                             </MenuItem>
-                            <MenuItem value={projectTypes.web}>{projectTypes.web}</MenuItem>
-                            <MenuItem value={projectTypes.game}>{projectTypes.game}</MenuItem>
-                            <MenuItem value={projectTypes.film}>{projectTypes.film}</MenuItem>
-                            <MenuItem value={projectTypes.audio}>{projectTypes.audio}</MenuItem>
-                            <MenuItem value={projectTypes.computeranimation}>{projectTypes.computeranimation}</MenuItem>
-                            <MenuItem value={projectTypes.communicationdesign}>{projectTypes.communicationdesign}</MenuItem>
-                            <MenuItem value={projectTypes.other}>{projectTypes.other}</MenuItem>
+                            {
+                                projectTypes.map((projectType: any) => (
+                                    <MenuItem key={projectType.id} value={projectType.name}>{projectType.name}</MenuItem>
+                                ))
+                            }
                         </Select>
                         <FormHelperText sx={{ color: (theme) => theme.palette.error.main }}></FormHelperText>
                     </FormControl>

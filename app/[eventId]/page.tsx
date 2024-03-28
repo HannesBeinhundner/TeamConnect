@@ -5,7 +5,7 @@ import TopArea from "@/components/TopArea/TopArea";
 import MainArea from "@/components/MainArea/MainArea";
 import OptionsArea from "@/components/OptionsArea/OptionsArea";
 import YourProjectCard from "@/components/YourProjectCard/YourProjectCard";
-import StudentStatistics from "@/components/StudentStatistics/StudentStatistics";
+import EventStatistics from "@/components/EventStatistics/EventStatistics";
 import findTeamMembersImg from "@/images/findTeamMembers.svg";
 import viewAllProjectsImg from "@/images/viewAllProjects.svg";
 import NavigationButton from "@/components/NavigationButton/NavigationButton";
@@ -82,7 +82,7 @@ export default async function Dashboard({ params }) {
                         buttonText="View all projects"
                     />}
                     bottomLeftComponent={<YourProjectCard eventId={paramEventId} />}
-                    bottomRightComponent={<StudentStatistics value={60} />}
+                    bottomRightComponent={<EventStatistics value={60} />}
                 />
             </div>
         </div>

@@ -21,9 +21,8 @@ export default function ViewAllProjectsCard({ projectResult }) {
     const [projectUsers, setProjectUsers] = useState('');
 
     const fetchProjectUsers = async () => {
-        const students: any = await getProjectUsers(projectResult.id);
-        console.log(students)
-        setProjectUsers(students);
+        const users: any = await getProjectUsers(projectResult.id);
+        setProjectUsers(users);
     };
 
     useEffect(() => {
@@ -39,7 +38,6 @@ export default function ViewAllProjectsCard({ projectResult }) {
             <div className={styles.propertyArea}>
                 <Chip className={styles.chipColor} text={projectResult?.status} icon={<CheckCircleOutlineIcon fontSize='small' sx={{ color: 'success.main' }} />} />
                 <Chip className={styles.chipColor} text={projectResult?.type} icon={<CategoryIcon fontSize='small' />} />
-                <Chip className={styles.chipColor} text={projectResult?.supervisor} icon={<AssignmentIndIcon fontSize='small' />} />
                 <Chip className={styles.chipColor} text={projectUsers} icon={<AssignmentIndIcon fontSize='small' />} />
                 <Link href={(projectResult?.link && (projectResult.link.startsWith("https://") || projectResult.link.startsWith("http://"))) ? projectResult.link : "https://" + projectResult?.link} className={styles.chipLink} target="_blank">
                     <Chip className={styles.chipColor} text={projectResult?.link} icon={<LinkIcon fontSize='small' sx={{ color: '#000000DE' }} />} />

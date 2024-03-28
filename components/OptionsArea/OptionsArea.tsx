@@ -98,6 +98,7 @@ export default function OptionsArea({ session, eventData }: Props) {
                 onClose={handleUpdateDialogClose}
                 session={session}
                 profileResult={profileResult.data}
+                eventData={eventData}
             />
         </div>
     )

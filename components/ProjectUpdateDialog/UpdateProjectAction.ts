@@ -29,7 +29,6 @@ export async function updateProject(inputData: UpdateProjectInputs, projectId: n
             data: {
                 name: inputData.projectName,
                 type: inputData.projectType,
-                supervisor: inputData.projectSupervisor,
                 description: inputData.projectDescription,
                 skills: inputData.projectSkills,
                 link: inputData.projectLink,

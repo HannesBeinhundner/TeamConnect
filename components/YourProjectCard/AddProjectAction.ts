@@ -29,7 +29,6 @@ export async function addEntry(inputData: CreateProjectInputs, sessionEmail: str
                 data: {
                     name: inputData.projectName,
                     type: inputData.projectType,
-                    supervisor: inputData.projectSupervisor,
                     description: inputData.projectDescription,
                     skills: inputData.projectSkills,
                     file: "testFile",

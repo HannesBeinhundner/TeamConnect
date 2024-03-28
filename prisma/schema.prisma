@@ -57,7 +57,6 @@ model Project {
   id          Int     @id @default(autoincrement())
   name        String  @unique @db.VarChar(256)
   type        String  @db.VarChar(256)
-  supervisor  String  @db.VarChar(256)
   description String
   skills      String
   file        String  @db.VarChar(256)
@@ -99,19 +98,12 @@ model Session {
 model User {
   id                        String    @id @default(cuid())
   email                     String?   @unique
-  emailVerified             DateTime?
   image                     String?
-  username                  String?
-  department                String?
-  firstname                 String?
-  lastname                  String?
-  status                    String?
-  studies                   String?
   name                      String?
   projectId                 Int?
   projectAdmin              Boolean   @default(false)
-  major                     String?
-  portfolio                 String?
+  expertise                 String?
+  link                      String?
   description               String?
   eventId                   String?
   accounts                  Account[]

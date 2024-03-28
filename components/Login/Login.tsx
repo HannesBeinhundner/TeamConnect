@@ -22,7 +22,7 @@ function AuthButtons({ eventId }: { eventId: any }) {
             ) : (
                 // normal Login
                 <>
-                    <Button variant="contained" color="primary" onClick={() => signIn("teamconnect")}>Sign in with FH</Button>
+                    {/* <Button variant="contained" color="primary" onClick={() => signIn("teamconnect")}>Sign in with FH</Button> */}
                     <Button variant="contained" color="primary" onClick={() => signIn("google")} startIcon={<GoogleIcon />} >Sign in with Google</Button>
                     <Button variant="contained" color="primary" onClick={() => signIn("github")} startIcon={<GitHubIcon />}> Sign in with Github</Button>
                     <Button variant="contained" color="primary" onClick={() => signIn("facebook")} startIcon={<FacebookIcon />} >Sign in with Facebook</Button>

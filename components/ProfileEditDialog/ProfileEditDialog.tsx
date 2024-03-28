@@ -22,21 +22,31 @@ import { UpdateProfileSchema } from '@/app/lib/types';
 import { UpdateProfileInputs } from '@/app/lib/types';
 import styles from './ProfileEditDialog.module.scss';
 import { updateProfile } from './UpdateProfileAction';
-import { studyProgramTypes } from '@/app/lib/data'
+import { getExpertises } from '@/app/lib/GetExpertisesAction';
 
 interface ProfileUpdateDialogProps {
     open: boolean;
     onClose: () => void;
     session: any;
     profileResult: any;
+    eventData: any
 }
 
-const ProfileEditDialog: React.FC<ProfileUpdateDialogProps> = ({ open, onClose, session, profileResult }) => {
+const ProfileEditDialog: React.FC<ProfileUpdateDialogProps> = ({ open, onClose, session, profileResult, eventData }) => {
     const [errorAlert, setErrorAlert] = useState(false);
     const [successAlert, setSuccessAlert] = useState(false);
     const [successMessage, setSuccessMessage] = useState('');
     const [serverErrorMessage, setServerErrorMessage] = useState('');
+    const [expertises, setExpertises] = useState([]);
 
+    useEffect(() => {
+        const fetchExpertises = async () => {
+            const expertises: any = await getExpertises(eventData.id);
+            setExpertises(expertises);
+        };
+
+        fetchExpertises();
+    }, [])
 
     const handleCloseAlert = () => {
         setSuccessAlert(false);
@@ -63,7 +73,7 @@ const ProfileEditDialog: React.FC<ProfileUpdateDialogProps> = ({ open, onClose, 
         resolver: zodResolver(UpdateProfileSchema),
         defaultValues: {
             //profileName: profileResult?.name || 'test', // Somehow doesnt work this way
-            //profileExpertise: profileResult?.major || 'test',
+            //profileExpertise: profileResult?.expertise || 'test',
             //profileDescription: profileResult?.description || 'test',
         },
     });
@@ -127,19 +137,15 @@ const ProfileEditDialog: React.FC<ProfileUpdateDialogProps> = ({ open, onClose, 
                                 id="profileExpertise"
                                 label="Profile Expertise"
                                 fullWidth
-                                defaultValue={profileResult?.major}
+                                defaultValue={profileResult?.expertise}
                                 {...register('profileExpertise')}
                                 error={!!errors.profileExpertise}
                             >
-                                <MenuItem value="">
-                                    <em>None</em>
-                                </MenuItem>
-                                <MenuItem value={studyProgramTypes.web}>{studyProgramTypes.web}</MenuItem>
-                                <MenuItem value={studyProgramTypes.game}>{studyProgramTypes.game}</MenuItem>
-                                <MenuItem value={studyProgramTypes.film}>{studyProgramTypes.film}</MenuItem>
-                                <MenuItem value={studyProgramTypes.audio}>{studyProgramTypes.audio}</MenuItem>
-                                <MenuItem value={studyProgramTypes.computeranimation}>{studyProgramTypes.computeranimation}</MenuItem>
-                                <MenuItem value={studyProgramTypes.communicationdesign}>{studyProgramTypes.communicationdesign}</MenuItem>
+                                {
+                                    expertises.map((expertise: any) => (
+                                        <MenuItem key={expertise.id} value={expertise.name}>{expertise.name}</MenuItem>
+                                    ))
+                                }
                             </Select>
                             <FormHelperText sx={{ color: (theme) => theme.palette.error.main }}>{errors.profileExpertise?.message}</FormHelperText>
                         </FormControl>

@@ -15,8 +15,8 @@ import { FindTeamMemberInputs, FindTeamMemberSchema } from '@/app/lib/types'
 import { Box } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import FindTeamMembersCard from '../FindTeamMembersCard/FindTeamMembersCard';
-import { studyProgramTypes } from '@/app/lib/data';
 import { UserFilter } from './UserFilterAction';
+import { getExpertises } from '@/app/lib/GetExpertisesAction';
 
 interface Props {
     session: any;
@@ -26,13 +26,14 @@ interface Props {
 export default function FindTeamMembers({ session, eventId }: Props) {
 
     const [userResult, setUserResult] = useState<any>({});
+    const [expertises, setExpertises] = useState([]);
 
     useEffect(() => {
-        const fetchData = async () => {
+        const fetchUsers = async () => {
             try {
                 const data = {
                     memberSearch: "",
-                    studyProgram: ""
+                    expertise: ""
                 };
                 const response = await UserFilter(data, eventId);
 
@@ -46,7 +47,13 @@ export default function FindTeamMembers({ session, eventId }: Props) {
             }
         };
 
-        fetchData();
+        const fetchExpertises = async () => {
+            const expertises: any = await getExpertises(eventId);
+            setExpertises(expertises);
+        };
+
+        fetchUsers();
+        fetchExpertises();
     }, []);
 
     const {
@@ -99,23 +106,19 @@ export default function FindTeamMembers({ session, eventId }: Props) {
                         />
                     </Box>
                     <FormControl variant="standard" sx={{ width: "25%" }}>
-                        <InputLabel id="studyProgram">Study Program</InputLabel>
+                        <InputLabel id="expertise">Expertise</InputLabel>
                         <Select
-                            labelId="studyProgram"
-                            id="studyProgram"
-                            label="studyProgram"
+                            labelId="expertise"
+                            id="expertise"
+                            label="expertise"
                             fullWidth
-                            {...register('studyProgram')}
+                            {...register('expertise')}
                         >
-                            <MenuItem value="">
-                                <em>None</em>
-                            </MenuItem>
-                            <MenuItem value={studyProgramTypes.web}>{studyProgramTypes.web}</MenuItem>
-                            <MenuItem value={studyProgramTypes.game}>{studyProgramTypes.game}</MenuItem>
-                            <MenuItem value={studyProgramTypes.film}>{studyProgramTypes.film}</MenuItem>
-                            <MenuItem value={studyProgramTypes.audio}>{studyProgramTypes.audio}</MenuItem>
-                            <MenuItem value={studyProgramTypes.computeranimation}>{studyProgramTypes.computeranimation}</MenuItem>
-                            <MenuItem value={studyProgramTypes.communicationdesign}>{studyProgramTypes.communicationdesign}</MenuItem>
+                            {
+                                expertises.map((expertise: any) => (
+                                    <MenuItem key={expertise.id} value={expertise.name}>{expertise.name}</MenuItem>
+                                ))
+                            }
                         </Select>
                         <FormHelperText sx={{ color: (theme) => theme.palette.error.main }}></FormHelperText>
                     </FormControl>
