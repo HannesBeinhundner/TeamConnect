@@ -50,7 +50,7 @@ export default async function Dashboard({ params }) {
 
         } else {
             //otherwise redirect to config, beacuse the user was not invited to an event
-            redirect("/config");
+            redirect("../config");
         }
     } else {
         // User has an eventId set, but the eventId in the params is not valid

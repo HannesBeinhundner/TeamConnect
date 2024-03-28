@@ -49,7 +49,7 @@ export default function OptionsArea({ session, eventData }: Props) {
             {
                 //Check if current user is admin of event, if so show Link to config page
                 session.user.email === eventData?.adminEmail ? (
-                    <Link href={`/${eventData.id}/config`}>
+                    <Link href={`/config`}>
                         <IconButton aria-label="config" sx={{ color: '#1C1C1C' }}>
                             <SettingsIcon />
                         </IconButton>

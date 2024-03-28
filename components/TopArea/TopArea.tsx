@@ -35,7 +35,7 @@ export default function TopArea({ eventData }: { eventData: any }) {
                 <h3>{eventData?.name ? `Event: ${eventData?.name}` : ""}</h3>
             </a>
             <Box sx={{ width: '100%' }}>
-                <Stepper activeStep={1} alternativeLabel sx={stepLabelStyle}>
+                {/* <Stepper activeStep={1} alternativeLabel sx={stepLabelStyle}>
                     {steps.map((step, index) => (
                         <Step key={index}>
                             <StepLabel className={styles.milestone}>
@@ -45,7 +45,7 @@ export default function TopArea({ eventData }: { eventData: any }) {
                             </StepLabel>
                         </Step>
                     ))}
-                </Stepper>
+                </Stepper> */}
             </Box>
         </div>
     );
