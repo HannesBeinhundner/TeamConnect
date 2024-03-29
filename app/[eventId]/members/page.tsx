@@ -4,46 +4,52 @@ import { options } from "@/app/api/auth/[...nextauth]/options"
 import TopArea from "@/components/TopArea/TopArea";
 import MainArea from "@/components/MainArea/MainArea";
 import OptionsArea from "@/components/OptionsArea/OptionsArea";
-import YourProjectCard from "@/components/YourProjectCard/YourProjectCard";
-import StudentStatistics from "@/components/StudentStatistics/StudentStatistics";
-import findTeamMembersImg from "@/images/findTeamMembers.svg";
 import viewAllProjectsImg from "@/images/viewAllProjects.svg";
+import backToDashboardImg from "@/images/backToDashboard.svg";
 import NavigationButton from "@/components/NavigationButton/NavigationButton";
-import styles from "@/styles/dashboard.module.scss";
+import styles from "@/styles/dashboard.module.scss"
+import FindTeamMembers from "@/components/FindTeamMembers/FindTeamMembers";
+import { getEvent } from '@/app/lib/GetEventAction';
 
-export default async function Dashboard() {
+export default async function Members({ params }: { params: any }) {
+    const eventId = params.eventId;
+    console.log(eventId);
     // @ts-ignore
     const session = await getServerSession(options);
     if (!session || !session.user) {
         redirect("/");
     }
 
+    const eventData: any = await getEvent(eventId);
+    if (!eventData) {
+        redirect("/");
+    }
+
     return (
         <div className={styles.container}>
             <div className={styles.topArea}>
-                <TopArea />
+                <TopArea eventData={eventData} />
             </div>
             <div className={styles.optionsArea}>
-                <OptionsArea session={session} />
+                <OptionsArea session={session} eventData={eventData} />
             </div>
             <div className={styles.mainArea}>
                 <MainArea
                     topLeftComponent={<NavigationButton
-                        href="./dashboard/members"
-                        imgSrc={findTeamMembersImg}
+                        href="../"
+                        imgSrc={backToDashboardImg}
                         altText="Illustration of a team celebrating together"
-                        buttonText="Find Team Members"
+                        buttonText="Back to Dashboard"
                     />}
                     topRightComponent={<NavigationButton
-                        href="./dashboard/projects"
+                        href={`./projects`}
                         imgSrc={viewAllProjectsImg}
                         altText="Illustration of a team working together"
                         buttonText="View all projects"
                     />}
-                    bottomLeftComponent={<YourProjectCard />}
-                    bottomRightComponent={<StudentStatistics value={60} />}
+                    bottomLeftComponent={<FindTeamMembers session={session} eventId={eventId} />}
                 />
             </div>
         </div>
-    );
+    )
 }

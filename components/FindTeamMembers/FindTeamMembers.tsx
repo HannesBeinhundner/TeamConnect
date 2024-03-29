@@ -15,25 +15,27 @@ import { FindTeamMemberInputs, FindTeamMemberSchema } from '@/app/lib/types'
 import { Box } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import FindTeamMembersCard from '../FindTeamMembersCard/FindTeamMembersCard';
-import { studyProgramTypes } from '@/app/lib/data';
 import { UserFilter } from './UserFilterAction';
+import { getExpertises } from '@/app/lib/GetExpertisesAction';
 
 interface Props {
     session: any;
+    eventId: any;
 }
 
-export default function FindTeamMembers({ session }: Props) {
+export default function FindTeamMembers({ session, eventId }: Props) {
 
     const [userResult, setUserResult] = useState<any>({});
+    const [expertises, setExpertises] = useState([]);
 
     useEffect(() => {
-        const fetchData = async () => {
+        const fetchUsers = async () => {
             try {
                 const data = {
                     memberSearch: "",
-                    studyProgram: ""
+                    expertise: ""
                 };
-                const response = await UserFilter(data);
+                const response = await UserFilter(data, eventId);
 
                 if (response.success && Array.isArray(response.data)) {
                     setUserResult(response.data);
@@ -45,11 +47,14 @@ export default function FindTeamMembers({ session }: Props) {
             }
         };
 
-        fetchData();
+        const fetchExpertises = async () => {
+            const expertises: any = await getExpertises(eventId);
+            setExpertises(expertises);
+        };
 
+        fetchUsers();
+        fetchExpertises();
     }, []);
-
-
 
     const {
         register,
@@ -65,7 +70,7 @@ export default function FindTeamMembers({ session }: Props) {
     const processForm: SubmitHandler<FindTeamMemberInputs> = async data => {
         try {
             // Call ApplyFilter with form data
-            const filteredUsers = await UserFilter(data);
+            const filteredUsers = await UserFilter(data, eventId);
 
             if (filteredUsers && filteredUsers.success && Array.isArray(filteredUsers.data)) {
                 // Set the filtered project data
@@ -101,23 +106,19 @@ export default function FindTeamMembers({ session }: Props) {
                         />
                     </Box>
                     <FormControl variant="standard" sx={{ width: "25%" }}>
-                        <InputLabel id="studyProgram">Study Program</InputLabel>
+                        <InputLabel id="expertise">Expertise</InputLabel>
                         <Select
-                            labelId="studyProgram"
-                            id="studyProgram"
-                            label="studyProgram"
+                            labelId="expertise"
+                            id="expertise"
+                            label="expertise"
                             fullWidth
-                            {...register('studyProgram')}
+                            {...register('expertise')}
                         >
-                            <MenuItem value="">
-                                <em>None</em>
-                            </MenuItem>
-                            <MenuItem value={studyProgramTypes.web}>{studyProgramTypes.web}</MenuItem>
-                            <MenuItem value={studyProgramTypes.game}>{studyProgramTypes.game}</MenuItem>
-                            <MenuItem value={studyProgramTypes.film}>{studyProgramTypes.film}</MenuItem>
-                            <MenuItem value={studyProgramTypes.audio}>{studyProgramTypes.audio}</MenuItem>
-                            <MenuItem value={studyProgramTypes.computeranimation}>{studyProgramTypes.computeranimation}</MenuItem>
-                            <MenuItem value={studyProgramTypes.communicationdesign}>{studyProgramTypes.communicationdesign}</MenuItem>
+                            {
+                                expertises.map((expertise: any) => (
+                                    <MenuItem key={expertise.id} value={expertise.name}>{expertise.name}</MenuItem>
+                                ))
+                            }
                         </Select>
                         <FormHelperText sx={{ color: (theme) => theme.palette.error.main }}></FormHelperText>
                     </FormControl>

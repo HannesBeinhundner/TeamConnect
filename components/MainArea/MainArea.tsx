@@ -2,8 +2,8 @@ import React from "react";
 import styles from "./MainArea.module.scss";
 
 interface MainAreaProps {
-    topLeftComponent: React.ReactNode;
-    topRightComponent: React.ReactNode;
+    topLeftComponent?: React.ReactNode;
+    topRightComponent?: React.ReactNode;
     bottomLeftComponent?: React.ReactNode;
     bottomRightComponent?: React.ReactNode;
 }
@@ -17,9 +17,17 @@ export default function MainArea({
     return (
         <div className={`${styles.container} ${bottomRightComponent ? '' : styles.containerWithScroll}`}>
 
+            {
+                topLeftComponent && topRightComponent ? (
+                    <>
+                        <div className={styles.topLeft}>{topLeftComponent}</div>
+                        <div className={styles.topRight}>{topRightComponent}</div>
+                    </>
+                ) : (
+                    ""
+                )
+            }
 
-            <div className={styles.topLeft}>{topLeftComponent}</div>
-            <div className={styles.topRight}>{topRightComponent}</div>
             {
                 bottomLeftComponent && bottomRightComponent ? (
                     <>

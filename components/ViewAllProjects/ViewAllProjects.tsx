@@ -16,20 +16,22 @@ import { Box } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { ApplyFilter } from './ApplyFilterAction';
 import ViewAllProjectsCard from '../ViewAllProjectsCard/ViewAllProjectsCard';
-import { projectTypes } from '@/app/lib/data';
+import { getProjectTypes } from '@/app/lib/GetProjectTypesAction';
 
-export default function ViewAllProjects() {
+export default function ViewAllProjects({ eventId }: { eventId: any }) {
     const [projectsResult, setProjectsResult] = useState<any>({});
+    const [projectTypes, setProjectTypes] = useState<any>([]);
+
 
     useEffect(() => {
-        const fetchData = async () => {
+        const fetchProjects = async () => {
             try {
                 const data = {
                     projectSearch: "",
                     projectType: "",
-                    projectStatus: ""
+                    projectStatus: "",
                 };
-                const response = await ApplyFilter(data);
+                const response = await ApplyFilter(data, eventId);
 
                 if (response.success && Array.isArray(response.data)) {
                     setProjectsResult(response.data);
@@ -41,11 +43,14 @@ export default function ViewAllProjects() {
             }
         };
 
-        fetchData();
+        const fetchProjectTypes = async () => {
+            const projectTypes: any = await getProjectTypes(eventId);
+            setProjectTypes(projectTypes);
+        };
 
+        fetchProjects();
+        fetchProjectTypes();
     }, []);
-
-
 
     const {
         register,
@@ -61,7 +66,7 @@ export default function ViewAllProjects() {
     const processForm: SubmitHandler<ApplyFilterInputs> = async data => {
         try {
             // Call ApplyFilter with form data
-            const filteredProjects = await ApplyFilter(data);
+            const filteredProjects = await ApplyFilter(data, eventId);
 
             if (filteredProjects && filteredProjects.success && Array.isArray(filteredProjects.data)) {
                 // Set the filtered project data
@@ -109,13 +114,11 @@ export default function ViewAllProjects() {
                             <MenuItem value="">
                                 <em>None</em>
                             </MenuItem>
-                            <MenuItem value={projectTypes.web}>{projectTypes.web}</MenuItem>
-                            <MenuItem value={projectTypes.game}>{projectTypes.game}</MenuItem>
-                            <MenuItem value={projectTypes.film}>{projectTypes.film}</MenuItem>
-                            <MenuItem value={projectTypes.audio}>{projectTypes.audio}</MenuItem>
-                            <MenuItem value={projectTypes.computeranimation}>{projectTypes.computeranimation}</MenuItem>
-                            <MenuItem value={projectTypes.communicationdesign}>{projectTypes.communicationdesign}</MenuItem>
-                            <MenuItem value={projectTypes.other}>{projectTypes.other}</MenuItem>
+                            {
+                                projectTypes.map((projectType: any) => (
+                                    <MenuItem key={projectType.id} value={projectType.name}>{projectType.name}</MenuItem>
+                                ))
+                            }
                         </Select>
                         <FormHelperText sx={{ color: (theme) => theme.palette.error.main }}></FormHelperText>
                     </FormControl>

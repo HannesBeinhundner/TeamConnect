@@ -23,7 +23,6 @@ export default function YourProjectInformationArea({ projectResult }) {
             <div className={styles.propertyArea}>
                 <Chip text={projectResult?.status} icon={<CheckCircleOutlineIcon fontSize='small' sx={{ color: 'success.main' }} />} />
                 <Chip text={projectResult?.type} icon={<CategoryIcon fontSize='small' />} />
-                <Chip text={projectResult?.supervisor} icon={<AssignmentIndIcon fontSize='small' />} />
                 <Link href={(projectResult?.link && (projectResult.link.startsWith("https://") || projectResult.link.startsWith("http://"))) ? projectResult.link : "https://" + projectResult?.link} className={styles.chipLink} target="_blank">
                     <Chip className={styles.chipColor} text={projectResult?.link} icon={<LinkIcon fontSize='small' sx={{ color: '#000000DE' }} />} />
                 </Link>

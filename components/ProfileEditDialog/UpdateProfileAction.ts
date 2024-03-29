@@ -17,7 +17,7 @@ export async function updateProfile(inputData: UpdateProfileInputs, userEmail: s
             where: { email: userEmail },
             data: {
                 name: inputData.profileName,
-                major: inputData.profileExpertise,
+                expertise: inputData.profileExpertise,
                 description: inputData.profileDescription,
             },
         });

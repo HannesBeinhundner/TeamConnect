@@ -24,17 +24,16 @@ import { UpdateProjectInputs } from '@/app/lib/types';
 import styles from './ProjectUpdateDialog.module.scss';
 import { updateProject } from './UpdateProjectAction';
 import { deleteProject } from './DeleteProjectAction';
-import { projectTypes } from '@/app/lib/data'
 
 interface ProjectUpdateDialogProps {
     open: boolean;
     onClose: () => void;
     projectResult: any;
     reloadComponent: () => void;
-    projectSupervisors: [];
+    projectTypes: any;
 }
 
-const ProjectUpdateDialog: React.FC<ProjectUpdateDialogProps> = ({ open, onClose, projectResult, reloadComponent, projectSupervisors }) => {
+const ProjectUpdateDialog: React.FC<ProjectUpdateDialogProps> = ({ open, onClose, projectResult, reloadComponent, projectTypes }) => {
     const [errorAlert, setErrorAlert] = useState(false);
     const [successAlert, setSuccessAlert] = useState(false);
     const [successMessage, setSuccessMessage] = useState('');
@@ -79,7 +78,6 @@ const ProjectUpdateDialog: React.FC<ProjectUpdateDialogProps> = ({ open, onClose
         defaultValues: {
             projectName: projectResult?.name || '',
             projectType: projectResult?.type || '',
-            projectSupervisor: projectResult?.supervisor || '',
             projectLink: projectResult?.link || '',
             projectDescription: projectResult?.description || '',
             projectSkills: projectResult?.skills || '',
@@ -176,41 +174,15 @@ const ProjectUpdateDialog: React.FC<ProjectUpdateDialogProps> = ({ open, onClose
                                 {...register('projectType')}
                                 error={!!errors.projectType}
                             >
-                                <MenuItem value="">
-                                    <em>None</em>
-                                </MenuItem>
-                                <MenuItem value={projectTypes.web}>{projectTypes.web}</MenuItem>
-                                <MenuItem value={projectTypes.game}>{projectTypes.game}</MenuItem>
-                                <MenuItem value={projectTypes.film}>{projectTypes.film}</MenuItem>
-                                <MenuItem value={projectTypes.audio}>{projectTypes.audio}</MenuItem>
-                                <MenuItem value={projectTypes.computeranimation}>{projectTypes.computeranimation}</MenuItem>
-                                <MenuItem value={projectTypes.communicationdesign}>{projectTypes.communicationdesign}</MenuItem>
-                                <MenuItem value={projectTypes.other}>{projectTypes.other}</MenuItem>
+                                {
+                                    projectTypes && projectTypes.map((projectType: any) => (
+                                        <MenuItem key={projectType.id} value={projectType.name}>{projectType.name}</MenuItem>
+                                    ))
+                                }
                             </Select>
                             <FormHelperText sx={{ color: (theme) => theme.palette.error.main }}>{errors.projectType?.message}</FormHelperText>
                         </FormControl>
-                        <FormControl variant="standard" sx={{ minWidth: '100%' }} error={!!errors.projectSupervisor}>
-                            <InputLabel id="projectSupervisor">Project Supervisor *</InputLabel>
-                            <Select
-                                labelId="projectSupervisor"
-                                id="projectSupervisor"
-                                label="Project Supervisor"
-                                fullWidth
-                                defaultValue={projectResult?.supervisor}
-                                {...register('projectSupervisor')}
-                                error={!!errors.projectSupervisor}
-                            >
-                                <MenuItem value="">
-                                    <em>None</em>
-                                </MenuItem>
-                                {projectSupervisors && projectSupervisors.map((supervisor: any) => (
-                                    <MenuItem key={supervisor.id} value={supervisor.name}>
-                                        {supervisor.name}
-                                    </MenuItem>
-                                ))}
-                            </Select>
-                            <FormHelperText sx={{ color: (theme) => theme.palette.error.main }}>{errors.projectSupervisor?.message}</FormHelperText>
-                        </FormControl>
+
                         <TextField
                             margin="dense"
                             id="projectLink"
@@ -238,9 +210,9 @@ const ProjectUpdateDialog: React.FC<ProjectUpdateDialogProps> = ({ open, onClose
                         <TextField
                             margin="dense"
                             id="projectSkills"
-                            label="Preferred skills and study program"
+                            label="Preferred skills and expertise"
                             type="text"
-                            placeholder="Specify desired team skills and relevant student courses for your project..."
+                            placeholder="Specify desired team skills and relevant expertises for your project..."
                             fullWidth
                             multiline
                             maxRows={4}
@@ -265,7 +237,7 @@ const ProjectUpdateDialog: React.FC<ProjectUpdateDialogProps> = ({ open, onClose
                             tabIndex={-1}
                             startIcon={<CloudUploadIcon />}
                         >
-                            Upload Exposé
+                            Upload Document
                             <VisuallyHiddenInput type="file" />
                         </Button>
                         <DialogActions>

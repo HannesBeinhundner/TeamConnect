@@ -30,9 +30,9 @@ export default function FindTeamMembersCard({ userResult }) {
                 <h2>{userResult?.name}</h2>
             </div>
             <div className={styles.propertyArea}>
-                <Chip className={styles.chipColor} text={userResult?.major} icon={<SchoolIcon fontSize='small' />} />
-                <Link href={"https://" + userResult?.portfolio} className={styles.chipLink} target="_blank" >
-                    <Chip className={styles.chipColor} text="Portfolio" icon={<LinkIcon fontSize='small' sx={{ color: '#000000DE' }} />} />
+                <Chip className={styles.chipColor} text={userResult?.expertise} icon={<SchoolIcon fontSize='small' />} />
+                <Link href={"https://" + userResult?.link} className={styles.chipLink} target="_blank" >
+                    <Chip className={styles.chipColor} text="Link" icon={<LinkIcon fontSize='small' sx={{ color: '#000000DE' }} />} />
                 </Link>
             </div>
             <div className={styles.descriptionArea}>

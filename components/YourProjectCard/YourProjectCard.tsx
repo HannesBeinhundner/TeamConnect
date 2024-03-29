@@ -28,24 +28,25 @@ import { CreateProjectInputs } from '@/app/lib/types'
 import { addEntry } from './AddProjectAction';
 import { useSession } from "next-auth/react";
 import { checkProject } from './CheckProjectAction';
-import { getSupervisors } from './GetSupervisorsAction';
 import YourProjectInformationArea from '../YourProjectInfoArea/YourProjectInfoArea';
 import ProjectUpdateDialog from '@/components/ProjectUpdateDialog/ProjectUpdateDialog';
-import { projectTypes } from '@/app/lib/data'
+import { getProjectTypes } from '@/app/lib/GetProjectTypesAction';
 
-
-export default function YourProjectCard() {
+// @ts-ignore
+export default function YourProjectCard({ eventId }) {
     const { data: session } = useSession();
     const sessionEmail = session?.user?.email;
     const [checkProjectResult, setCheckProjectResult] = useState(false);
     const [projectResult, setProjectResult] = useState<any>([]);
-    const [projectSupervisors, setProjectSupervisors] = useState<any>([]);
+    const [projectTypes, setProjectTypes] = useState<any>([]);
+
 
     const [open, setOpen] = useState(false);
     const [updateDialogOpen, setUpdateDialogOpen] = useState(false);
     const [errorAlert, setErrorAlert] = useState(false)
     const [successAlert, setSucessAlert] = useState(false)
     const [serverErrorMessage, setServerErrorMessage] = useState("")
+
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -70,18 +71,20 @@ export default function YourProjectCard() {
     };
 
     const fetchProjectStatus = async () => {
-        const projectResult: any = await checkProject(sessionEmail);
+        const projectResult: any = await checkProject(sessionEmail, eventId);
         projectResult ? setCheckProjectResult(true) : setCheckProjectResult(false)
         setProjectResult(projectResult);
         console.log(projectResult)
-
-        //Fetch Supervisors
-        const supervisorsResult: any = await getSupervisors();
-        setProjectSupervisors(supervisorsResult.data || []);
     };
 
     useEffect(() => {
+        const fetchProjectTypes = async () => {
+            const projectTypes: any = await getProjectTypes(eventId);
+            setProjectTypes(projectTypes);
+        };
+
         fetchProjectStatus();
+        fetchProjectTypes();
     }, []);
 
     useEffect(() => {
@@ -118,7 +121,7 @@ export default function YourProjectCard() {
     })
 
     const processForm: SubmitHandler<CreateProjectInputs> = async data => {
-        const result = await addEntry(data, sessionEmail)
+        const result = await addEntry(data, sessionEmail, eventId)
 
         if (!result) {
             alert("Something went wrong")
@@ -154,7 +157,7 @@ export default function YourProjectCard() {
                         onClose={handleUpdateDialogClose}
                         projectResult={projectResult}
                         reloadComponent={fetchProjectStatus}
-                        projectSupervisors={projectSupervisors}
+                        projectTypes={projectTypes}
                     />
                 )
             }
@@ -175,12 +178,6 @@ export default function YourProjectCard() {
                                 fullWidth={true}
                                 maxWidth={"md"}
                                 className={styles.createModal}
-                                PaperProps={{
-                                    style: {
-                                        // backgroundColor: '#232323',
-                                        // color: 'text.secondary'
-                                    },
-                                }}
                             >
                                 <DialogTitle>Create Project</DialogTitle>
                                 <IconButton
@@ -221,40 +218,13 @@ export default function YourProjectCard() {
                                                 {...register('projectType')}
                                                 error={!!errors.projectType}
                                             >
-                                                <MenuItem value="">
-                                                    <em>None</em>
-                                                </MenuItem>
-                                                <MenuItem value={projectTypes.web}>{projectTypes.web}</MenuItem>
-                                                <MenuItem value={projectTypes.game}>{projectTypes.game}</MenuItem>
-                                                <MenuItem value={projectTypes.film}>{projectTypes.film}</MenuItem>
-                                                <MenuItem value={projectTypes.audio}>{projectTypes.audio}</MenuItem>
-                                                <MenuItem value={projectTypes.computeranimation}>{projectTypes.computeranimation}</MenuItem>
-                                                <MenuItem value={projectTypes.communicationdesign}>{projectTypes.communicationdesign}</MenuItem>
-                                                <MenuItem value={projectTypes.other}>{projectTypes.other}</MenuItem>
+                                                {
+                                                    projectTypes.map((projectType: any) => (
+                                                        <MenuItem key={projectType.id} value={projectType.name}>{projectType.name}</MenuItem>
+                                                    ))
+                                                }
                                             </Select>
                                             <FormHelperText sx={{ color: (theme) => theme.palette.error.main }}>{errors.projectType?.message}</FormHelperText>
-                                        </FormControl>
-                                        <FormControl variant="standard" sx={{ minWidth: "100%" }} error={!!errors.projectType}>
-                                            <InputLabel id="projectSupervisor">Project Supervisor *</InputLabel>
-                                            <Select
-                                                labelId="projectSupervisor"
-                                                id="projectSupervisor"
-                                                label="project Supervisor"
-                                                fullWidth
-                                                {...register('projectSupervisor')}
-                                                error={!!errors.projectSupervisor}
-                                            >
-                                                <MenuItem value="">
-                                                    <em>None</em>
-                                                </MenuItem>
-
-                                                {projectSupervisors && projectSupervisors.map((supervisor: any) => (
-                                                    <MenuItem key={supervisor.id} value={supervisor.name}>
-                                                        {supervisor.name}
-                                                    </MenuItem>
-                                                ))}
-                                            </Select>
-                                            <FormHelperText sx={{ color: (theme) => theme.palette.error.main }}>{errors.projectSupervisor?.message}</FormHelperText>
                                         </FormControl>
                                         <TextField
                                             margin="dense"
@@ -283,9 +253,9 @@ export default function YourProjectCard() {
                                         <TextField
                                             margin="dense"
                                             id="projectSkills"
-                                            label="Preffered skills and study program"
+                                            label="Preffered skills and expertise"
                                             type="text"
-                                            placeholder="Specify desired team skills and relevant student courses for your project..."
+                                            placeholder="Specify desired team skills and relevant expertises for your project..."
                                             fullWidth
                                             multiline
                                             maxRows={4}
@@ -310,7 +280,7 @@ export default function YourProjectCard() {
                                             tabIndex={-1}
                                             startIcon={<CloudUploadIcon />}
                                         >
-                                            Upload Exposé
+                                            Upload Document
                                             <VisuallyHiddenInput type="file" />
                                         </Button>
                                         <DialogActions>

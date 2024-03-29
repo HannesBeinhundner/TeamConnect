@@ -7,12 +7,12 @@ import CircularProgress, {
 } from '@mui/material/CircularProgress';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import styles from "./StudentStatistics.module.scss"
+import styles from "./EventStatistics.module.scss"
 import NumberCard from "@/components/NumberCard/NumberCard";
 import { projectTypes } from '@/app/lib/data'
 
 
-export default function StudentStatistics(props: CircularProgressProps & { value: number },) {
+export default function EventStatistics(props: CircularProgressProps & { value: number },) {
     const [progress, setProgress] = React.useState(10);
 
     // useEffect(() => {
@@ -90,7 +90,7 @@ export default function StudentStatistics(props: CircularProgressProps & { value
 
                 <div className={styles.numbersArea}>
                     <NumberCard number={"23"} text={"Days till deadline"} />
-                    <NumberCard number={"101"} text={"Available students"} />
+                    <NumberCard number={"101"} text={"Available Users"} />
                     {/* <div className={styles.circularProgressBarContainer}>
                     <Box sx={{ position: 'relative', display: 'inline-flex' }}>
                         <CircularProgress thickness={4.5} size={60} variant="determinate" {...props} />

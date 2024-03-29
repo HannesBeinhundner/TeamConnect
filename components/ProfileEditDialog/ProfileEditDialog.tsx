@@ -22,29 +22,36 @@ import { UpdateProfileSchema } from '@/app/lib/types';
 import { UpdateProfileInputs } from '@/app/lib/types';
 import styles from './ProfileEditDialog.module.scss';
 import { updateProfile } from './UpdateProfileAction';
-import { getProfile } from '../OptionsArea/GetProfileAction';
-import { studyProgramTypes } from '@/app/lib/data'
+import { getExpertises } from '@/app/lib/GetExpertisesAction';
 
 interface ProfileUpdateDialogProps {
     open: boolean;
     onClose: () => void;
     session: any;
     profileResult: any;
+    eventData: any
 }
 
-const ProfileEditDialog: React.FC<ProfileUpdateDialogProps> = ({ open, onClose, session, profileResult }) => {
+const ProfileEditDialog: React.FC<ProfileUpdateDialogProps> = ({ open, onClose, session, profileResult, eventData }) => {
     const [errorAlert, setErrorAlert] = useState(false);
     const [successAlert, setSuccessAlert] = useState(false);
     const [successMessage, setSuccessMessage] = useState('');
     const [serverErrorMessage, setServerErrorMessage] = useState('');
+    const [expertises, setExpertises] = useState([]);
 
+    useEffect(() => {
+        const fetchExpertises = async () => {
+            const expertises: any = await getExpertises(eventData.id);
+            setExpertises(expertises);
+        };
+
+        fetchExpertises();
+    }, [])
 
     const handleCloseAlert = () => {
         setSuccessAlert(false);
         setErrorAlert(false);
     };
-
-    console.log(profileResult?.name)
 
     useEffect(() => {
         if (successAlert || errorAlert) {
@@ -66,7 +73,7 @@ const ProfileEditDialog: React.FC<ProfileUpdateDialogProps> = ({ open, onClose, 
         resolver: zodResolver(UpdateProfileSchema),
         defaultValues: {
             //profileName: profileResult?.name || 'test', // Somehow doesnt work this way
-            //profileExpertise: profileResult?.major || 'test',
+            //profileExpertise: profileResult?.expertise || 'test',
             //profileDescription: profileResult?.description || 'test',
         },
     });
@@ -130,44 +137,18 @@ const ProfileEditDialog: React.FC<ProfileUpdateDialogProps> = ({ open, onClose, 
                                 id="profileExpertise"
                                 label="Profile Expertise"
                                 fullWidth
-                                defaultValue={profileResult?.major}
+                                defaultValue={profileResult?.expertise}
                                 {...register('profileExpertise')}
                                 error={!!errors.profileExpertise}
                             >
-                                <MenuItem value="">
-                                    <em>None</em>
-                                </MenuItem>
-                                <MenuItem value={studyProgramTypes.web}>{studyProgramTypes.web}</MenuItem>
-                                <MenuItem value={studyProgramTypes.game}>{studyProgramTypes.game}</MenuItem>
-                                <MenuItem value={studyProgramTypes.film}>{studyProgramTypes.film}</MenuItem>
-                                <MenuItem value={studyProgramTypes.audio}>{studyProgramTypes.audio}</MenuItem>
-                                <MenuItem value={studyProgramTypes.computeranimation}>{studyProgramTypes.computeranimation}</MenuItem>
-                                <MenuItem value={studyProgramTypes.communicationdesign}>{studyProgramTypes.communicationdesign}</MenuItem>
+                                {
+                                    expertises.map((expertise: any) => (
+                                        <MenuItem key={expertise.id} value={expertise.name}>{expertise.name}</MenuItem>
+                                    ))
+                                }
                             </Select>
                             <FormHelperText sx={{ color: (theme) => theme.palette.error.main }}>{errors.profileExpertise?.message}</FormHelperText>
                         </FormControl>
-                        {/* <FormControl variant="standard" sx={{ minWidth: '100%' }} error={!!errors.projectSupervisor}>
-                            <InputLabel id="projectSupervisor">Project Supervisor *</InputLabel>
-                            <Select
-                                labelId="projectSupervisor"
-                                id="projectSupervisor"
-                                label="Project Supervisor"
-                                fullWidth
-                                defaultValue={projectResult?.supervisor}
-                                {...register('projectSupervisor')}
-                                error={!!errors.projectSupervisor}
-                            >
-                                <MenuItem value="">
-                                    <em>None</em>
-                                </MenuItem>
-                                {projectSupervisors && projectSupervisors.map((supervisor: any) => (
-                                    <MenuItem key={supervisor.id} value={supervisor.name}>
-                                        {supervisor.name}
-                                    </MenuItem>
-                                ))}
-                            </Select>
-                            <FormHelperText sx={{ color: (theme) => theme.palette.error.main }}>{errors.profileExpertise?.message}</FormHelperText>
-                        </FormControl> */}
                         <TextField
                             margin="dense"
                             id="profileDescription"
