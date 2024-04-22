@@ -53,8 +53,16 @@ export default async function Dashboard({ params }) {
             redirect("../config");
         }
     } else {
-        // User has an eventId set, but the eventId in the params is not valid
+        // User has an eventId set
+
+        //the eventId in the params is not valid
         if (!paramEventIdIsValid) {
+            redirect("./");
+        }
+
+        // if the user has a eventID that is not the passed one already -> Error: User can't join more than one event at the same time
+        if (user?.eventId !== paramEventId) {
+            console.log("You can't join more than one event at the same time!");
             redirect("./");
         }
     }
@@ -62,7 +70,7 @@ export default async function Dashboard({ params }) {
     return (
         <div className={styles.container}>
             <div className={styles.topArea}>
-                <TopArea eventData={eventData} />
+                <TopArea session={session} eventData={eventData} />
             </div>
             <div className={styles.optionsArea}>
                 <OptionsArea session={session} eventData={eventData} />

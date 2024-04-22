@@ -8,7 +8,6 @@ import DialogActions from '@mui/material/DialogActions';
 import Link from "next/link";
 import { Tooltip } from '@mui/material'
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Alert from '@mui/material/Alert'
 import IconButton from '@mui/material/IconButton';
@@ -158,7 +157,7 @@ export default function ConfigCard() {
                 <h5>Event Settings</h5>
             </div>
             <div className={styles.contentArea}>
-                <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.Stet clita kasd gubergren, no sea taLorem ipsum dolor sit amet, consetetur sadipscing elitrLorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor</p>
+                <p>This is your admin dashboard, where you can oversee all your events. Click on the event name to view it and all associated projects.</p>
                 <TableContainer component={Paper} sx={{ backgroundColor: 'transparent' }}>
                     <Table sx={{ minWidth: 650 }} aria-label="event table">
                         <TableHead>
@@ -265,9 +264,6 @@ export default function ConfigCard() {
                         <CloseIcon />
                     </IconButton>
                     <DialogContent>
-                        <DialogContentText sx={{ color: '#1C1C1C' }}>
-                            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
-                        </DialogContentText>
                         <form onSubmit={handleSubmit(processForm)} className={styles.formContainer}>
                             <TextField
                                 margin="dense"
@@ -282,10 +278,6 @@ export default function ConfigCard() {
                             />
                             <FormGroup>
                                 <FormControlLabel control={<Checkbox {...register('isPartOfEvent')} defaultChecked />} label="As Admin, I want to be part of the event" />
-                            </FormGroup>
-
-                            <FormGroup>
-                                <FormControlLabel control={<Checkbox {...register('hasMilestones')} />} label="The Event has Milestones or Deadlines" />
                             </FormGroup>
 
                             <Controller

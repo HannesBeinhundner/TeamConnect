@@ -148,9 +148,6 @@ const ProjectUpdateDialog: React.FC<ProjectUpdateDialogProps> = ({ open, onClose
                     <CloseIcon />
                 </IconButton>
                 <DialogContent>
-                    <DialogContentText sx={{ color: '#1C1C1C' }}>
-                        Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
-                    </DialogContentText>
                     <form onSubmit={handleSubmit(handleUpdate)} className={styles.formContainer}>
                         <TextField
                             margin="dense"

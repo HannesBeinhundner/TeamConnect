@@ -19,7 +19,6 @@ export async function addEvent(inputData: CreateEventInputs, sessionEmail: strin
                 data: {
                     name: inputData.eventName,
                     isPartOfEvent: inputData.isPartOfEvent,
-                    hasMilestones: inputData.hasMilestones,
                     adminEmail: sessionEmail,
                 },
                 select: {

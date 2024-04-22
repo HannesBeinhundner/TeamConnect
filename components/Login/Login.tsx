@@ -46,7 +46,10 @@ export default function Login({ eventId }: { eventId: any }) {
                 <p>simplify the interdisciplinary team and project finding phase</p>
             </Link>
             <AuthButtons eventId={eventId} />
-            <p className={styles.informationLink}>Need more information? <Link href="https://teamconnect-home.vercel.app/" target="_blank">Click here</Link></p>
+            <div className={styles.informationWrapper}>
+                <p className={styles.informationLink}>Need more information? <Link href="https://teamconnect-home.vercel.app/" target="_blank">Click here</Link></p>
+                <p className={styles.imprintLink}><Link href="./imprint/">Imprint & Privacy Policy</Link></p>
+            </div>
         </div>
     )
 }

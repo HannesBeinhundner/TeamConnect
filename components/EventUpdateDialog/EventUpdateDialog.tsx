@@ -8,16 +8,9 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import InputLabel from '@mui/material/InputLabel';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
-import { styled } from '@mui/material/styles';
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import Alert from '@mui/material/Alert';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
-import FormHelperText from '@mui/material/FormHelperText';
 import { useForm, SubmitHandler, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { CreateEventSchema } from '@/app/lib/types';
@@ -25,8 +18,6 @@ import { CreateEventInputs } from '@/app/lib/types';
 import styles from './EventUpdateDialog.module.scss';
 import { updateEvent } from './UpdateEventAction';
 import { deleteEvent } from './DeleteEventAction';
-import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import EditIcon from '@mui/icons-material/Edit';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
@@ -141,9 +132,6 @@ const EventUpdateDialog: React.FC<EventUpdateDialogProps> = ({ open, onClose, ev
                     <CloseIcon />
                 </IconButton>
                 <DialogContent>
-                    <DialogContentText sx={{ color: '#1C1C1C' }}>
-                        Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
-                    </DialogContentText>
                     <form onSubmit={handleSubmit(handleUpdate)} className={styles.formContainer}>
                         <TextField
                             margin="dense"
@@ -159,10 +147,6 @@ const EventUpdateDialog: React.FC<EventUpdateDialogProps> = ({ open, onClose, ev
                         />
                         <FormGroup>
                             <FormControlLabel control={<Checkbox {...register('isPartOfEvent')} defaultChecked={eventResult?.isPartOfEvent} />} label="As Admin, I want to be part of the event" />
-                        </FormGroup>
-
-                        <FormGroup>
-                            <FormControlLabel control={<Checkbox {...register('hasMilestones')} defaultChecked={eventResult?.hasMilestones} />} label="The Event has Milestones or Deadlines" />
                         </FormGroup>
 
                         <Controller

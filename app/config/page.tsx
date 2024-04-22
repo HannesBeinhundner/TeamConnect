@@ -25,7 +25,7 @@ export default async function Config({ params }: { params: any }) {
     return (
         <div className={styles.container}>
             <div className={styles.topArea}>
-                <TopArea eventData={null} />
+                <TopArea session={null} eventData={null} />
             </div>
             <div className={styles.optionsArea}>
                 <OptionsArea session={session} eventData={null} />

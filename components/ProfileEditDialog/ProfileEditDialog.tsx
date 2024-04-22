@@ -6,7 +6,6 @@ import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import InputLabel from '@mui/material/InputLabel';
 import IconButton from '@mui/material/IconButton';
@@ -41,7 +40,7 @@ const ProfileEditDialog: React.FC<ProfileUpdateDialogProps> = ({ open, onClose, 
 
     useEffect(() => {
         const fetchExpertises = async () => {
-            const expertises: any = await getExpertises(eventData.id);
+            const expertises: any = await getExpertises(eventData?.id);
             setExpertises(expertises);
         };
 
@@ -114,9 +113,6 @@ const ProfileEditDialog: React.FC<ProfileUpdateDialogProps> = ({ open, onClose, 
                     <CloseIcon />
                 </IconButton>
                 <DialogContent>
-                    <DialogContentText sx={{ color: '#1C1C1C' }}>
-                        Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
-                    </DialogContentText>
                     <form onSubmit={handleSubmit(handleUpdate)} className={styles.formContainer}>
                         <TextField
                             margin="dense"

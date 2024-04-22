@@ -1,29 +1,40 @@
-import Link from "next/link";
+"use client"
+
+import { useState } from "react";
 import Image from "next/image";
 import LogoDarkImg from '@/images/logo_dark.svg';
-
-import Box from '@mui/material/Box';
-import Stepper from '@mui/material/Stepper';
-import Step from '@mui/material/Step';
-import StepLabel from '@mui/material/StepLabel';
-import Typography from '@mui/material/Typography';
 import styles from "./TopArea.module.scss";
+import LogoutIcon from '@mui/icons-material/Logout';
+import IconButton from '@mui/material/IconButton';
+import { leaveEvent } from "./LeaveEventAction";
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogContent from "@mui/material/DialogContent";
+import DialogActions from "@mui/material/DialogActions";
+import Button from "@mui/material/Button";
+import DialogContentText from "@mui/material/DialogContentText";
+import { signOut } from "next-auth/react";
 
-const steps = [
-    { label: 'Submission Exposé', date: '26.04.2024' },
-    { label: 'Entry in Portfolio', date: '26.07.2024' },
-    { label: 'Update Portfolio', date: '20.08.2024' },
-    { label: 'Project fixation', date: '31.08.2024' },
-];
 
-const stepLabelStyle = {
-    ".mui-5340bo-MuiStepLabel-label.MuiStepLabel-alternativeLabel": {
-        marginTop: 0.75,
-        fontSize: 13,
-    },
-};
 
-export default function TopArea({ eventData }: { eventData: any }) {
+export default function TopArea({ session, eventData }: { session: any, eventData: any }) {
+    const [confirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
+
+    const handleLeaveButtonClick = () => {
+        setConfirmationDialogOpen(true);
+    };
+
+    const handleConfirmationDialogClose = () => {
+        setConfirmationDialogOpen(false);
+    };
+
+    const handleEventLeave = async () => {
+        await leaveEvent(session.user.email, eventData.id);
+        // end the session
+        signOut();
+
+    }
+
     return (
         <div className={styles.container}>
             <a href="/" className={styles.logoLink}>
@@ -32,21 +43,45 @@ export default function TopArea({ eventData }: { eventData: any }) {
                     alt="TeamConnect Logo"
                     width={220}
                 />
-                <h3>{eventData?.name ? `Event: ${eventData?.name}` : ""}</h3>
             </a>
-            <Box sx={{ width: '100%' }}>
-                {/* <Stepper activeStep={1} alternativeLabel sx={stepLabelStyle}>
-                    {steps.map((step, index) => (
-                        <Step key={index}>
-                            <StepLabel className={styles.milestone}>
-                                {step.label}
-                                <br></br>
-                                <Typography variant="caption">{step.date}</Typography>
-                            </StepLabel>
-                        </Step>
-                    ))}
-                </Stepper> */}
-            </Box>
+            {
+                // Don't show the event info in the config page
+                session && eventData && (
+                    <div className={styles.eventInfoWrapper}>
+                        <p>{eventData?.adminEmail === session.user.email && `Current Event: `}</p>
+                        <h2>{eventData?.name && `${eventData?.name}`}</h2>
+
+                        {
+                            // Show the leave button only if the user is not the event admin
+                            eventData?.adminEmail !== session.user.email && (
+                                <>
+                                    <IconButton aria-label="expand" sx={{ color: '#1C1C1C' }} onClick={handleLeaveButtonClick}>
+                                        <LogoutIcon fontSize="medium" />
+                                    </IconButton>
+
+                                    <Dialog
+                                        open={confirmationDialogOpen}
+                                        onClose={handleConfirmationDialogClose}
+                                    >
+                                        <DialogTitle>Confirm leaving the Event</DialogTitle>
+                                        <DialogContent>
+                                            <DialogContentText>
+                                                {
+                                                    `Are you sure you want to leave ${eventData?.name}. You will no longer be able to access this event. If you're the project admin the entire project will be deleted.`
+                                                }
+                                            </DialogContentText>
+                                        </DialogContent>
+                                        <DialogActions>
+                                            <Button onClick={handleConfirmationDialogClose}>Cancel</Button>
+                                            <Button onClick={handleEventLeave} color="error">Leave</Button>
+                                        </DialogActions>
+                                    </Dialog>
+                                </>
+                            )
+                        }
+                    </div>
+                )
+            }
         </div>
     );
 }

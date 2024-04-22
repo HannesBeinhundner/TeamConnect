@@ -28,7 +28,7 @@ export default async function Members({ params }: { params: any }) {
     return (
         <div className={styles.container}>
             <div className={styles.topArea}>
-                <TopArea eventData={eventData} />
+                <TopArea session={session} eventData={eventData} />
             </div>
             <div className={styles.optionsArea}>
                 <OptionsArea session={session} eventData={eventData} />

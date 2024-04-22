@@ -34,7 +34,6 @@ export async function addEntry(inputData: CreateProjectInputs, sessionEmail: str
                     file: "testFile",
                     image: "testImage",
                     link: inputData.projectLink,
-                    status: "not accepted",
                     eventId: eventId,
                 },
                 select: {

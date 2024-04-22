@@ -36,7 +36,6 @@ export default function ViewAllProjectsCard({ projectResult }) {
                 <h2>{projectResult?.name}</h2>
             </div>
             <div className={styles.propertyArea}>
-                <Chip className={styles.chipColor} text={projectResult?.status} icon={<CheckCircleOutlineIcon fontSize='small' sx={{ color: 'success.main' }} />} />
                 <Chip className={styles.chipColor} text={projectResult?.type} icon={<CategoryIcon fontSize='small' />} />
                 <Chip className={styles.chipColor} text={projectUsers} icon={<AssignmentIndIcon fontSize='small' />} />
                 <Link href={(projectResult?.link && (projectResult.link.startsWith("https://") || projectResult.link.startsWith("http://"))) ? projectResult.link : "https://" + projectResult?.link} className={styles.chipLink} target="_blank">

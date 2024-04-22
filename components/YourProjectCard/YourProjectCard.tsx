@@ -5,9 +5,7 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
-import Link from "next/link";
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { styled } from '@mui/material/styles';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
@@ -193,9 +191,6 @@ export default function YourProjectCard({ eventId }) {
                                     <CloseIcon />
                                 </IconButton>
                                 <DialogContent>
-                                    <DialogContentText sx={{ color: '#1C1C1C' }}>
-                                        Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
-                                    </DialogContentText>
                                     <form onSubmit={handleSubmit(processForm)} className={styles.formContainer}>
                                         <TextField
                                             margin="dense"
