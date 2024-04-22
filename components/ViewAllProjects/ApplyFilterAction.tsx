@@ -28,9 +28,6 @@ export async function ApplyFilter(inputData: ApplyFilterInputs, eventId: any) {
             if (inputData.projectType) {
                 filter.type = inputData.projectType;
             }
-            if (inputData.projectStatus) {
-                filter.status = inputData.projectStatus;
-            }
 
             const projects = await prisma.project.findMany({
                 where: filter

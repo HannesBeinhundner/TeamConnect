@@ -2,7 +2,7 @@
 
 import { prisma } from "@/prisma";
 
-export async function getEvent(eventId: string | undefined) {
+export async function getEvent(eventId: string) {
     try {
         const eventData = await prisma.event.findUnique({
             where: {

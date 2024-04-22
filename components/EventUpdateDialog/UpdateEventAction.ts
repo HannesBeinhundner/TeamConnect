@@ -29,7 +29,6 @@ export async function updateEvent(inputData: CreateEventInputs, eventId: string)
                 data: {
                     name: inputData.eventName,
                     isPartOfEvent: inputData.isPartOfEvent,
-                    hasMilestones: inputData.hasMilestones,
                 },
             }),
             // Update or create EventProjectTypes

@@ -29,7 +29,6 @@ export default function ViewAllProjects({ eventId }: { eventId: any }) {
                 const data = {
                     projectSearch: "",
                     projectType: "",
-                    projectStatus: "",
                 };
                 const response = await ApplyFilter(data, eventId);
 
@@ -119,24 +118,6 @@ export default function ViewAllProjects({ eventId }: { eventId: any }) {
                                     <MenuItem key={projectType.id} value={projectType.name}>{projectType.name}</MenuItem>
                                 ))
                             }
-                        </Select>
-                        <FormHelperText sx={{ color: (theme) => theme.palette.error.main }}></FormHelperText>
-                    </FormControl>
-                    <FormControl variant="standard" sx={{ width: "22%" }}>
-                        <InputLabel id="projectStatus">Project Status</InputLabel>
-                        <Select
-                            labelId="projectStatus"
-                            id="projectStatus"
-                            label="projectStatus"
-                            fullWidth
-                            {...register('projectStatus')}
-                            error={!!errors.projectType}
-                        >
-                            <MenuItem value="">
-                                <em>None</em>
-                            </MenuItem>
-                            <MenuItem value={"Accepted"}>Accepted</MenuItem>
-                            <MenuItem value={"Declined"}>Declined</MenuItem>
                         </Select>
                         <FormHelperText sx={{ color: (theme) => theme.palette.error.main }}></FormHelperText>
                     </FormControl>

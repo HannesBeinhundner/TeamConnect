@@ -149,10 +149,6 @@ const EventUpdateDialog: React.FC<EventUpdateDialogProps> = ({ open, onClose, ev
                             <FormControlLabel control={<Checkbox {...register('isPartOfEvent')} defaultChecked={eventResult?.isPartOfEvent} />} label="As Admin, I want to be part of the event" />
                         </FormGroup>
 
-                        <FormGroup>
-                            <FormControlLabel control={<Checkbox {...register('hasMilestones')} defaultChecked={eventResult?.hasMilestones} />} label="The Event has Milestones or Deadlines" />
-                        </FormGroup>
-
                         <Controller
                             control={control}
                             render={({ field, fieldState }) => (

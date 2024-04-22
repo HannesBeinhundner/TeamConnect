@@ -8,25 +8,10 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
-model Milestone {
-  id              Int           @id @default(autoincrement())
-  name            String        @db.VarChar(256)
-  date            DateTime
-  configurationId Int           @unique
-  configuration   Configuration @relation(fields: [configurationId], references: [id])
-}
-
-model Configuration {
-  id         Int        @id @default(autoincrement())
-  name       String     @unique
-  milestones Milestone?
-}
-
 model Event {
   id                       String             @id @default(cuid())
   name                     String             @db.VarChar(256)
   isPartOfEvent            Boolean            @default(true)
-  hasMilestones            Boolean            @default(false)
   adminEmail               String?
   user                     User?              @relation(fields: [adminEmail], references: [email])
   EventExpertise           EventExpertise[]
@@ -61,7 +46,6 @@ model Project {
   skills      String
   file        String  @db.VarChar(256)
   link        String  @db.VarChar(256)
-  status      String  @db.VarChar(256)
   image       String  @db.VarChar(256)
   eventId     String?
   event       Event?  @relation(fields: [eventId], references: [id])

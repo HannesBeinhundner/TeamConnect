@@ -54,14 +54,13 @@ export default async function Dashboard({ params }) {
         }
     } else {
         // User has an eventId set
-        console.log("User has an eventId set");
+
         //the eventId in the params is not valid
         if (!paramEventIdIsValid) {
             redirect("./");
         }
 
         // if the user has a eventID that is not the passed one already -> Error: User can't join more than one event at the same time
-        console.log(user?.eventId, paramEventId);
         if (user?.eventId !== paramEventId) {
             console.log("You can't join more than one event at the same time!");
             redirect("./");

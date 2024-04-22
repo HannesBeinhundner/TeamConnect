@@ -1,21 +1,5 @@
 import { z } from "zod";
 
-export const MilestoneSchema = z.object({
-    id: z.number().optional(),
-    name: z.string().min(1, { message: "The name of the milestone must be given." }).max(50, { message: "The name of the milestone is too long (50 characters max.)" }),
-    date: z.date()
-})
-
-export type Milestone = z.infer<typeof MilestoneSchema>;
-
-export const ConfigurationSchema = z.object({
-    id: z.number().optional(),
-    name: z.string().min(1).max(50),
-    milestones: z.array(MilestoneSchema)
-});
-
-export type Configuration = z.infer<typeof ConfigurationSchema>;
-
 export const CreateProjectSchema = z.object({
     projectName: z.string().min(1, { message: 'Project name is required' }),
     projectType: z.string().min(1, { message: 'Project type is required' }),
@@ -39,7 +23,6 @@ export type UpdateProjectInputs = z.infer<typeof UpdateProjectSchema>;
 export const CreateEventSchema = z.object({
     eventName: z.string().min(1, { message: 'Event name is required' }),
     isPartOfEvent: z.boolean(),
-    hasMilestones: z.boolean(),
     eventProjectType: z.array(z.string()).min(1, { message: 'At least one event project type must be selected' }),
     eventExpertise: z.array(z.string()).min(1, { message: 'At least one user expertise must be selected' }),
 });
@@ -56,7 +39,6 @@ export type UpdateProfileInputs = z.infer<typeof UpdateProfileSchema>;
 export const ApplyFilterSchema = z.object({
     projectSearch: z.string(),
     projectType: z.string(),
-    projectStatus: z.string()
 });
 
 export type ApplyFilterInputs = z.infer<typeof ApplyFilterSchema>
