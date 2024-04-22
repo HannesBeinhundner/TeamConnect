@@ -98,6 +98,7 @@ model Session {
 model User {
   id                        String    @id @default(cuid())
   email                     String?   @unique
+  emailVerified             DateTime?
   image                     String?
   name                      String?
   projectId                 Int?
