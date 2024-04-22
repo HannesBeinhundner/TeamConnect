@@ -11,9 +11,6 @@
     gap: 1.7rem;
     width: clamp(300px, 50%, 500px);
 
-    // min-width: 300px;
-    // max-width: 500px;
-    // width: 50%;
     button {
         width: 70%;
     }
@@ -30,6 +27,18 @@
     font-size: 0.8rem;
 }
 
-.informationLink {
-    font-size: 0.8rem;
+.informationWrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    .informationLink {
+        font-size: 0.8rem;
+    }
+
+    .imprintLink {
+        font-size: 0.7rem;
+        margin: 0;
+    }
 }
