@@ -2,6 +2,15 @@
 
 import { prisma } from "@/prisma";
 
+async function getEventUsersCount(eventId: string) {
+    const allUsers = await prisma.user.findMany({
+        where: {
+            eventId: eventId,
+        },
+    });
+    return allUsers
+}
+
 export async function getEvents(sessionEmail: string | null | undefined) {
     try {
 
@@ -25,10 +34,9 @@ export async function getEvents(sessionEmail: string | null | undefined) {
             },
         });
 
-        //Get amount of users that are part of all projects in the event
-        const eventsWithUsersCount = events.map((event) => {
-            // Get an array of all users in all projects
-            const allUsers = event.Project.flatMap((project) => project.User);
+        //Get amount of users and projects that are part of the event
+        const eventsWithUsersCount = await Promise.all(events.map(async (event) => {
+            const allUsers = await getEventUsersCount(event.id);
             const allProjects = event.Project;
 
             return {
@@ -36,7 +44,7 @@ export async function getEvents(sessionEmail: string | null | undefined) {
                 usersCount: allUsers.length, // Get the count of users
                 projectsCount: allProjects.length, // Get the count of projects
             };
-        });
+        }));
 
         return eventsWithUsersCount;
 
@@ -44,3 +52,6 @@ export async function getEvents(sessionEmail: string | null | undefined) {
         return { success: false, error: 'An unexpected error occurred.' };
     }
 }
+
+
+
