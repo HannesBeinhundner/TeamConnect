@@ -6,6 +6,7 @@ import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import InputLabel from '@mui/material/InputLabel';
 import IconButton from '@mui/material/IconButton';
@@ -113,6 +114,10 @@ const ProfileEditDialog: React.FC<ProfileUpdateDialogProps> = ({ open, onClose, 
                     <CloseIcon />
                 </IconButton>
                 <DialogContent>
+                    <DialogContentText>
+                        <strong>Please make sure that you have selected a profile expertise and a profile description!</strong>
+                    </DialogContentText>
+                    <br />
                     <form onSubmit={handleSubmit(handleUpdate)} className={styles.formContainer}>
                         <TextField
                             margin="dense"

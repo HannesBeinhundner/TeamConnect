@@ -30,6 +30,11 @@ export default function OptionsArea({ session, eventData }: Props) {
     const fetchProfileStatus = async () => {
         const profileResult: any = await getProfile(session.user.email);
         setProfileResult(profileResult);
+
+        // If user has not set expertise or description, open ProfileEditDialog winodw
+        if (!profileResult?.data?.expertise || !profileResult?.data?.description) {
+            setUpdateDialogOpen(true);
+        }
     };
 
     useEffect(() => {
