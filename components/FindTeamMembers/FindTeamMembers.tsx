@@ -134,7 +134,7 @@ export default function FindTeamMembers({ session, eventId }: Props) {
                         Array.isArray(userResult) && userResult.map((user: any) => (
                             //Filter own user from the list
                             session?.user?.email !== user.email &&
-                            <FindTeamMembersCard key={user.id} userResult={user} />
+                            <FindTeamMembersCard session={session} key={user.id} userResult={user} />
                         ))
                     }
                 </div>
