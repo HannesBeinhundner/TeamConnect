@@ -132,7 +132,8 @@ const FindTeamMembersViewDialog: React.FC<ProjectUpdateDialogProps> = ({ open, o
                         <DialogTitle>Confirm Remove User</DialogTitle>
                         <DialogContent>
                             <DialogContentText>
-                                Are you sure you want to remove this User? If the user is a project admin, the project will be deleted.
+                                Are you sure you want to remove this User?
+                                {userResult?.projectAdmin && <strong> This user is a project admin and the project will be deleted!</strong>}
                             </DialogContentText>
                         </DialogContent>
                         <DialogActions>
