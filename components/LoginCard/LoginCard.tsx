@@ -5,10 +5,10 @@ import Image from "next/image";
 import LoginImg from '@/images/login_dark.svg'
 import Login from "../Login/Login";
 
-export default function LoginCard({ eventId }: { eventId: any }) {
+export default function LoginCard({ eventData }: { eventData: any }) {
     return (
         <div className={styles.container}>
-            <Login eventId={eventId} />
+            <Login eventData={eventData} />
             <Image
                 src={LoginImg}
                 alt="Illustration of a team working together"

@@ -40,12 +40,7 @@ export default async function Invite({ params }: { params: any }) {
     return (
         <>
             {
-                showUserLogin ? (
-                    <>
-                        <h1>Invite</h1>
-                        <LoginCard eventId={eventId} />
-                    </>
-                ) : null
+                showUserLogin && <LoginCard eventData={eventData} />
             }
         </>
     );
