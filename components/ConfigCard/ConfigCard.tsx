@@ -90,7 +90,7 @@ export default function ConfigCard() {
         setCopiedEventId(eventId);
         setTimeout(() => {
             handleTooltipClose();
-        }, 2000);
+        }, 1500);
     };
 
     const handleTooltipClose = () => {

@@ -16,7 +16,7 @@ export default function EventStatistics(props: CircularProgressProps & { value: 
     const [progress, setProgress] = React.useState(10);
 
     // useEffect(() => {
-    //     const timer = setInterval(() => {
+    //     const timer = setTimeout(() => {
     //         setProgress((prevProgress) => (prevProgress >= 100 ? 0 : prevProgress + 10));
     //     }, 800);
     //     return () => {

@@ -48,6 +48,7 @@
 
     .descriptionArea {
         min-height: 5rem;
+
         p {
             max-height: 6rem;
             overflow: hidden;
@@ -59,10 +60,20 @@
             line-clamp: 4;
             box-orient: vertical;
         }
-        .requestButton {
+
+        .buttonWrapper {
             display: flex;
             align-items: flex-end;
             justify-content: end;
+            gap: 1rem;
         }
     }
+}
+
+.alert {
+    position: absolute;
+    top: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
 }

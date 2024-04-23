@@ -47,7 +47,7 @@ export default async function Members({ params }: { params: any }) {
                         altText="Illustration of a team working together"
                         buttonText="View all projects"
                     />}
-                    bottomLeftComponent={<FindTeamMembers session={session} eventId={eventId} />}
+                    bottomLeftComponent={<FindTeamMembers session={session} eventData={eventData} />}
                 />
             </div>
         </div>

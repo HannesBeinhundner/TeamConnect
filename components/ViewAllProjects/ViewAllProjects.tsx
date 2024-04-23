@@ -18,32 +18,31 @@ import { ApplyFilter } from './ApplyFilterAction';
 import ViewAllProjectsCard from '../ViewAllProjectsCard/ViewAllProjectsCard';
 import { getProjectTypes } from '@/app/lib/GetProjectTypesAction';
 
-export default function ViewAllProjects({ eventId, session }: { eventId: any, session: any }) {
+export default function ViewAllProjects({ eventData, session }: { eventData: any, session: any }) {
     const [projectsResult, setProjectsResult] = useState<any>({});
     const [projectTypes, setProjectTypes] = useState<any>([]);
 
+    const fetchProjects = async () => {
+        try {
+            const data = {
+                projectSearch: "",
+                projectType: "",
+            };
+            const response = await ApplyFilter(data, eventData.id);
+
+            if (response.success && Array.isArray(response.data)) {
+                setProjectsResult(response.data);
+            } else {
+                console.error('Error: ApplyFilter did not return a successful response or data is not an array.');
+            }
+        } catch (error) {
+            console.error('Error fetching project data:', error);
+        }
+    };
 
     useEffect(() => {
-        const fetchProjects = async () => {
-            try {
-                const data = {
-                    projectSearch: "",
-                    projectType: "",
-                };
-                const response = await ApplyFilter(data, eventId);
-
-                if (response.success && Array.isArray(response.data)) {
-                    setProjectsResult(response.data);
-                } else {
-                    console.error('Error: ApplyFilter did not return a successful response or data is not an array.');
-                }
-            } catch (error) {
-                console.error('Error fetching project data:', error);
-            }
-        };
-
         const fetchProjectTypes = async () => {
-            const projectTypes: any = await getProjectTypes(eventId);
+            const projectTypes: any = await getProjectTypes(eventData.id);
             setProjectTypes(projectTypes);
         };
 
@@ -65,7 +64,7 @@ export default function ViewAllProjects({ eventId, session }: { eventId: any, se
     const processForm: SubmitHandler<ApplyFilterInputs> = async data => {
         try {
             // Call ApplyFilter with form data
-            const filteredProjects = await ApplyFilter(data, eventId);
+            const filteredProjects = await ApplyFilter(data, eventData.id);
 
             if (filteredProjects && filteredProjects.success && Array.isArray(filteredProjects.data)) {
                 // Set the filtered project data
@@ -129,7 +128,7 @@ export default function ViewAllProjects({ eventId, session }: { eventId: any, se
                 </form>
                 <div className={styles.cardsArea}>
                     {Array.isArray(projectsResult) && projectsResult.map((project: any) => (
-                        <ViewAllProjectsCard session={session} key={project.id} projectResult={project} />
+                        <ViewAllProjectsCard session={session} eventData={eventData} key={project.id} projectResult={project} reloadComponent={fetchProjects} />
                     ))}
                 </div>
             </div>
