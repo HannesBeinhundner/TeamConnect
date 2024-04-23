@@ -18,15 +18,14 @@ import { Button, IconButton } from '@mui/material';
 import { getProjectUsers } from './GetProjectUsersAction';
 import ProjectViewDialog from '@/components/ProjectViewDialog/ProjectViewDialog';
 
-//@ts-ignore
-export default function ViewAllProjectsCard({ projectResult }) {
-    const [projectUsers, setProjectUsers] = useState('');
-    const [updateDialogOpen, setUpdateDialogOpen] = useState(false);
+interface Props {
+    session: any;
+    projectResult?: any;
+}
 
-    const fetchProjectUsers = async () => {
-        const users: any = await getProjectUsers(projectResult.id);
-        setProjectUsers(users);
-    };
+export default function ViewAllProjectsCard({ session, projectResult }: Props) {
+    const [projectUsers, setProjectUsers] = useState<any>([]);
+    const [updateDialogOpen, setUpdateDialogOpen] = useState(false);
 
     const handleUpdateDialogOpen = () => {
         setUpdateDialogOpen(true);
@@ -34,6 +33,11 @@ export default function ViewAllProjectsCard({ projectResult }) {
 
     const handleUpdateDialogClose = () => {
         setUpdateDialogOpen(false);
+    };
+
+    const fetchProjectUsers = async () => {
+        const users: any = await getProjectUsers(projectResult.id);
+        setProjectUsers(users);
     };
 
     useEffect(() => {
@@ -51,10 +55,12 @@ export default function ViewAllProjectsCard({ projectResult }) {
                         <OpenInFullIcon fontSize="small" />
                 </IconButton>
             </div>
-            <ProjectViewDialog>
+            <ProjectViewDialog
                 open={updateDialogOpen}
                 onClose={handleUpdateDialogClose}
-            </ProjectViewDialog>
+                session={session}
+                projectResult={projectResult}
+            />
             <div className={styles.propertyArea}>
                 <Chip className={styles.chipColor} text={projectResult?.status} icon={<CheckCircleOutlineIcon fontSize='small' sx={{ color: 'success.main' }} />} />
                 <Chip className={styles.chipColor} text={projectResult?.type} icon={<CategoryIcon fontSize='small' />} />

@@ -18,7 +18,7 @@ import { ApplyFilter } from './ApplyFilterAction';
 import ViewAllProjectsCard from '../ViewAllProjectsCard/ViewAllProjectsCard';
 import { getProjectTypes } from '@/app/lib/GetProjectTypesAction';
 
-export default function ViewAllProjects({ eventId }: { eventId: any }) {
+export default function ViewAllProjects({ eventId, session }: { eventId: any, session: any }) {
     const [projectsResult, setProjectsResult] = useState<any>({});
     const [projectTypes, setProjectTypes] = useState<any>([]);
 
@@ -148,7 +148,7 @@ export default function ViewAllProjects({ eventId }: { eventId: any }) {
                 </form>
                 <div className={styles.cardsArea}>
                     {Array.isArray(projectsResult) && projectsResult.map((project: any) => (
-                        <ViewAllProjectsCard key={project.id} projectResult={project} />
+                        <ViewAllProjectsCard session={session} key={project.id} projectResult={project} />
                     ))}
                 </div>
             </div>
