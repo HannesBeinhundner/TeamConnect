@@ -104,7 +104,7 @@ const EventUpdateDialog: React.FC<EventUpdateDialogProps> = ({ open, onClose, ev
         setSuccessMessage('Your Event was successfully deleted!')
         setSuccessAlert(true);
         onClose();
-        setInterval(() => reloadComponent(), 2000)
+        setTimeout(() => reloadComponent(), 1500)
     };
 
     const handleDeleteButtonClick = () => {

@@ -120,7 +120,7 @@ const ProjectUpdateDialog: React.FC<ProjectUpdateDialogProps> = ({ open, onClose
         setSuccessMessage('Your Project was successfully deleted!')
         setSuccessAlert(true);
         onClose();
-        setInterval(() => reloadComponent(), 2000)
+        setTimeout(() => reloadComponent(), 1500)
     };
 
     const handleDeleteButtonClick = () => {
