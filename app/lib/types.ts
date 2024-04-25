@@ -6,6 +6,7 @@ export const CreateProjectSchema = z.object({
     projectLink: z.string().max(256, { message: 'Project link is too long' }),
     projectDescription: z.string().min(1, { message: 'Project description is required' }).max(1000, { message: 'Project description is too long' }),
     projectSkills: z.string().max(1000, { message: 'Preffered skills and expertise is too long' }),
+    projectImage: z.string().max(256, { message: 'Project image URL is too long' }),
 });
 
 export type CreateProjectInputs = z.infer<typeof CreateProjectSchema>
@@ -17,6 +18,7 @@ export const UpdateProjectSchema = z.object({
     projectDescription: z.string().min(1, { message: 'Project description is required' }).max(1000, { message: 'Project description is too long' }),
     projectSkills: z.string().max(1000, { message: 'Preffered skills and expertise is too long' }),
     projectLink: z.string().max(256, { message: 'Project link is too long' }),
+    //projectImage: z.string().max(256, { message: 'Project image URL is too long' }),
 });
 export type UpdateProjectInputs = z.infer<typeof UpdateProjectSchema>;
 

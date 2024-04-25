@@ -29,6 +29,8 @@ import { checkProject } from './CheckProjectAction';
 import YourProjectInformationArea from '../YourProjectInfoArea/YourProjectInfoArea';
 import ProjectUpdateDialog from '@/components/ProjectUpdateDialog/ProjectUpdateDialog';
 import { getProjectTypes } from '@/app/lib/GetProjectTypesAction';
+import "@uploadthing/react/styles.css";
+import { UploadDropzone, UploadButton } from "@/utils/uploadthing";
 
 // @ts-ignore
 export default function YourProjectCard({ eventId }) {
@@ -37,7 +39,7 @@ export default function YourProjectCard({ eventId }) {
     const [checkProjectResult, setCheckProjectResult] = useState(false);
     const [projectResult, setProjectResult] = useState<any>([]);
     const [projectTypes, setProjectTypes] = useState<any>([]);
-
+    const [imageURL, setImageURL] = useState("")
 
     const [open, setOpen] = useState(false);
     const [updateDialogOpen, setUpdateDialogOpen] = useState(false);
@@ -119,6 +121,8 @@ export default function YourProjectCard({ eventId }) {
     })
 
     const processForm: SubmitHandler<CreateProjectInputs> = async data => {
+        //console.log(imageURL)
+        //data.projectImage = imageURL
         const result = await addEntry(data, sessionEmail, eventId)
 
         if (!result) {
@@ -259,16 +263,26 @@ export default function YourProjectCard({ eventId }) {
                                             error={!!errors.projectSkills}
                                             helperText={errors.projectSkills?.message}
                                         />
-                                        <Button
-                                            component="label"
-                                            role={undefined}
-                                            variant="contained"
-                                            tabIndex={-1}
-                                            startIcon={<CloudUploadIcon />}
-                                        >
-                                            Upload Project Logo
-                                            <VisuallyHiddenInput type="file" />
-                                        </Button>
+                                        <UploadDropzone
+                                            appearance={{
+                                                container: {
+                                                    padding: "12px",
+                                                    cursor: "pointer",
+                                                },
+                                                button: {
+                                                    backgroundColor: "#007DFA"
+                                                },
+                                            }}
+                                            endpoint="imageUploader"
+                                            onClientUploadComplete={(res) => {
+                                                console.log("Files: ", res);
+                                                setImageURL(res[0].url)
+                                                alert("Upload Completed");
+                                            }}
+                                            onUploadError={(error: Error) => {
+                                                alert(`ERROR! ${error.message}`);
+                                            }}
+                                        />
                                         <Button
                                             component="label"
                                             role={undefined}
