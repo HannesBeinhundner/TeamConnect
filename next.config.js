@@ -6,7 +6,7 @@ const nextConfig = {
         includePaths: [path.join(__dirname, 'styles')],
     },
     images: {
-        domains: ['lh3.googleusercontent.com', 'avatars.githubusercontent.com', 'pbs.twimg.com', 'media.licdn.com'],
+        domains: ['lh3.googleusercontent.com', 'avatars.githubusercontent.com', 'pbs.twimg.com', 'media.licdn.com', 'utfs.io', 'https://utfs.io'],
     },
 };
 

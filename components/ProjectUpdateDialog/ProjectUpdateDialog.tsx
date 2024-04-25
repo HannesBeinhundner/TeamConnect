@@ -8,6 +8,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import InputLabel from '@mui/material/InputLabel';
+import Image from "next/image";
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import { styled } from '@mui/material/styles';
@@ -26,6 +27,9 @@ import { updateProject } from './UpdateProjectAction';
 import { deleteProject } from './DeleteProjectAction';
 import { getUser } from './GetUserAction';
 import { leaveProject } from './LeaveProjectAction';
+import "@uploadthing/react/styles.css";
+import { UploadDropzone, UploadButton } from "@/utils/uploadthing";
+import CustomProjectLogo from '@/images/customProjectLogo.svg'
 
 interface ProjectUpdateDialogProps {
     open: boolean;
@@ -57,18 +61,6 @@ const ProjectUpdateDialog: React.FC<ProjectUpdateDialogProps> = ({ open, onClose
         getCurrentUser(sessionEmail);
     }, [])
 
-    const VisuallyHiddenInput = styled('input')({
-        clip: 'rect(0 0 0 0)',
-        clipPath: 'inset(50%)',
-        height: 1,
-        overflow: 'hidden',
-        position: 'absolute',
-        bottom: 0,
-        left: 0,
-        whiteSpace: 'nowrap',
-        width: 1,
-    });
-
     const handleCloseAlert = () => {
         setSuccessAlert(false);
         setErrorAlert(false);
@@ -87,6 +79,7 @@ const ProjectUpdateDialog: React.FC<ProjectUpdateDialogProps> = ({ open, onClose
     const {
         register,
         handleSubmit,
+        setValue,
         setError,
         reset,
         formState: { errors },
@@ -98,6 +91,8 @@ const ProjectUpdateDialog: React.FC<ProjectUpdateDialogProps> = ({ open, onClose
             projectLink: projectResult?.link || '',
             projectDescription: projectResult?.description || '',
             projectSkills: projectResult?.skills || '',
+            projectImage: projectResult?.image || '',
+            projectFile: projectResult?.file || '',
         },
     });
 
@@ -253,26 +248,58 @@ const ProjectUpdateDialog: React.FC<ProjectUpdateDialogProps> = ({ open, onClose
                             error={!!errors.projectSkills}
                             helperText={errors.projectSkills?.message}
                         />
-                        <Button
-                            component="label"
-                            role={undefined}
-                            variant="contained"
-                            tabIndex={-1}
-                            startIcon={<CloudUploadIcon />}
-                        >
-                            Upload Project Logo
-                            <VisuallyHiddenInput type="file" />
-                        </Button>
-                        <Button
-                            component="label"
-                            role={undefined}
-                            variant="contained"
-                            tabIndex={-1}
-                            startIcon={<CloudUploadIcon />}
-                        >
-                            Upload Document
-                            <VisuallyHiddenInput type="file" />
-                        </Button>
+                        {/* <Image src={projectResult?.image !== 'undefined' ? projectResult?.image : CustomProjectLogo} alt="Custom Logo" width={53} height={53} /> */}
+                        <UploadDropzone
+                            appearance={{
+                                container: {
+                                    padding: "12px",
+                                    cursor: "pointer",
+                                },
+                                button: {
+                                    width: "100%",
+                                    maxWidth: "200px"
+                                }
+                            }}
+                            content={{
+                                button: "Upload Project Logo",
+                            }}
+                            endpoint="imageUploader"
+                            onClientUploadComplete={(res) => {
+                                console.log("Files: ", res);
+                                // Set the projectImage value to the uploaded image URL
+                                setValue('projectImage', res[0].url);
+                                // alert("Upload Completed");
+                            }}
+                            onUploadError={(error: Error) => {
+                                alert(`ERROR! ${error.message}`);
+                            }}
+                        />
+                        <UploadDropzone
+                            appearance={{
+                                container: {
+                                    padding: "12px",
+                                    cursor: "pointer",
+                                },
+                                button: {
+                                    width: "100%",
+                                    maxWidth: "200px"
+                                }
+                            }}
+                            content={{
+                                button: "Upload PDF File",
+                            }}
+                            endpoint="textUploader"
+                            onClientUploadComplete={(res) => {
+                                console.log("Files: ", res);
+                                // Set the projectImage value to the uploaded image URL
+                                setValue('projectFile', res[0].url);
+                                //setValue('projectFileName', res[0].name);
+                                // alert("Upload Completed");
+                            }}
+                            onUploadError={(error: Error) => {
+                                alert(`ERROR! ${error.message}`);
+                            }}
+                        />
                         <DialogActions>
                             {
                                 // Show remove button only if the user is the project admin

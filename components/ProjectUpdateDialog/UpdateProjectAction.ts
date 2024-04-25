@@ -32,6 +32,8 @@ export async function updateProject(inputData: UpdateProjectInputs, projectId: n
                 description: inputData.projectDescription,
                 skills: inputData.projectSkills,
                 link: inputData.projectLink,
+                file: inputData.projectFile || "undefined",
+                image: inputData.projectImage || "undefined",
             },
         });
 
