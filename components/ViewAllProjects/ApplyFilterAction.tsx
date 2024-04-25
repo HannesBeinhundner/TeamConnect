@@ -22,11 +22,12 @@ export async function ApplyFilter(inputData: ApplyFilterInputs, eventId: any) {
 
             if (inputData.projectSearch) {
                 filter.name = {
-                    contains: inputData.projectSearch
+                    contains: inputData.projectSearch,
+                    mode: 'insensitive'
                 };
             }
             if (inputData.projectType) {
-                filter.type = inputData.projectType;
+                filter.type = inputData.projectType
             }
 
             const projects = await prisma.project.findMany({

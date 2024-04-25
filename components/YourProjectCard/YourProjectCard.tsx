@@ -156,6 +156,7 @@ export default function YourProjectCard({ eventId }) {
                         projectResult={projectResult}
                         reloadComponent={fetchProjectStatus}
                         projectTypes={projectTypes}
+                        sessionEmail={sessionEmail}
                     />
                 )
             }

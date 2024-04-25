@@ -29,10 +29,11 @@ interface ProfileUpdateDialogProps {
     onClose: () => void;
     session: any;
     profileResult: any;
-    eventData: any
+    eventData: any;
+    reloadComponent: any;
 }
 
-const ProfileEditDialog: React.FC<ProfileUpdateDialogProps> = ({ open, onClose, session, profileResult, eventData }) => {
+const ProfileEditDialog: React.FC<ProfileUpdateDialogProps> = ({ open, onClose, session, profileResult, eventData, reloadComponent }) => {
     const [errorAlert, setErrorAlert] = useState(false);
     const [successAlert, setSuccessAlert] = useState(false);
     const [successMessage, setSuccessMessage] = useState('');
@@ -95,6 +96,7 @@ const ProfileEditDialog: React.FC<ProfileUpdateDialogProps> = ({ open, onClose, 
         setSuccessMessage('Your Profile was successfully updated!')
         setSuccessAlert(true);
         onClose();
+        setTimeout(() => reloadComponent(), 1500)
     };
 
     return (

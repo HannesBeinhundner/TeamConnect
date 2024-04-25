@@ -11,7 +11,6 @@ datasource db {
 model Event {
   id                       String             @id @default(cuid())
   name                     String             @db.VarChar(256)
-  isPartOfEvent            Boolean            @default(true)
   adminEmail               String?
   user                     User?              @relation(fields: [adminEmail], references: [email])
   EventExpertise           EventExpertise[]

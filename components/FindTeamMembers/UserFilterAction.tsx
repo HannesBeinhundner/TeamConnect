@@ -16,11 +16,14 @@ export async function UserFilter(inputData: FindTeamMemberInputs, eventId: any) 
 
             if (inputData.memberSearch) {
                 filter.name = {
-                    contains: inputData.memberSearch
+                    contains: inputData.memberSearch,
+                    mode: 'insensitive'
                 };
             }
             if (inputData.expertise) {
-                filter.expertise = inputData.expertise;
+                filter.expertise = {
+                    contains: inputData.expertise
+                };
             }
 
             const users = await prisma.user.findMany({
