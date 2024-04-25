@@ -279,9 +279,6 @@ export default function ConfigCard() {
                                 error={!!errors.eventName}
                                 helperText={errors.eventName?.message}
                             />
-                            <FormGroup>
-                                <FormControlLabel control={<Checkbox {...register('isPartOfEvent')} defaultChecked />} label="As Admin, I want to be part of the event" />
-                            </FormGroup>
 
                             <Controller
                                 control={control}

@@ -24,6 +24,8 @@ import { UpdateProjectInputs } from '@/app/lib/types';
 import styles from './ProjectUpdateDialog.module.scss';
 import { updateProject } from './UpdateProjectAction';
 import { deleteProject } from './DeleteProjectAction';
+import { getUser } from './GetUserAction';
+import { leaveProject } from './LeaveProjectAction';
 
 interface ProjectUpdateDialogProps {
     open: boolean;
@@ -31,14 +33,29 @@ interface ProjectUpdateDialogProps {
     projectResult: any;
     reloadComponent: () => void;
     projectTypes: any;
+    sessionEmail: any;
 }
 
-const ProjectUpdateDialog: React.FC<ProjectUpdateDialogProps> = ({ open, onClose, projectResult, reloadComponent, projectTypes }) => {
+const ProjectUpdateDialog: React.FC<ProjectUpdateDialogProps> = ({ open, onClose, projectResult, reloadComponent, projectTypes, sessionEmail }) => {
+    const [user, setUser] = useState<any>(null);
     const [errorAlert, setErrorAlert] = useState(false);
     const [successAlert, setSuccessAlert] = useState(false);
     const [successMessage, setSuccessMessage] = useState('');
     const [serverErrorMessage, setServerErrorMessage] = useState('');
     const [confirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
+
+    const isProjectAdmin = user && (user.projectId === projectResult?.id) && user.projectAdmin
+    const isNotProjectAdmin = user && (user.projectId === projectResult?.id) && !user.projectAdmin
+
+
+    useEffect(() => {
+        const getCurrentUser = async (sessionEmail: string) => {
+            const result = await getUser(sessionEmail);
+            setUser(result);
+        }
+
+        getCurrentUser(sessionEmail);
+    }, [])
 
     const VisuallyHiddenInput = styled('input')({
         clip: 'rect(0 0 0 0)',
@@ -123,7 +140,26 @@ const ProjectUpdateDialog: React.FC<ProjectUpdateDialogProps> = ({ open, onClose
         setTimeout(() => reloadComponent(), 1500)
     };
 
-    const handleDeleteButtonClick = () => {
+    const handleLeaveProject = async () => {
+        const result = await leaveProject(projectResult?.id, user?.id);
+
+        if (!result) {
+            alert("Something went wrong");
+            return;
+        }
+
+        if (result.error) {
+            setServerErrorMessage(result.error.toString());
+            setErrorAlert(true);
+            return;
+        }
+        setSuccessMessage('You successfully left the Project!')
+        setSuccessAlert(true);
+        onClose();
+        setTimeout(() => reloadComponent(), 1500)
+    };
+
+    const handleActionButtonClick = () => {
         setConfirmationDialogOpen(true);
     };
 
@@ -238,9 +274,22 @@ const ProjectUpdateDialog: React.FC<ProjectUpdateDialogProps> = ({ open, onClose
                             <VisuallyHiddenInput type="file" />
                         </Button>
                         <DialogActions>
-                            <Button variant="contained" color="error" onClick={handleDeleteButtonClick}>
-                                Delete Project
-                            </Button>
+                            {
+                                // Show remove button only if the user is the project admin
+                                isProjectAdmin && (
+                                    <Button variant="contained" color="error" onClick={handleActionButtonClick}>
+                                        Delete Project
+                                    </Button>
+                                )
+                            }
+                            {
+                                // Show leave button only if the user is not the project admin
+                                isNotProjectAdmin && (
+                                    <Button variant="contained" color="error" onClick={handleActionButtonClick}>
+                                        Leave Project
+                                    </Button>
+                                )
+                            }
                             <Button variant="contained" type="submit">
                                 Update
                             </Button>
@@ -248,15 +297,32 @@ const ProjectUpdateDialog: React.FC<ProjectUpdateDialogProps> = ({ open, onClose
                                 open={confirmationDialogOpen}
                                 onClose={handleConfirmationDialogClose}
                             >
-                                <DialogTitle>Confirm Deletion</DialogTitle>
+                                <DialogTitle>
+                                    {
+                                        isProjectAdmin && ('Confirm Deletion')
+                                    }
+                                    {
+                                        isNotProjectAdmin && ('Confirm Leave')
+                                    }
+                                </DialogTitle>
                                 <DialogContent>
                                     <DialogContentText>
-                                        Are you sure you want to delete this project?
+                                        {
+                                            isProjectAdmin && ('Are you sure you want to delete this project?')
+                                        }
+                                        {
+                                            isNotProjectAdmin && ('Are you sure you want to leave this project?')
+                                        }
                                     </DialogContentText>
                                 </DialogContent>
                                 <DialogActions>
                                     <Button onClick={handleConfirmationDialogClose}>Cancel</Button>
-                                    <Button onClick={handleDeleteProject} color="error">Delete</Button>
+                                    {
+                                        isProjectAdmin && (<Button onClick={handleDeleteProject} color="error">Delete</Button>)
+                                    }
+                                    {
+                                        isNotProjectAdmin && (<Button onClick={handleLeaveProject} color="error">Leave</Button>)
+                                    }
                                 </DialogActions>
                             </Dialog>
                         </DialogActions>

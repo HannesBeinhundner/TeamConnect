@@ -18,9 +18,6 @@ import { CreateEventInputs } from '@/app/lib/types';
 import styles from './EventUpdateDialog.module.scss';
 import { updateEvent } from './UpdateEventAction';
 import { deleteEvent } from './DeleteEventAction';
-import FormGroup from '@mui/material/FormGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import { MuiChipsInput } from 'mui-chips-input'
 
 interface EventUpdateDialogProps {
@@ -145,9 +142,6 @@ const EventUpdateDialog: React.FC<EventUpdateDialogProps> = ({ open, onClose, ev
                             error={!!errors.eventName}
                             helperText={errors.eventName?.message}
                         />
-                        <FormGroup>
-                            <FormControlLabel control={<Checkbox {...register('isPartOfEvent')} defaultChecked={eventResult?.isPartOfEvent} />} label="As Admin, I want to be part of the event" />
-                        </FormGroup>
 
                         <Controller
                             control={control}
