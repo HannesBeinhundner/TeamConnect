@@ -20,21 +20,42 @@ import Link from "next/link";
 import LinkIcon from '@mui/icons-material/Link';
 import UserIconText from '../UserIconText/UserIconText';
 import { checkProject } from './CheckProjectAction';
+import { deleteProject } from '@/components/ProjectUpdateDialog/DeleteProjectAction';
+import AttachFileIcon from '@mui/icons-material/AttachFile';
+
 
 
 interface ProjectUpdateDialogProps {
     open: boolean;
     onClose: () => void;
     session: any;
+    eventData: any;
+    reloadComponent: any;
     projectResult: any;
 }
 
-const ProjectViewDialog: React.FC<ProjectUpdateDialogProps> = ({ open, onClose, projectResult, session }) => {
+const ProjectViewDialog: React.FC<ProjectUpdateDialogProps> = ({ open, onClose, projectResult, session, eventData, reloadComponent }) => {
     const [errorAlert, setErrorAlert] = useState(false);
     const [successAlert, setSuccessAlert] = useState(false);
+    const [confirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
+
     const [projectUsers, setProjectUsers] = useState<any>([]);
-    const [successMessage, setSuccessMessage] = useState('');
-    const [serverErrorMessage, setServerErrorMessage] = useState('');
+
+    const handleDeleteProject = async () => {
+        const result = await deleteProject(projectResult?.id);
+
+        if (!result) {
+            alert("Something went wrong");
+            return;
+        }
+
+        if (result.error) {
+            setErrorAlert(true);
+            return;
+        }
+        setSuccessAlert(true);
+        setTimeout(() => reloadComponent(), 1500)
+    };
 
     const handleCloseAlert = () => {
         setSuccessAlert(false);
@@ -47,6 +68,13 @@ const ProjectViewDialog: React.FC<ProjectUpdateDialogProps> = ({ open, onClose, 
         console.log(projectResult)
     };
 
+    const handleDeleteButtonClick = () => {
+        setConfirmationDialogOpen(true);
+    };
+
+    const handleConfirmationDialogClose = () => {
+        setConfirmationDialogOpen(false);
+    };
 
     useEffect(() => {
         if (successAlert || errorAlert) {
@@ -78,14 +106,25 @@ const ProjectViewDialog: React.FC<ProjectUpdateDialogProps> = ({ open, onClose, 
                 </IconButton>
                 <DialogContent className={styles.viewDialog}>
                     <div className={styles.titleArea}>
-                        <Image src={CustomProjectLogo} alt="Custom Logo" width={53} />
+                        <Image src={projectResult?.image !== 'undefined' ? projectResult?.image : CustomProjectLogo} alt="Custom Logo" width={53} height={53} />
                         <h1>{projectResult?.name}</h1>
                     </div>
                     <div className={styles.propertyArea}>
                         <Chip className={styles.chipColor} text={projectResult?.type} icon={<CategoryIcon fontSize='small' />} />
-                        <Link href={(projectResult?.link && (projectResult.link.startsWith("https://") || projectResult.link.startsWith("http://"))) ? projectResult.link : "https://" + projectResult?.link} className={styles.chipLink} target="_blank">
-                            <Chip className={styles.chipColor} text={projectResult?.link} icon={<LinkIcon fontSize='small' sx={{ color: '#000000DE' }} />} />
-                        </Link>
+                        {
+                            projectResult.file !== 'undefined' && (
+                                <Link href={projectResult.file} className={styles.chipLink} target="_blank">
+                                    <Chip className={styles.chipColor} text={"Project file"} icon={<AttachFileIcon fontSize='small' sx={{ color: '#000000DE' }} />} />
+                                </Link>
+                            )
+                        }
+                        {
+                            projectResult?.link && (
+                                <Link href={(projectResult.link.startsWith("https://") || projectResult.link.startsWith("http://")) ? projectResult.link : "https://" + projectResult?.link} className={styles.chipLink} target="_blank">
+                                    <Chip className={styles.chipColor} text={projectResult?.link} icon={<LinkIcon fontSize='small' sx={{ color: '#000000DE' }} />} />
+                                </Link>
+                            )
+                        }
                     </div>
                     <div className={styles.teamArea}>
                         {projectUsers
@@ -105,19 +144,42 @@ const ProjectViewDialog: React.FC<ProjectUpdateDialogProps> = ({ open, onClose, 
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
+                    {
+                        // Show delete button only if the user is an event admin
+                        eventData.adminEmail === session.user.email && (
+                            <Button variant="contained" color="error" onClick={handleDeleteButtonClick}>
+                                Delete Project
+                            </Button>
+                        )
+                    }
                     <Button variant="contained" type="submit">
                         Request to Join
                     </Button>
+                    <Dialog
+                        open={confirmationDialogOpen}
+                        onClose={handleConfirmationDialogClose}
+                    >
+                        <DialogTitle>Confirm Delete Project</DialogTitle>
+                        <DialogContent>
+                            <DialogContentText>
+                                Are you sure you want to delete this Project?
+                            </DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={handleConfirmationDialogClose}>Cancel</Button>
+                            <Button onClick={handleDeleteProject} color="error">Delete</Button>
+                        </DialogActions>
+                    </Dialog>
                 </DialogActions>
             </Dialog>
             {successAlert && (
                 <Alert severity="success" onClose={handleCloseAlert} className={styles.alert}>
-                    {successMessage}
+                    This Project was successfully deleted!
                 </Alert>
             )}
             {errorAlert && (
                 <Alert severity="error" onClose={handleCloseAlert} className={styles.alert}>
-                    {serverErrorMessage}
+                    This Project couldn't be deleted!
                 </Alert>
             )}
         </>

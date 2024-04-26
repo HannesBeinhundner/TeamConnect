@@ -20,38 +20,39 @@ import { getExpertises } from '@/app/lib/GetExpertisesAction';
 
 interface Props {
     session: any;
-    eventId: any;
+    eventData: any;
 }
 
-export default function FindTeamMembers({ session, eventId }: Props) {
+export default function FindTeamMembers({ session, eventData }: Props) {
 
     const [userResult, setUserResult] = useState<any>({});
     const [expertises, setExpertises] = useState([]);
 
-    useEffect(() => {
-        const fetchUsers = async () => {
-            try {
-                const data = {
-                    memberSearch: "",
-                    expertise: ""
-                };
-                const response = await UserFilter(data, eventId);
+    const fetchUsers = async () => {
+        try {
+            const data = {
+                memberSearch: "",
+                expertise: ""
+            };
+            const response = await UserFilter(data, eventData.id);
 
-                if (response.success && Array.isArray(response.data)) {
-                    setUserResult(response.data);
-                } else {
-                    console.error('Error: ApplyFilter did not return a successful response or data is not an array.');
-                }
-            } catch (error) {
-                console.error('Error fetching project data:', error);
+            if (response.success && Array.isArray(response.data)) {
+                setUserResult(response.data);
+            } else {
+                console.error('Error: ApplyFilter did not return a successful response or data is not an array.');
             }
-        };
+        } catch (error) {
+            console.error('Error fetching project data:', error);
+        }
+    };
 
+
+
+    useEffect(() => {
         const fetchExpertises = async () => {
-            const expertises: any = await getExpertises(eventId);
+            const expertises: any = await getExpertises(eventData.id);
             setExpertises(expertises);
         };
-
         fetchUsers();
         fetchExpertises();
     }, []);
@@ -70,7 +71,7 @@ export default function FindTeamMembers({ session, eventId }: Props) {
     const processForm: SubmitHandler<FindTeamMemberInputs> = async data => {
         try {
             // Call ApplyFilter with form data
-            const filteredUsers = await UserFilter(data, eventId);
+            const filteredUsers = await UserFilter(data, eventData.id);
 
             if (filteredUsers && filteredUsers.success && Array.isArray(filteredUsers.data)) {
                 // Set the filtered project data
@@ -134,7 +135,7 @@ export default function FindTeamMembers({ session, eventId }: Props) {
                         Array.isArray(userResult) && userResult.map((user: any) => (
                             //Filter own user from the list
                             session?.user?.email !== user.email &&
-                            <FindTeamMembersCard session={session} key={user.id} userResult={user} />
+                            <FindTeamMembersCard session={session} eventData={eventData} key={user.id} userResult={user} reloadComponent={fetchUsers} />
                         ))
                     }
                 </div>

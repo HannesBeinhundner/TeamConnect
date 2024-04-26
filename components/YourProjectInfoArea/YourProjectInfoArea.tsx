@@ -5,6 +5,7 @@ import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import CategoryIcon from '@mui/icons-material/Category';
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 import LinkIcon from '@mui/icons-material/Link';
+import AttachFileIcon from '@mui/icons-material/AttachFile';
 import UserIconText from '../UserIconText/UserIconText';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import PersonIcon from '@mui/icons-material/Person';
@@ -17,14 +18,25 @@ export default function YourProjectInformationArea({ projectResult }) {
     return (
         <div className={styles.projectInformationArea}>
             <div className={styles.titleArea}>
-                <Image src={CustomProjectLogo} alt="Custom Logo" width={53} />
+                <Image src={projectResult?.image !== 'undefined' ? projectResult?.image : CustomProjectLogo} alt="Custom Logo" width={53} height={53} />
                 <h1>{projectResult?.name}</h1>
             </div>
             <div className={styles.propertyArea}>
                 <Chip text={projectResult?.type} icon={<CategoryIcon fontSize='small' />} />
-                <Link href={(projectResult?.link && (projectResult.link.startsWith("https://") || projectResult.link.startsWith("http://"))) ? projectResult.link : "https://" + projectResult?.link} className={styles.chipLink} target="_blank">
-                    <Chip className={styles.chipColor} text={projectResult?.link} icon={<LinkIcon fontSize='small' sx={{ color: '#000000DE' }} />} />
-                </Link>
+                {
+                    projectResult.file !== 'undefined' && (
+                        <Link href={projectResult.file} className={styles.chipLink} target="_blank">
+                            <Chip className={styles.chipColor} text={"Project file"} icon={<AttachFileIcon fontSize='small' sx={{ color: '#000000DE' }} />} />
+                        </Link>
+                    )
+                }
+                {
+                    projectResult?.link && (
+                        <Link href={(projectResult.link.startsWith("https://") || projectResult.link.startsWith("http://")) ? projectResult.link : "https://" + projectResult?.link} className={styles.chipLink} target="_blank">
+                            <Chip className={styles.chipColor} text={projectResult?.link} icon={<LinkIcon fontSize='small' sx={{ color: '#000000DE' }} />} />
+                        </Link>
+                    )
+                }
             </div>
             <div className={styles.teamArea}>
                 {projectResult?.users

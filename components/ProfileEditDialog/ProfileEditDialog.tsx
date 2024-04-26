@@ -6,6 +6,7 @@ import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import InputLabel from '@mui/material/InputLabel';
 import IconButton from '@mui/material/IconButton';
@@ -28,10 +29,11 @@ interface ProfileUpdateDialogProps {
     onClose: () => void;
     session: any;
     profileResult: any;
-    eventData: any
+    eventData: any;
+    reloadComponent: any;
 }
 
-const ProfileEditDialog: React.FC<ProfileUpdateDialogProps> = ({ open, onClose, session, profileResult, eventData }) => {
+const ProfileEditDialog: React.FC<ProfileUpdateDialogProps> = ({ open, onClose, session, profileResult, eventData, reloadComponent }) => {
     const [errorAlert, setErrorAlert] = useState(false);
     const [successAlert, setSuccessAlert] = useState(false);
     const [successMessage, setSuccessMessage] = useState('');
@@ -94,6 +96,7 @@ const ProfileEditDialog: React.FC<ProfileUpdateDialogProps> = ({ open, onClose, 
         setSuccessMessage('Your Profile was successfully updated!')
         setSuccessAlert(true);
         onClose();
+        setTimeout(() => reloadComponent(), 1500)
     };
 
     return (
@@ -113,6 +116,10 @@ const ProfileEditDialog: React.FC<ProfileUpdateDialogProps> = ({ open, onClose, 
                     <CloseIcon />
                 </IconButton>
                 <DialogContent>
+                    <DialogContentText>
+                        <strong>Please make sure that you have selected a profile expertise and a profile description!</strong>
+                    </DialogContentText>
+                    <br />
                     <form onSubmit={handleSubmit(handleUpdate)} className={styles.formContainer}>
                         <TextField
                             margin="dense"

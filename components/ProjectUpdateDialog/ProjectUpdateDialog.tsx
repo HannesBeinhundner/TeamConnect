@@ -8,6 +8,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import InputLabel from '@mui/material/InputLabel';
+import Image from "next/image";
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import { styled } from '@mui/material/styles';
@@ -24,6 +25,11 @@ import { UpdateProjectInputs } from '@/app/lib/types';
 import styles from './ProjectUpdateDialog.module.scss';
 import { updateProject } from './UpdateProjectAction';
 import { deleteProject } from './DeleteProjectAction';
+import { getUser } from './GetUserAction';
+import { leaveProject } from './LeaveProjectAction';
+import "@uploadthing/react/styles.css";
+import { UploadDropzone, UploadButton } from "@/utils/uploadthing";
+import CustomProjectLogo from '@/images/customProjectLogo.svg'
 
 interface ProjectUpdateDialogProps {
     open: boolean;
@@ -31,26 +37,31 @@ interface ProjectUpdateDialogProps {
     projectResult: any;
     reloadComponent: () => void;
     projectTypes: any;
+    sessionEmail: any;
 }
 
-const ProjectUpdateDialog: React.FC<ProjectUpdateDialogProps> = ({ open, onClose, projectResult, reloadComponent, projectTypes }) => {
+const ProjectUpdateDialog: React.FC<ProjectUpdateDialogProps> = ({ open, onClose, projectResult, reloadComponent, projectTypes, sessionEmail }) => {
+    const [user, setUser] = useState<any>(null);
     const [errorAlert, setErrorAlert] = useState(false);
     const [successAlert, setSuccessAlert] = useState(false);
     const [successMessage, setSuccessMessage] = useState('');
     const [serverErrorMessage, setServerErrorMessage] = useState('');
     const [confirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
+    const [documentName, setDocumentName] = useState('');
+    const [imageName, setImageName] = useState('');
 
-    const VisuallyHiddenInput = styled('input')({
-        clip: 'rect(0 0 0 0)',
-        clipPath: 'inset(50%)',
-        height: 1,
-        overflow: 'hidden',
-        position: 'absolute',
-        bottom: 0,
-        left: 0,
-        whiteSpace: 'nowrap',
-        width: 1,
-    });
+    const isProjectAdmin = user && (user.projectId === projectResult?.id) && user.projectAdmin
+    const isNotProjectAdmin = user && (user.projectId === projectResult?.id) && !user.projectAdmin
+
+
+    useEffect(() => {
+        const getCurrentUser = async (sessionEmail: string) => {
+            const result = await getUser(sessionEmail);
+            setUser(result);
+        }
+
+        getCurrentUser(sessionEmail);
+    }, [])
 
     const handleCloseAlert = () => {
         setSuccessAlert(false);
@@ -70,6 +81,7 @@ const ProjectUpdateDialog: React.FC<ProjectUpdateDialogProps> = ({ open, onClose
     const {
         register,
         handleSubmit,
+        setValue,
         setError,
         reset,
         formState: { errors },
@@ -81,6 +93,8 @@ const ProjectUpdateDialog: React.FC<ProjectUpdateDialogProps> = ({ open, onClose
             projectLink: projectResult?.link || '',
             projectDescription: projectResult?.description || '',
             projectSkills: projectResult?.skills || '',
+            projectImage: projectResult?.image || '',
+            projectFile: projectResult?.file || '',
         },
     });
 
@@ -120,10 +134,29 @@ const ProjectUpdateDialog: React.FC<ProjectUpdateDialogProps> = ({ open, onClose
         setSuccessMessage('Your Project was successfully deleted!')
         setSuccessAlert(true);
         onClose();
-        setInterval(() => reloadComponent(), 2000)
+        setTimeout(() => reloadComponent(), 1500)
     };
 
-    const handleDeleteButtonClick = () => {
+    const handleLeaveProject = async () => {
+        const result = await leaveProject(projectResult?.id, user?.id);
+
+        if (!result) {
+            alert("Something went wrong");
+            return;
+        }
+
+        if (result.error) {
+            setServerErrorMessage(result.error.toString());
+            setErrorAlert(true);
+            return;
+        }
+        setSuccessMessage('You successfully left the Project!')
+        setSuccessAlert(true);
+        onClose();
+        setTimeout(() => reloadComponent(), 1500)
+    };
+
+    const handleActionButtonClick = () => {
         setConfirmationDialogOpen(true);
     };
 
@@ -217,30 +250,76 @@ const ProjectUpdateDialog: React.FC<ProjectUpdateDialogProps> = ({ open, onClose
                             error={!!errors.projectSkills}
                             helperText={errors.projectSkills?.message}
                         />
-                        <Button
-                            component="label"
-                            role={undefined}
-                            variant="contained"
-                            tabIndex={-1}
-                            startIcon={<CloudUploadIcon />}
-                        >
-                            Upload Project Logo
-                            <VisuallyHiddenInput type="file" />
-                        </Button>
-                        <Button
-                            component="label"
-                            role={undefined}
-                            variant="contained"
-                            tabIndex={-1}
-                            startIcon={<CloudUploadIcon />}
-                        >
-                            Upload Document
-                            <VisuallyHiddenInput type="file" />
-                        </Button>
+                        <div>
+                            <UploadButton
+                                appearance={{
+                                    button: {
+                                        width: "100%",
+                                        maxWidth: "200px"
+                                    }
+                                }}
+                                content={{
+                                    button: "Upload Project Logo",
+                                }}
+                                endpoint="imageUploader"
+                                onClientUploadComplete={(res) => {
+                                    console.log("Files: ", res);
+                                    // Set the projectImage value to the uploaded image URL
+                                    setImageName(res[0].name);
+                                    setValue('projectImage', res[0].url);
+                                    // alert("Upload Completed");
+                                }}
+                                onUploadError={(error: Error) => {
+                                    alert(`ERROR! ${error.message}`);
+                                }}
+                            />
+                            <p className={styles.fileName}>{imageName}</p>
+                        </div>
+
+                        <div>
+                            <UploadButton
+                                appearance={{
+                                    button: {
+                                        width: "100%",
+                                        maxWidth: "200px"
+                                    }
+                                }}
+                                content={{
+                                    button: "Upload PDF File",
+                                }}
+                                endpoint="textUploader"
+                                onClientUploadComplete={(res) => {
+                                    console.log("Files: ", res);
+                                    // Set the projectImage value to the uploaded image URL
+                                    setDocumentName(res[0].name);
+                                    setValue('projectFile', res[0].url);
+                                    //setValue('projectFileName', res[0].name);
+                                    // alert("Upload Completed");
+                                }}
+                                onUploadError={(error: Error) => {
+                                    alert(`ERROR! ${error.message}`);
+                                }}
+                            />
+                            <p className={styles.fileName}>{documentName}</p>
+                        </div>
+
                         <DialogActions>
-                            <Button variant="contained" color="error" onClick={handleDeleteButtonClick}>
-                                Delete Project
-                            </Button>
+                            {
+                                // Show remove button only if the user is the project admin
+                                isProjectAdmin && (
+                                    <Button variant="contained" color="error" onClick={handleActionButtonClick}>
+                                        Delete Project
+                                    </Button>
+                                )
+                            }
+                            {
+                                // Show leave button only if the user is not the project admin
+                                isNotProjectAdmin && (
+                                    <Button variant="contained" color="error" onClick={handleActionButtonClick}>
+                                        Leave Project
+                                    </Button>
+                                )
+                            }
                             <Button variant="contained" type="submit">
                                 Update
                             </Button>
@@ -248,15 +327,32 @@ const ProjectUpdateDialog: React.FC<ProjectUpdateDialogProps> = ({ open, onClose
                                 open={confirmationDialogOpen}
                                 onClose={handleConfirmationDialogClose}
                             >
-                                <DialogTitle>Confirm Deletion</DialogTitle>
+                                <DialogTitle>
+                                    {
+                                        isProjectAdmin && ('Confirm Deletion')
+                                    }
+                                    {
+                                        isNotProjectAdmin && ('Confirm Leave')
+                                    }
+                                </DialogTitle>
                                 <DialogContent>
                                     <DialogContentText>
-                                        Are you sure you want to delete this project?
+                                        {
+                                            isProjectAdmin && ('Are you sure you want to delete this project?')
+                                        }
+                                        {
+                                            isNotProjectAdmin && ('Are you sure you want to leave this project?')
+                                        }
                                     </DialogContentText>
                                 </DialogContent>
                                 <DialogActions>
                                     <Button onClick={handleConfirmationDialogClose}>Cancel</Button>
-                                    <Button onClick={handleDeleteProject} color="error">Delete</Button>
+                                    {
+                                        isProjectAdmin && (<Button onClick={handleDeleteProject} color="error">Delete</Button>)
+                                    }
+                                    {
+                                        isNotProjectAdmin && (<Button onClick={handleLeaveProject} color="error">Leave</Button>)
+                                    }
                                 </DialogActions>
                             </Dialog>
                         </DialogActions>

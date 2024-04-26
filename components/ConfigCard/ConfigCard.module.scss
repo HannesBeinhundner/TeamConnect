@@ -27,6 +27,16 @@
     //align-items: center;
     gap: 1.5rem;
 
+    .paragraphWrapper {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+
+        p {
+            margin: 0;
+        }
+    }
+
     .tableHeaderWrapper {
         display: flex;
         justify-content: center;

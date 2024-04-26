@@ -90,7 +90,7 @@ export default function ConfigCard() {
         setCopiedEventId(eventId);
         setTimeout(() => {
             handleTooltipClose();
-        }, 2000);
+        }, 1500);
     };
 
     const handleTooltipClose = () => {
@@ -157,7 +157,10 @@ export default function ConfigCard() {
                 <h5>Event Settings</h5>
             </div>
             <div className={styles.contentArea}>
-                <p>This is your admin dashboard, where you can oversee all your events. Click on the event name to view it and all associated projects.</p>
+                <div className={styles.paragraphWrapper}>
+                    <p>This is your admin dashboard, where you can oversee all your events. Click on the event name to view it and all it's associated projects.</p>
+                    <p>To add users to the event, distribute the invitation link!</p>
+                </div>
                 <TableContainer component={Paper} sx={{ backgroundColor: 'transparent' }}>
                     <Table sx={{ minWidth: 650 }} aria-label="event table">
                         <TableHead>
@@ -276,9 +279,6 @@ export default function ConfigCard() {
                                 error={!!errors.eventName}
                                 helperText={errors.eventName?.message}
                             />
-                            <FormGroup>
-                                <FormControlLabel control={<Checkbox {...register('isPartOfEvent')} defaultChecked />} label="As Admin, I want to be part of the event" />
-                            </FormGroup>
 
                             <Controller
                                 control={control}

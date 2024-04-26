@@ -28,7 +28,6 @@ export async function updateEvent(inputData: CreateEventInputs, eventId: string)
                 where: { id: eventId },
                 data: {
                     name: inputData.eventName,
-                    isPartOfEvent: inputData.isPartOfEvent,
                 },
             }),
             // Update or create EventProjectTypes

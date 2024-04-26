@@ -11,7 +11,6 @@ datasource db {
 model Event {
   id                       String             @id @default(cuid())
   name                     String             @db.VarChar(256)
-  isPartOfEvent            Boolean            @default(true)
   adminEmail               String?
   user                     User?              @relation(fields: [adminEmail], references: [email])
   EventExpertise           EventExpertise[]
@@ -53,20 +52,22 @@ model Project {
 }
 
 model Account {
-  id                String  @id @default(cuid())
-  userId            String
-  type              String
-  provider          String
-  providerAccountId String
-  refresh_token     String?
-  access_token      String?
-  expires_at        Int?
-  token_type        String?
-  scope             String?
-  id_token          String?
-  session_state     String?
-  created_at        String?
-  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id                 String  @id @default(cuid())
+  userId             String
+  type               String
+  provider           String
+  providerAccountId  String
+  refresh_token      String?
+  access_token       String?
+  expires_at         Int?
+  token_type         String?
+  scope              String?
+  id_token           String?
+  session_state      String?
+  created_at         String?
+  oauth_token        String?
+  oauth_token_secret String?
+  user               User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
 }

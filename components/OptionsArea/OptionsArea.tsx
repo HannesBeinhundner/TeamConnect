@@ -16,6 +16,7 @@ import Image from "next/image";
 import { signOut } from "next-auth/react";
 import ProfileEditDialog from '../ProfileEditDialog/ProfileEditDialog';
 import { getProfile } from './GetProfileAction';
+import Badge from '@mui/material/Badge';
 
 interface Props {
     session: any;
@@ -26,10 +27,17 @@ export default function OptionsArea({ session, eventData }: Props) {
 
     const [updateDialogOpen, setUpdateDialogOpen] = useState(false);
     const [profileResult, setProfileResult] = useState<any>([]);
+    const [missingProfileData, setMissingProfileData] = useState(false);
 
     const fetchProfileStatus = async () => {
         const profileResult: any = await getProfile(session.user.email);
         setProfileResult(profileResult);
+
+        const isMissingProfileData = (profileResult?.data?.expertise === '') || (profileResult?.data?.expertise === null) || (profileResult?.data?.description === '') || (profileResult?.data?.description === null);
+        setMissingProfileData(isMissingProfileData);
+
+        // If user has not set expertise or description, open ProfileEditDialog window
+        isMissingProfileData && setUpdateDialogOpen(true)
     };
 
     useEffect(() => {
@@ -62,18 +70,36 @@ export default function OptionsArea({ session, eventData }: Props) {
             <NotificationsIcon />
             <div className={styles.profile}>
                 {session.user.image !== null ? (
-                    <Image
-                        aria-label="expand"
-                        onClick={handleUpdateDialogOpen}
-                        className={styles.profile}
-                        src={session.user.image}
-                        width={40}
-                        height={40}
-                        alt="Profile picture of user"
-                        style={{
-                            objectFit: 'cover',
-                        }}
-                    />
+                    // If user has not set expertise or description, set a badge on the profile picture
+                    missingProfileData ? (
+                        <Badge color="error" badgeContent="!">
+                            <Image
+                                aria-label="expand"
+                                onClick={handleUpdateDialogOpen}
+                                className={styles.profile}
+                                src={session.user.image}
+                                width={42}
+                                height={42}
+                                alt="Profile picture of user"
+                                style={{
+                                    objectFit: 'cover',
+                                }}
+                            />
+                        </Badge>
+                    ) : (
+                        <Image
+                            aria-label="expand"
+                            onClick={handleUpdateDialogOpen}
+                            className={styles.profile}
+                            src={session.user.image}
+                            width={42}
+                            height={42}
+                            alt="Profile picture of user"
+                            style={{
+                                objectFit: 'cover',
+                            }}
+                        />
+                    )
                 ) : (
                     <AccountCircleIcon
                         aria-label="expand"
@@ -99,6 +125,7 @@ export default function OptionsArea({ session, eventData }: Props) {
                 session={session}
                 profileResult={profileResult.data}
                 eventData={eventData}
+                reloadComponent={fetchProfileStatus}
             />
         </div>
     )

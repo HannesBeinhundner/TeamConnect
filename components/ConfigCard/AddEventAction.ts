@@ -18,7 +18,6 @@ export async function addEvent(inputData: CreateEventInputs, sessionEmail: strin
             const createdEvent = await prisma.event.create({
                 data: {
                     name: inputData.eventName,
-                    isPartOfEvent: inputData.isPartOfEvent,
                     adminEmail: sessionEmail,
                 },
                 select: {

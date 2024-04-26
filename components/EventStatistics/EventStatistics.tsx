@@ -46,7 +46,6 @@ export default function EventStatistics(props: CircularProgressProps & { value: 
 
     const fetchUserExpertiseCnt = async () => {
         const userExpertiseCountResult = await countUserExpertise(props.eventId);
-        console.log(userExpertiseCountResult);
         setUserExpertiseCountCount(userExpertiseCountResult);
     };
 
