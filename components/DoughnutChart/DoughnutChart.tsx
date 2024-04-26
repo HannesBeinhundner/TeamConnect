@@ -44,7 +44,7 @@ const DoughnutChart: React.FC<DoughnutChartProps> = ({ id, chartData }) => {
                     }],
                 },
                 legend: {
-                    position: 'right',
+                    position: 'bottom',
                     labels: {
                         fontSize: 10,
                         boxWidth: 15,
@@ -59,7 +59,7 @@ const DoughnutChart: React.FC<DoughnutChartProps> = ({ id, chartData }) => {
     }, [chartData]);
 
     return (
-        <canvas id={id} style={{ width: '100%', maxWidth: '370px' }}></canvas>
+        <canvas id={id} style={{ width: '100%', maxWidth: '300px', height: '100%', maxHeight: '150px' }}></canvas>
     )
 }
 
