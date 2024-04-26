@@ -21,6 +21,8 @@ import LinkIcon from '@mui/icons-material/Link';
 import UserIconText from '../UserIconText/UserIconText';
 import { checkProject } from './CheckProjectAction';
 import { deleteProject } from '@/components/ProjectUpdateDialog/DeleteProjectAction';
+import AttachFileIcon from '@mui/icons-material/AttachFile';
+
 
 
 interface ProjectUpdateDialogProps {
@@ -104,14 +106,25 @@ const ProjectViewDialog: React.FC<ProjectUpdateDialogProps> = ({ open, onClose, 
                 </IconButton>
                 <DialogContent className={styles.viewDialog}>
                     <div className={styles.titleArea}>
-                        <Image src={CustomProjectLogo} alt="Custom Logo" width={53} />
+                        <Image src={projectResult?.image !== 'undefined' ? projectResult?.image : CustomProjectLogo} alt="Custom Logo" width={53} height={53} />
                         <h1>{projectResult?.name}</h1>
                     </div>
                     <div className={styles.propertyArea}>
                         <Chip className={styles.chipColor} text={projectResult?.type} icon={<CategoryIcon fontSize='small' />} />
-                        <Link href={(projectResult?.link && (projectResult.link.startsWith("https://") || projectResult.link.startsWith("http://"))) ? projectResult.link : "https://" + projectResult?.link} className={styles.chipLink} target="_blank">
-                            <Chip className={styles.chipColor} text={projectResult?.link} icon={<LinkIcon fontSize='small' sx={{ color: '#000000DE' }} />} />
-                        </Link>
+                        {
+                            projectResult.file !== 'undefined' && (
+                                <Link href={projectResult.file} className={styles.chipLink} target="_blank">
+                                    <Chip className={styles.chipColor} text={"Project file"} icon={<AttachFileIcon fontSize='small' sx={{ color: '#000000DE' }} />} />
+                                </Link>
+                            )
+                        }
+                        {
+                            projectResult?.link && (
+                                <Link href={(projectResult.link.startsWith("https://") || projectResult.link.startsWith("http://")) ? projectResult.link : "https://" + projectResult?.link} className={styles.chipLink} target="_blank">
+                                    <Chip className={styles.chipColor} text={projectResult?.link} icon={<LinkIcon fontSize='small' sx={{ color: '#000000DE' }} />} />
+                                </Link>
+                            )
+                        }
                     </div>
                     <div className={styles.teamArea}>
                         {projectUsers

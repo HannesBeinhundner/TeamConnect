@@ -29,6 +29,8 @@ import { checkProject } from './CheckProjectAction';
 import YourProjectInformationArea from '../YourProjectInfoArea/YourProjectInfoArea';
 import ProjectUpdateDialog from '@/components/ProjectUpdateDialog/ProjectUpdateDialog';
 import { getProjectTypes } from '@/app/lib/GetProjectTypesAction';
+import "@uploadthing/react/styles.css";
+import { UploadDropzone, UploadButton } from "@/utils/uploadthing";
 
 // @ts-ignore
 export default function YourProjectCard({ eventId }) {
@@ -37,7 +39,6 @@ export default function YourProjectCard({ eventId }) {
     const [checkProjectResult, setCheckProjectResult] = useState(false);
     const [projectResult, setProjectResult] = useState<any>([]);
     const [projectTypes, setProjectTypes] = useState<any>([]);
-
 
     const [open, setOpen] = useState(false);
     const [updateDialogOpen, setUpdateDialogOpen] = useState(false);
@@ -95,21 +96,10 @@ export default function YourProjectCard({ eventId }) {
         }
     }, [successAlert, errorAlert]);
 
-    const VisuallyHiddenInput = styled('input')({
-        clip: 'rect(0 0 0 0)',
-        clipPath: 'inset(50%)',
-        height: 1,
-        overflow: 'hidden',
-        position: 'absolute',
-        bottom: 0,
-        left: 0,
-        whiteSpace: 'nowrap',
-        width: 1,
-    });
-
     const {
         register,
         handleSubmit,
+        setValue,
         setError,
         reset,
         watch,
@@ -119,6 +109,7 @@ export default function YourProjectCard({ eventId }) {
     })
 
     const processForm: SubmitHandler<CreateProjectInputs> = async data => {
+
         const result = await addEntry(data, sessionEmail, eventId)
 
         if (!result) {
@@ -259,26 +250,57 @@ export default function YourProjectCard({ eventId }) {
                                             error={!!errors.projectSkills}
                                             helperText={errors.projectSkills?.message}
                                         />
-                                        <Button
-                                            component="label"
-                                            role={undefined}
-                                            variant="contained"
-                                            tabIndex={-1}
-                                            startIcon={<CloudUploadIcon />}
-                                        >
-                                            Upload Project Logo
-                                            <VisuallyHiddenInput type="file" />
-                                        </Button>
-                                        <Button
-                                            component="label"
-                                            role={undefined}
-                                            variant="contained"
-                                            tabIndex={-1}
-                                            startIcon={<CloudUploadIcon />}
-                                        >
-                                            Upload Document
-                                            <VisuallyHiddenInput type="file" />
-                                        </Button>
+                                        <UploadDropzone
+                                            appearance={{
+                                                container: {
+                                                    padding: "12px",
+                                                    cursor: "pointer",
+                                                },
+                                                button: {
+                                                    width: "100%",
+                                                    maxWidth: "200px"
+                                                }
+                                            }}
+                                            content={{
+                                                button: "Upload Project Logo",
+                                            }}
+                                            endpoint="imageUploader"
+                                            onClientUploadComplete={(res) => {
+                                                console.log("Files: ", res);
+                                                // Set the projectImage value to the uploaded image URL
+                                                setValue('projectImage', res[0].url);
+                                                // alert("Upload Completed");
+                                            }}
+                                            onUploadError={(error: Error) => {
+                                                alert(`ERROR! ${error.message}`);
+                                            }}
+                                        />
+                                        <UploadDropzone
+                                            appearance={{
+                                                container: {
+                                                    padding: "12px",
+                                                    cursor: "pointer",
+                                                },
+                                                button: {
+                                                    width: "100%",
+                                                    maxWidth: "200px"
+                                                }
+                                            }}
+                                            content={{
+                                                button: "Upload PDF File",
+                                            }}
+                                            endpoint="textUploader"
+                                            onClientUploadComplete={(res) => {
+                                                console.log("Files: ", res);
+                                                // Set the projectImage value to the uploaded image URL
+                                                setValue('projectFile', res[0].url);
+                                                //setValue('projectFileName', res[0].name);
+                                                // alert("Upload Completed");
+                                            }}
+                                            onUploadError={(error: Error) => {
+                                                alert(`ERROR! ${error.message}`);
+                                            }}
+                                        />
                                         <DialogActions>
                                             <Button variant="contained" type="submit">Create</Button>
                                         </DialogActions>

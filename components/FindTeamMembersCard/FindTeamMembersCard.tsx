@@ -3,15 +3,12 @@
 import React, { useEffect, useState } from 'react';
 import Image from "next/image";
 import Chip from '@/components/Chip/Chip';
-import LinkIcon from '@mui/icons-material/Link';
 import SchoolIcon from '@mui/icons-material/School';
 import EmailIcon from '@mui/icons-material/Email';
 import OpenInFullIcon from '@mui/icons-material/OpenInFull';
 import styles from "./FindTeamMembersCard.module.scss";
 import Link from "next/link";
-import ProfilePicture from '@/images/profile_girl.png'
 import { Button, IconButton } from '@mui/material';
-import { getProjectUsers } from '../ViewAllProjectsCard/GetProjectUsersAction';
 import FindTeamMembersViewDialog from '@/components/FindTeamMembersViewDialog/FindTeamMembersViewDialog';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';

@@ -3,13 +3,9 @@
 import React, { useEffect, useState } from 'react';
 import Image from "next/image";
 import Chip from '@/components/Chip/Chip';
-import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import CategoryIcon from '@mui/icons-material/Category';
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 import LinkIcon from '@mui/icons-material/Link';
-import UserIconText from '../UserIconText/UserIconText';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import PersonIcon from '@mui/icons-material/Person';
 import OpenInFullIcon from '@mui/icons-material/OpenInFull';
 import styles from "./ViewAllProjectsCard.module.scss";
 import Link from "next/link";
@@ -24,6 +20,8 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Alert from '@mui/material/Alert';
 import { deleteProject } from '@/components/ProjectUpdateDialog/DeleteProjectAction';
 import ProjectViewDialog from '@/components/ProjectViewDialog/ProjectViewDialog';
+import AttachFileIcon from '@mui/icons-material/AttachFile';
+
 
 interface Props {
     session: any;
@@ -89,7 +87,7 @@ export default function ViewAllProjectsCard({ session, eventData, reloadComponen
         <div className={styles.projectInformationArea}>
             <div className={styles.titleArea}>
                 <div className={styles.iconName}>
-                    <Image src={CustomProjectLogo} alt="Custom Logo" width={53} />
+                    <Image src={projectResult?.image !== 'undefined' ? projectResult?.image : CustomProjectLogo} alt="Custom Logo" width={53} height={53} />
                     <h2>{projectResult?.name}</h2>
                 </div>
                 <IconButton aria-label="expand" sx={{ color: '#1C1C1C' }} onClick={handleUpdateDialogOpen}>
@@ -107,9 +105,20 @@ export default function ViewAllProjectsCard({ session, eventData, reloadComponen
             <div className={styles.propertyArea}>
                 <Chip className={styles.chipColor} text={projectResult?.type} icon={<CategoryIcon fontSize='small' />} />
                 <Chip className={styles.chipColor} text={projectUsers} icon={<AssignmentIndIcon fontSize='small' />} />
-                <Link href={(projectResult?.link && (projectResult.link.startsWith("https://") || projectResult.link.startsWith("http://"))) ? projectResult.link : "https://" + projectResult?.link} className={styles.chipLink} target="_blank">
-                    <Chip className={styles.chipColor} text={projectResult?.link} icon={<LinkIcon fontSize='small' sx={{ color: '#000000DE' }} />} />
-                </Link>
+                {
+                    projectResult.file !== 'undefined' && (
+                        <Link href={projectResult.file} className={styles.chipLink} target="_blank">
+                            <Chip className={styles.chipColor} text={"Project file"} icon={<AttachFileIcon fontSize='small' sx={{ color: '#000000DE' }} />} />
+                        </Link>
+                    )
+                }
+                {
+                    projectResult?.link && (
+                        <Link href={(projectResult.link.startsWith("https://") || projectResult.link.startsWith("http://")) ? projectResult.link : "https://" + projectResult?.link} className={styles.chipLink} target="_blank">
+                            <Chip className={styles.chipColor} text={projectResult?.link} icon={<LinkIcon fontSize='small' sx={{ color: '#000000DE' }} />} />
+                        </Link>
+                    )
+                }
             </div>
             <div className={styles.descriptionArea}>
                 <p>{projectResult?.description}</p>
