@@ -46,6 +46,9 @@ export default function YourProjectCard({ eventId }) {
     const [successAlert, setSucessAlert] = useState(false)
     const [serverErrorMessage, setServerErrorMessage] = useState("")
 
+    const [documentName, setDocumentName] = useState('');
+    const [imageName, setImageName] = useState('');
+
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -250,57 +253,58 @@ export default function YourProjectCard({ eventId }) {
                                             error={!!errors.projectSkills}
                                             helperText={errors.projectSkills?.message}
                                         />
-                                        <UploadDropzone
-                                            appearance={{
-                                                container: {
-                                                    padding: "12px",
-                                                    cursor: "pointer",
-                                                },
-                                                button: {
-                                                    width: "100%",
-                                                    maxWidth: "200px"
-                                                }
-                                            }}
-                                            content={{
-                                                button: "Upload Project Logo",
-                                            }}
-                                            endpoint="imageUploader"
-                                            onClientUploadComplete={(res) => {
-                                                console.log("Files: ", res);
-                                                // Set the projectImage value to the uploaded image URL
-                                                setValue('projectImage', res[0].url);
-                                                // alert("Upload Completed");
-                                            }}
-                                            onUploadError={(error: Error) => {
-                                                alert(`ERROR! ${error.message}`);
-                                            }}
-                                        />
-                                        <UploadDropzone
-                                            appearance={{
-                                                container: {
-                                                    padding: "12px",
-                                                    cursor: "pointer",
-                                                },
-                                                button: {
-                                                    width: "100%",
-                                                    maxWidth: "200px"
-                                                }
-                                            }}
-                                            content={{
-                                                button: "Upload PDF File",
-                                            }}
-                                            endpoint="textUploader"
-                                            onClientUploadComplete={(res) => {
-                                                console.log("Files: ", res);
-                                                // Set the projectImage value to the uploaded image URL
-                                                setValue('projectFile', res[0].url);
-                                                //setValue('projectFileName', res[0].name);
-                                                // alert("Upload Completed");
-                                            }}
-                                            onUploadError={(error: Error) => {
-                                                alert(`ERROR! ${error.message}`);
-                                            }}
-                                        />
+                                        <div>
+                                            <UploadButton
+                                                appearance={{
+                                                    button: {
+                                                        width: "100%",
+                                                        maxWidth: "200px"
+                                                    }
+                                                }}
+                                                content={{
+                                                    button: "Upload Project Logo",
+                                                }}
+                                                endpoint="imageUploader"
+                                                onClientUploadComplete={(res) => {
+                                                    console.log("Files: ", res);
+                                                    // Set the projectImage value to the uploaded image URL
+                                                    setImageName(res[0].name);
+                                                    setValue('projectImage', res[0].url);
+                                                    // alert("Upload Completed");
+                                                }}
+                                                onUploadError={(error: Error) => {
+                                                    alert(`ERROR! ${error.message}`);
+                                                }}
+                                            />
+                                            <p className={styles.fileName}>{imageName}</p>
+                                        </div>
+
+                                        <div>
+                                            <UploadButton
+                                                appearance={{
+                                                    button: {
+                                                        width: "100%",
+                                                        maxWidth: "200px"
+                                                    }
+                                                }}
+                                                content={{
+                                                    button: "Upload PDF File",
+                                                }}
+                                                endpoint="textUploader"
+                                                onClientUploadComplete={(res) => {
+                                                    console.log("Files: ", res);
+                                                    // Set the projectImage value to the uploaded image URL
+                                                    setDocumentName(res[0].name);
+                                                    setValue('projectFile', res[0].url);
+                                                    //setValue('projectFileName', res[0].name);
+                                                    // alert("Upload Completed");
+                                                }}
+                                                onUploadError={(error: Error) => {
+                                                    alert(`ERROR! ${error.message}`);
+                                                }}
+                                            />
+                                            <p className={styles.fileName}>{documentName}</p>
+                                        </div>
                                         <DialogActions>
                                             <Button variant="contained" type="submit">Create</Button>
                                         </DialogActions>
