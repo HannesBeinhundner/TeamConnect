@@ -23,7 +23,7 @@ export default async function Home() {
       {user ? (
         redirect(`/${user?.eventId}`)  //HAS SESSION -> Redirect to dashboard
       ) : (
-        <LoginCard eventId={null} /> //HAS NO SESSION -> Show the login mask
+        <LoginCard eventData={null} /> //HAS NO SESSION -> Show the login mask
       )}
     </>
   );
