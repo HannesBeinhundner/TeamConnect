@@ -8,6 +8,7 @@ const nextConfig = {
     images: {
         domains: ['lh3.googleusercontent.com', 'avatars.githubusercontent.com', 'pbs.twimg.com', 'media.licdn.com', 'utfs.io', 'https://utfs.io'],
     },
+    reactStrictMode: false
 };
 
 module.exports = nextConfig;

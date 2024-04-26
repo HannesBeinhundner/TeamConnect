@@ -1,6 +1,5 @@
 "use client"
 
-import { Chart } from "chart.js";
 import React, { useEffect } from "react";
 import CircularProgress, {
     CircularProgressProps,
@@ -9,72 +8,54 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import styles from "./EventStatistics.module.scss"
 import NumberCard from "@/components/NumberCard/NumberCard";
+import DoughnutChart from "@/components/DoughnutChart/DoughnutChart";
 import { projectTypes } from '@/app/lib/data'
+import { getUserCnt } from "./GetUsersAction";
+import { getProjectCnt } from "./GetProjectsAction";
+import { countSingleUserProjects } from "./GetUsersForProjectAction";
+import { countProjectTypes } from "./GetTypeForProjectAction";
+import { countUserExpertise } from "./GetExpertiseForUsersAction";
 
-
-export default function EventStatistics(props: CircularProgressProps & { value: number },) {
+export default function EventStatistics(props: CircularProgressProps & { value: number, session: any, eventId: any }) {
     const [progress, setProgress] = React.useState(10);
+    const [userCountResult, setUserCnt] = React.useState<any>([]);
+    const [projectCountResult, setProjectCount] = React.useState<any>([]);
+    const [projectUserCountResult, setProjectUserCount] = React.useState<any>([]);
+    const [projectTypeCountResult, setProjectTypeCount] = React.useState<any>([]);
+    const [userExpertiseCountResult, setUserExpertiseCountCount] = React.useState<any>([]);
 
-    // useEffect(() => {
-    //     const timer = setTimeout(() => {
-    //         setProgress((prevProgress) => (prevProgress >= 100 ? 0 : prevProgress + 10));
-    //     }, 800);
-    //     return () => {
-    //         clearInterval(timer);
-    //     };
-    // }, []);
+    const fetchUserCnt = async () => {
+        const userCountResult = await getUserCnt(props.eventId);
+        setUserCnt(userCountResult);
+    };
+
+    const fetchProjectCnt = async () => {
+        const projectCountResult = await getProjectCnt(props.eventId);
+        setProjectCount(projectCountResult);
+    };
+
+    const fetchProjectUserCnt = async () => {
+        const projectUserCountResult = await countSingleUserProjects(props.eventId);
+        setProjectUserCount(projectUserCountResult);
+    };
+
+    const fetchProjectTypeCnt = async () => {
+        const projectTypeCountResult = await countProjectTypes(props.eventId);
+        setProjectTypeCount(projectTypeCountResult);
+    };
+
+    const fetchUserExpertiseCnt = async () => {
+        const userExpertiseCountResult = await countUserExpertise(props.eventId);
+        setUserExpertiseCountCount(userExpertiseCountResult);
+    };
 
     useEffect(() => {
-        //@ts-ignore
-        var ctx = document.getElementById('myChart').getContext('2d');
-        var myChart = new Chart(ctx, {
-            type: 'doughnut',
-            data: {
-                labels: [projectTypes.web, projectTypes.game, projectTypes.film, projectTypes.audio, projectTypes.computeranimation, projectTypes.communicationdesign, projectTypes.multimedia, projectTypes.other],
-                datasets: [{
-                    data: [10, 20, 20, 10, 10, 10, 10, 10],
-                    borderColor: [
-                        "#007DFF",
-                        "#0057B2",
-                        "#cf2b2b", // Light Red
-                        "#6F2931",
-                        "#CC0000", // Dark Red
-                        "#66B2FF", // Light Blue
-                        "#003366",
-
-                    ],
-                    backgroundColor: [
-                        "#007DFF",
-                        "#0057B2",
-                        "#cf2b2b", // Light Red
-                        "#6F2931",
-                        "#CC0000", // Dark Red
-                        "#66B2FF", // Light Blue
-                        "#003366",
-
-                    ],
-                    borderWidth: 2,
-                }]
-            },
-            options: {
-                scales: {
-                    xAxes: [{
-                        display: false,
-                    }],
-                    yAxes: [{
-                        display: false,
-                    }],
-                },
-                legend: {
-                    position: 'right',
-                    labels: {
-                        fontSize: 10, // Adjust the legend label font size
-                        boxWidth: 15, // Adjust the width of the colored box in the legend label
-                    },
-                },
-            },
-        });
-    }, [])
+        fetchUserCnt();
+        fetchProjectCnt();
+        fetchProjectUserCnt();
+        fetchProjectTypeCnt();
+        fetchUserExpertiseCnt();
+    }, []);
 
     return (
         <div className={styles.container}>
@@ -82,41 +63,23 @@ export default function EventStatistics(props: CircularProgressProps & { value: 
                 <h5>Statistics</h5>
             </div>
             <div className={styles.contentArea}>
-                <div className={styles.projectChart}>
-                    <div className='border border-gray-400 pt-0 rounded-xl w-full h-fit my-auto shadow-xl pb-2 chartSize'>
-                        <canvas id='myChart' style={{ width: '100%', maxWidth: '370px' }}></canvas>
+                <div className={styles.doughnutChart}>
+                    <div className={styles.numbersArea}>
+                        <NumberCard number={projectCountResult.allProjects} text={"All Projects"} />
+                        <NumberCard number={projectUserCountResult} text={"Teamless projects"} />
+                    </div>
+                    <div className={styles.chartArea}>
+                        <DoughnutChart id={'projectChart'} chartData={projectTypeCountResult} />
                     </div>
                 </div>
-
-                <div className={styles.numbersArea}>
-                    <NumberCard number={"23"} text={"Days till deadline"} />
-                    <NumberCard number={"101"} text={"Available Users"} />
-                    {/* <div className={styles.circularProgressBarContainer}>
-                    <Box sx={{ position: 'relative', display: 'inline-flex' }}>
-                        <CircularProgress thickness={4.5} size={60} variant="determinate" {...props} />
-                        <Box
-                            sx={{
-                                top: 0,
-                                left: 0,
-                                bottom: 0,
-                                right: 0,
-                                position: 'absolute',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                            }}
-                        >
-                            <p className={styles.progressNumber}
-                            >{`${Math.round(props.value)}%`}</p>
-                        </Box>
-                    </Box>
-                    <p className={styles.progressText}>Deadlines completed</p>
-                </div> */}
-                    <NumberCard number={"25%"} text={"Deadlines completed"} />
-                    <NumberCard number={"21"} text={"Projects"} />
-                    <NumberCard number={"5"} text={"Accepted projects"} />
-                    <NumberCard number={"4"} text={"Teamless projects"} />
-
+                <div className={styles.doughnutChart}>
+                    <div className={styles.numbersArea}>
+                        <NumberCard number={userCountResult.usersWithoutProject} text={"Available Users"} />
+                        <NumberCard number={userCountResult.userCount} text={"All Users"} />
+                    </div>
+                    <div className={styles.chartArea}>
+                        <DoughnutChart id={'userChart'} chartData={userExpertiseCountResult} />
+                    </div>
                 </div>
             </div>
         </div>
