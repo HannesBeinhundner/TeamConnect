@@ -33,7 +33,7 @@ export default function OptionsArea({ session, eventData }: Props) {
         const profileResult: any = await getProfile(session.user.email);
         setProfileResult(profileResult);
 
-        const isMissingProfileData = (profileResult?.data?.expertise === '') || (profileResult?.data?.description === '');
+        const isMissingProfileData = (profileResult?.data?.expertise === '') || (profileResult?.data?.expertise === null) || (profileResult?.data?.description === '') || (profileResult?.data?.description === null);
         setMissingProfileData(isMissingProfileData);
 
         // If user has not set expertise or description, open ProfileEditDialog window
