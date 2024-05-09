@@ -23,6 +23,7 @@ export default function ViewAllProjects({ eventData, session }: { eventData: any
     const [projectTypes, setProjectTypes] = useState<any>([]);
 
     const fetchProjects = async () => {
+        console.log("AJHSFKLJAHDFASLKHDFASLKJFJHAS");
         try {
             const data = {
                 projectSearch: "",
