@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
     CircularProgressProps,
 } from '@mui/material/CircularProgress';
@@ -12,8 +12,13 @@ import { getProjectCnt } from "./GetProjectsAction";
 import { countSingleUserProjects } from "./GetUsersForProjectAction";
 import { countProjectTypes } from "./GetTypeForProjectAction";
 import { countUserExpertise } from "./GetExpertiseForUsersAction";
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 
 export default function EventStatistics(props: CircularProgressProps & { value: number, session: any, eventId: any }) {
+    const [isLoadingProjects, setIsLoadingProjects] = useState(true);
+    const [isLoadingUsers, setIsLoadingUsers] = useState(true);
+
     const [progress, setProgress] = React.useState(10);
     const [userCountResult, setUserCnt] = React.useState<any>([]);
     const [projectCountResult, setProjectCount] = React.useState<any>([]);
@@ -47,12 +52,31 @@ export default function EventStatistics(props: CircularProgressProps & { value: 
     };
 
     useEffect(() => {
-        fetchUserCnt();
-        fetchProjectCnt();
-        fetchProjectUserCnt();
-        fetchProjectTypeCnt();
-        fetchUserExpertiseCnt();
+        Promise.all([
+            fetchProjectCnt(),
+            fetchProjectUserCnt(),
+            fetchProjectTypeCnt(),
+        ]).then(() => setIsLoadingProjects(false));
+
+        Promise.all([
+            fetchUserCnt(),
+            fetchUserExpertiseCnt()
+        ]).then(() => setIsLoadingUsers(false));
     }, []);
+
+    function Box({ children }: any) {
+        return (
+            <div
+                style={{
+                    display: 'block',
+                    lineHeight: 3.1,
+                    width: 450,
+                }}
+            >
+                {children}
+            </div>
+        );
+    }
 
     return (
         <div className={styles.container}>
@@ -61,22 +85,36 @@ export default function EventStatistics(props: CircularProgressProps & { value: 
             </div>
             <div className={styles.contentArea}>
                 <div className={styles.doughnutChart}>
-                    <div className={styles.numbersArea}>
-                        <NumberCard number={projectCountResult.allProjects} text={"All Projects"} />
-                        <NumberCard number={projectUserCountResult} text={"Teamless projects"} />
-                    </div>
-                    <div className={styles.chartArea}>
-                        <DoughnutChart id={'projectChart'} chartData={projectTypeCountResult} />
-                    </div>
+                    {
+                        isLoadingProjects ? <Skeleton wrapper={Box} height={27} count={4} /> : (
+                            <>
+                                <div className={styles.numbersArea}>
+                                    <NumberCard number={projectCountResult.allProjects} text={"All Projects"} />
+                                    <NumberCard number={projectUserCountResult} text={"Teamless projects"} />
+                                </div>
+                                <div className={styles.chartArea}>
+                                    <DoughnutChart id={'projectChart'} chartData={projectTypeCountResult} />
+                                </div>
+                            </>
+                        )
+                    }
+
                 </div>
                 <div className={styles.doughnutChart}>
-                    <div className={styles.numbersArea}>
-                        <NumberCard number={userCountResult.usersWithoutProject} text={"Available Users"} />
-                        <NumberCard number={userCountResult.userCount} text={"All Users"} />
-                    </div>
-                    <div className={styles.chartArea}>
-                        <DoughnutChart id={'userChart'} chartData={userExpertiseCountResult} />
-                    </div>
+                    {
+                        isLoadingUsers ? <Skeleton wrapper={Box} height={27} count={4} /> : (
+                            <>
+                                <div className={styles.numbersArea}>
+                                    <NumberCard number={userCountResult.usersWithoutProject} text={"Available Users"} />
+                                    <NumberCard number={userCountResult.userCount} text={"All Users"} />
+                                </div>
+                                <div className={styles.chartArea}>
+                                    <DoughnutChart id={'userChart'} chartData={userExpertiseCountResult} />
+                                </div>
+                            </>
+                        )
+                    }
+
                 </div>
             </div>
         </div>

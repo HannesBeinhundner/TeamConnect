@@ -19,6 +19,8 @@ import { UserFilter } from './UserFilterAction';
 import { getExpertises } from '@/app/lib/GetExpertisesAction';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 
 interface Props {
     session: any;
@@ -26,7 +28,7 @@ interface Props {
 }
 
 export default function FindTeamMembers({ session, eventData }: Props) {
-
+    const [isLoading, setIsLoading] = useState(true);
     const [userResult, setUserResult] = useState<any>({});
     const [expertises, setExpertises] = useState([]);
 
@@ -40,6 +42,7 @@ export default function FindTeamMembers({ session, eventData }: Props) {
 
             if (response.success && Array.isArray(response.data)) {
                 setUserResult(response.data);
+                setIsLoading(false)
             } else {
                 console.error('Error: ApplyFilter did not return a successful response or data is not an array.');
             }
@@ -47,8 +50,6 @@ export default function FindTeamMembers({ session, eventData }: Props) {
             console.error('Error fetching project data:', error);
         }
     };
-
-
 
     useEffect(() => {
         const fetchExpertises = async () => {
@@ -69,6 +70,21 @@ export default function FindTeamMembers({ session, eventData }: Props) {
     } = useForm<FindTeamMemberInputs>({
         resolver: zodResolver(FindTeamMemberSchema)
     })
+
+    function LoadingBox({ children }: any) {
+        return (
+            <div
+                style={{
+                    display: 'block',
+                    lineHeight: 3.1,
+                    width: 1200,
+                    margin: '2rem'
+                }}
+            >
+                {children}
+            </div>
+        );
+    }
 
     const processForm: SubmitHandler<FindTeamMemberInputs> = async data => {
         try {
@@ -117,6 +133,9 @@ export default function FindTeamMembers({ session, eventData }: Props) {
                             fullWidth
                             {...register('expertise')}
                         >
+                            <MenuItem value="">
+                                <em>None</em>
+                            </MenuItem>
                             {
                                 expertises.map((expertise: any) => (
                                     <MenuItem key={expertise.id} value={expertise.name}>{expertise.name}</MenuItem>
@@ -133,12 +152,13 @@ export default function FindTeamMembers({ session, eventData }: Props) {
                 </form>
                 <div className={styles.cardsArea}>
                     {
-
-                        Array.isArray(userResult) && userResult.map((user: any) => (
-                            //Filter own user from the list
-                            session?.user?.email !== user.email &&
-                            <FindTeamMembersCard session={session} eventData={eventData} key={user.id} userResult={user} reloadComponent={fetchUsers} />
-                        ))
+                        isLoading ? <Skeleton wrapper={LoadingBox} height={45} count={4} /> : (
+                            Array.isArray(userResult) && userResult.map((user: any) => (
+                                //Filter own user from the list
+                                session?.user?.email !== user.email &&
+                                <FindTeamMembersCard session={session} eventData={eventData} key={user.id} userResult={user} reloadComponent={fetchUsers} />
+                            ))
+                        )
                     }
                 </div>
             </div>

@@ -19,9 +19,11 @@ import ViewAllProjectsCard from '../ViewAllProjectsCard/ViewAllProjectsCard';
 import { getProjectTypes } from '@/app/lib/GetProjectTypesAction';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 
 export default function ViewAllProjects({ eventData, session }: { eventData: any, session: any }) {
+    const [isLoading, setIsLoading] = useState(true);
     const [projectsResult, setProjectsResult] = useState<any>({});
     const [projectTypes, setProjectTypes] = useState<any>([]);
 
@@ -35,6 +37,7 @@ export default function ViewAllProjects({ eventData, session }: { eventData: any
 
             if (response.success && Array.isArray(response.data)) {
                 setProjectsResult(response.data);
+                setIsLoading(false)
             } else {
                 console.error('Error: ApplyFilter did not return a successful response or data is not an array.');
             }
@@ -83,6 +86,21 @@ export default function ViewAllProjects({ eventData, session }: { eventData: any
         }
     };
 
+    function LoadingBox({ children }: any) {
+        return (
+            <div
+                style={{
+                    display: 'block',
+                    lineHeight: 3.1,
+                    width: 1200,
+                    margin: '2rem'
+                }}
+            >
+                {children}
+            </div>
+        );
+    }
+
     return (
         <div className={styles.container}>
             <div className={styles.headerArea}>
@@ -130,9 +148,13 @@ export default function ViewAllProjects({ eventData, session }: { eventData: any
                     </Button>
                 </form>
                 <div className={styles.cardsArea}>
-                    {Array.isArray(projectsResult) && projectsResult.map((project: any) => (
-                        <ViewAllProjectsCard session={session} eventData={eventData} key={project.id} projectResult={project} reloadComponent={fetchProjects} />
-                    ))}
+                    {
+                        isLoading ? <Skeleton wrapper={LoadingBox} height={45} count={4} /> : (
+                            Array.isArray(projectsResult) && projectsResult.map((project: any) => (
+                                <ViewAllProjectsCard session={session} eventData={eventData} key={project.id} projectResult={project} reloadComponent={fetchProjects} />
+                            ))
+                        )
+                    }
                 </div>
             </div>
         </div>
