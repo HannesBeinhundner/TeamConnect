@@ -18,11 +18,12 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import Alert from '@mui/material/Alert';
 import { deleteProject } from '@/components/ProjectUpdateDialog/DeleteProjectAction';
 import { getUserData } from './getUserAction';
 import ProjectViewDialog from '@/components/ProjectViewDialog/ProjectViewDialog';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 interface Props {
@@ -44,16 +45,18 @@ export default function ViewAllProjectsCard({ session, eventData, reloadComponen
         const result = await deleteProject(projectResult?.id);
 
         if (!result) {
-            alert("Something went wrong");
+            toast.error('Unexpected error occurred!');
             return;
         }
 
-        // if (result.error) {
-        //     setErrorAlert(true);
-        //     return;
-        // }
-        // setSuccessAlert(true);
-        setTimeout(() => reloadComponent(), 1500);
+
+        if (result.error) {
+            toast.error('The Project could not be deleted!');
+            return;
+        }
+
+        toast.success('The Project was successfully deleted!');
+        reloadComponent();
     };
 
     const handleJoinProject = async () => {
@@ -63,8 +66,6 @@ export default function ViewAllProjectsCard({ session, eventData, reloadComponen
             alert("Something went wrong");
             return;
         }
-
-        // setSuccessJoinAlert(true);
 
         handleJoinDialogClose();
         handleOtherProjectJoinDialogClose();
@@ -186,7 +187,7 @@ export default function ViewAllProjectsCard({ session, eventData, reloadComponen
                         <DialogTitle>Confirm Delete Project</DialogTitle>
                         <DialogContent>
                             <DialogContentText>
-                                Are you sure you want to delete this Project?
+                                Are you sure you want to delete {projectResult?.name}?
                             </DialogContentText>
                         </DialogContent>
                         <DialogActions>
@@ -194,7 +195,7 @@ export default function ViewAllProjectsCard({ session, eventData, reloadComponen
                             <Button onClick={handleDeleteProject} color="error">Delete</Button>
                         </DialogActions>
                     </Dialog>
-
+                  
                     <Dialog
                         open={joinDialogOpen}
                         onClose={handleJoinDialogClose}

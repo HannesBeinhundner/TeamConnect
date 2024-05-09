@@ -17,6 +17,8 @@ import SearchIcon from '@mui/icons-material/Search';
 import FindTeamMembersCard from '../FindTeamMembersCard/FindTeamMembersCard';
 import { UserFilter } from './UserFilterAction';
 import { getExpertises } from '@/app/lib/GetExpertisesAction';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 interface Props {
     session: any;
@@ -83,7 +85,7 @@ export default function FindTeamMembers({ session, eventData }: Props) {
         } catch (error) {
             console.error('Error processing form:', error);
             // Handle error if there's an issue with ApplyFilter or resetting the form
-            alert("Something went wrong");
+            toast.error('Unexpected error occurred!');
         }
     };
 

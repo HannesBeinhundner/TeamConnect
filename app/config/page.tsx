@@ -7,6 +7,8 @@ import OptionsArea from "@/components/OptionsArea/OptionsArea";
 import styles from "@/styles/dashboard.module.scss";
 import ConfigCard from "@/components/ConfigCard/ConfigCard";
 import { getEvent } from '@/app/lib/GetEventAction';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default async function Config({ params }: { params: any }) {
     const eventId = params.eventId;
@@ -23,18 +25,32 @@ export default async function Config({ params }: { params: any }) {
     // }
 
     return (
-        <div className={styles.container}>
-            <div className={styles.topArea}>
-                <TopArea session={null} eventData={null} />
+        <>
+            <ToastContainer
+                position="top-center"
+                autoClose={3000}
+                hideProgressBar={false}
+                newestOnTop
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable={false}
+                pauseOnHover={false}
+                theme="light"
+            />
+            <div className={styles.container}>
+                <div className={styles.topArea}>
+                    <TopArea session={null} eventData={null} />
+                </div>
+                <div className={styles.optionsArea}>
+                    <OptionsArea session={session} eventData={null} />
+                </div>
+                <div className={styles.mainArea}>
+                    <MainArea
+                        bottomLeftComponent={<ConfigCard />}
+                    />
+                </div>
             </div>
-            <div className={styles.optionsArea}>
-                <OptionsArea session={session} eventData={null} />
-            </div>
-            <div className={styles.mainArea}>
-                <MainArea
-                    bottomLeftComponent={<ConfigCard />}
-                />
-            </div>
-        </div>
+        </>
     );
 }

@@ -13,7 +13,6 @@ import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import { styled } from '@mui/material/styles';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import Alert from '@mui/material/Alert';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
@@ -30,6 +29,8 @@ import { leaveProject } from './LeaveProjectAction';
 import "@uploadthing/react/styles.css";
 import { UploadDropzone, UploadButton } from "@/utils/uploadthing";
 import CustomProjectLogo from '@/images/customProjectLogo.svg'
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 interface ProjectUpdateDialogProps {
     open: boolean;
@@ -42,9 +43,6 @@ interface ProjectUpdateDialogProps {
 
 const ProjectUpdateDialog: React.FC<ProjectUpdateDialogProps> = ({ open, onClose, projectResult, reloadComponent, projectTypes, sessionEmail }) => {
     const [user, setUser] = useState<any>(null);
-    const [errorAlert, setErrorAlert] = useState(false);
-    const [successAlert, setSuccessAlert] = useState(false);
-    const [successMessage, setSuccessMessage] = useState('');
     const [serverErrorMessage, setServerErrorMessage] = useState('');
     const [confirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
     const [documentName, setDocumentName] = useState('');
@@ -62,21 +60,6 @@ const ProjectUpdateDialog: React.FC<ProjectUpdateDialogProps> = ({ open, onClose
 
         getCurrentUser(sessionEmail);
     }, [])
-
-    const handleCloseAlert = () => {
-        setSuccessAlert(false);
-        setErrorAlert(false);
-    };
-
-    useEffect(() => {
-        if (successAlert || errorAlert) {
-            const timerId = setTimeout(() => {
-                handleCloseAlert();
-            }, 3000);
-
-            return () => clearTimeout(timerId);
-        }
-    }, [successAlert, errorAlert]);
 
     const {
         register,
@@ -102,18 +85,17 @@ const ProjectUpdateDialog: React.FC<ProjectUpdateDialogProps> = ({ open, onClose
         const result = await updateProject(data, projectResult?.id);
 
         if (!result) {
-            alert("Something went wrong");
+            toast.error("Something went wrong!");
             return;
         }
 
         if (result.error) {
             setServerErrorMessage(result.error.toString());
-            setErrorAlert(true);
+            toast.error(serverErrorMessage);
             return;
         }
 
-        setSuccessMessage('Your Project was successfully updated!')
-        setSuccessAlert(true);
+        toast.success('Your Project was successfully updated!');
         onClose();
         reloadComponent();
     };
@@ -122,38 +104,38 @@ const ProjectUpdateDialog: React.FC<ProjectUpdateDialogProps> = ({ open, onClose
         const result = await deleteProject(projectResult?.id);
 
         if (!result) {
-            alert("Something went wrong");
+            toast.error("Something went wrong!");
             return;
         }
 
         if (result.error) {
             setServerErrorMessage(result.error.toString());
-            setErrorAlert(true);
+            toast.error('You could not delete the Project!');
             return;
         }
-        setSuccessMessage('Your Project was successfully deleted!')
-        setSuccessAlert(true);
+
+        toast.success('Your Project was successfully deleted!');
         onClose();
-        setTimeout(() => reloadComponent(), 1500)
+        reloadComponent();
     };
 
     const handleLeaveProject = async () => {
         const result = await leaveProject(projectResult?.id, user?.id);
 
         if (!result) {
-            alert("Something went wrong");
+            toast.error("Something went wrong!");
             return;
         }
 
         if (result.error) {
             setServerErrorMessage(result.error.toString());
-            setErrorAlert(true);
+            toast.error('You could not leave the Project!');
             return;
         }
-        setSuccessMessage('You successfully left the Project!')
-        setSuccessAlert(true);
+
+        toast.success('You successfully left the Project!');
         onClose();
-        setTimeout(() => reloadComponent(), 1500)
+        reloadComponent();
     };
 
     const handleActionButtonClick = () => {
@@ -165,211 +147,199 @@ const ProjectUpdateDialog: React.FC<ProjectUpdateDialogProps> = ({ open, onClose
     };
 
     return (
-        <>
-            <Dialog open={open} onClose={onClose} fullWidth maxWidth="md" className={styles.updateModal}>
-                <DialogTitle>Update Project</DialogTitle>
-                <IconButton
-                    aria-label="close"
-                    onClick={onClose}
-                    sx={{
-                        position: 'absolute',
-                        right: 8,
-                        top: 8,
-                        color: (theme) => theme.palette.grey[700],
-                    }}
-                >
-                    <CloseIcon />
-                </IconButton>
-                <DialogContent>
-                    <form onSubmit={handleSubmit(handleUpdate)} className={styles.formContainer}>
-                        <TextField
-                            margin="dense"
-                            id="projectName"
-                            label="Project Name*"
-                            type="text"
+        <Dialog open={open} onClose={onClose} fullWidth maxWidth="md" className={styles.updateModal}>
+            <DialogTitle>Update Project</DialogTitle>
+            <IconButton
+                aria-label="close"
+                onClick={onClose}
+                sx={{
+                    position: 'absolute',
+                    right: 8,
+                    top: 8,
+                    color: (theme) => theme.palette.grey[700],
+                }}
+            >
+                <CloseIcon />
+            </IconButton>
+            <DialogContent>
+                <form onSubmit={handleSubmit(handleUpdate)} className={styles.formContainer}>
+                    <TextField
+                        margin="dense"
+                        id="projectName"
+                        label="Project Name*"
+                        type="text"
+                        fullWidth
+                        variant="standard"
+                        {...register('projectName')}
+                        error={!!errors.projectName}
+                        helperText={errors.projectName?.message}
+                    />
+                    <FormControl variant="standard" sx={{ minWidth: '100%' }} error={!!errors.projectType}>
+                        <InputLabel id="projectType">Project Type *</InputLabel>
+                        <Select
+                            labelId="projectType"
+                            id="projectType"
+                            label="Project Type"
                             fullWidth
-                            variant="standard"
-                            {...register('projectName')}
-                            error={!!errors.projectName}
-                            helperText={errors.projectName?.message}
-                        />
-                        <FormControl variant="standard" sx={{ minWidth: '100%' }} error={!!errors.projectType}>
-                            <InputLabel id="projectType">Project Type *</InputLabel>
-                            <Select
-                                labelId="projectType"
-                                id="projectType"
-                                label="Project Type"
-                                fullWidth
-                                defaultValue={projectResult?.type}
-                                {...register('projectType')}
-                                error={!!errors.projectType}
-                            >
-                                {
-                                    projectTypes && projectTypes.map((projectType: any) => (
-                                        <MenuItem key={projectType.id} value={projectType.name}>{projectType.name}</MenuItem>
-                                    ))
+                            defaultValue={projectResult?.type}
+                            {...register('projectType')}
+                            error={!!errors.projectType}
+                        >
+                            {
+                                projectTypes && projectTypes.map((projectType: any) => (
+                                    <MenuItem key={projectType.id} value={projectType.name}>{projectType.name}</MenuItem>
+                                ))
+                            }
+                        </Select>
+                        <FormHelperText sx={{ color: (theme) => theme.palette.error.main }}>{errors.projectType?.message}</FormHelperText>
+                    </FormControl>
+
+                    <TextField
+                        margin="dense"
+                        id="projectLink"
+                        label="Project Link"
+                        type="text"
+                        fullWidth
+                        variant="standard"
+                        {...register('projectLink')}
+                        error={!!errors.projectLink}
+                        helperText={errors.projectLink?.message}
+                    />
+                    <TextField
+                        margin="dense"
+                        id="projectDescription"
+                        label="Project Description *"
+                        type="text"
+                        placeholder="Specify what your project is about..."
+                        fullWidth
+                        multiline
+                        maxRows={4}
+                        {...register('projectDescription')}
+                        error={!!errors.projectDescription}
+                        helperText={errors.projectDescription?.message}
+                    />
+                    <TextField
+                        margin="dense"
+                        id="projectSkills"
+                        label="Preferred skills and expertise"
+                        type="text"
+                        placeholder="Specify desired team skills and relevant expertises for your project..."
+                        fullWidth
+                        multiline
+                        maxRows={4}
+                        {...register('projectSkills')}
+                        error={!!errors.projectSkills}
+                        helperText={errors.projectSkills?.message}
+                    />
+                    <div>
+                        <UploadButton
+                            appearance={{
+                                button: {
+                                    width: "100%",
+                                    maxWidth: "200px"
                                 }
-                            </Select>
-                            <FormHelperText sx={{ color: (theme) => theme.palette.error.main }}>{errors.projectType?.message}</FormHelperText>
-                        </FormControl>
-
-                        <TextField
-                            margin="dense"
-                            id="projectLink"
-                            label="Project Link"
-                            type="text"
-                            fullWidth
-                            variant="standard"
-                            {...register('projectLink')}
-                            error={!!errors.projectLink}
-                            helperText={errors.projectLink?.message}
+                            }}
+                            content={{
+                                button: "Upload Project Logo",
+                            }}
+                            endpoint="imageUploader"
+                            onClientUploadComplete={(res) => {
+                                console.log("Files: ", res);
+                                // Set the projectImage value to the uploaded image URL
+                                setImageName(res[0].name);
+                                setValue('projectImage', res[0].url);
+                                // alert("Upload Completed");
+                            }}
+                            onUploadError={(error: Error) => {
+                                toast.error('Unexpected error occurred!');
+                            }}
                         />
-                        <TextField
-                            margin="dense"
-                            id="projectDescription"
-                            label="Project Description *"
-                            type="text"
-                            placeholder="Specify what your project is about..."
-                            fullWidth
-                            multiline
-                            maxRows={4}
-                            {...register('projectDescription')}
-                            error={!!errors.projectDescription}
-                            helperText={errors.projectDescription?.message}
-                        />
-                        <TextField
-                            margin="dense"
-                            id="projectSkills"
-                            label="Preferred skills and expertise"
-                            type="text"
-                            placeholder="Specify desired team skills and relevant expertises for your project..."
-                            fullWidth
-                            multiline
-                            maxRows={4}
-                            {...register('projectSkills')}
-                            error={!!errors.projectSkills}
-                            helperText={errors.projectSkills?.message}
-                        />
-                        <div>
-                            <UploadButton
-                                appearance={{
-                                    button: {
-                                        width: "100%",
-                                        maxWidth: "200px"
-                                    }
-                                }}
-                                content={{
-                                    button: "Upload Project Logo",
-                                }}
-                                endpoint="imageUploader"
-                                onClientUploadComplete={(res) => {
-                                    console.log("Files: ", res);
-                                    // Set the projectImage value to the uploaded image URL
-                                    setImageName(res[0].name);
-                                    setValue('projectImage', res[0].url);
-                                    // alert("Upload Completed");
-                                }}
-                                onUploadError={(error: Error) => {
-                                    alert(`ERROR! ${error.message}`);
-                                }}
-                            />
-                            <p className={styles.fileName}>{imageName}</p>
-                        </div>
+                        <p className={styles.fileName}>{imageName}</p>
+                    </div>
 
-                        <div>
-                            <UploadButton
-                                appearance={{
-                                    button: {
-                                        width: "100%",
-                                        maxWidth: "200px"
-                                    }
-                                }}
-                                content={{
-                                    button: "Upload PDF File",
-                                }}
-                                endpoint="textUploader"
-                                onClientUploadComplete={(res) => {
-                                    console.log("Files: ", res);
-                                    // Set the projectImage value to the uploaded image URL
-                                    setDocumentName(res[0].name);
-                                    setValue('projectFile', res[0].url);
-                                    //setValue('projectFileName', res[0].name);
-                                    // alert("Upload Completed");
-                                }}
-                                onUploadError={(error: Error) => {
-                                    alert(`ERROR! ${error.message}`);
-                                }}
-                            />
-                            <p className={styles.fileName}>{documentName}</p>
-                        </div>
+                    <div>
+                        <UploadButton
+                            appearance={{
+                                button: {
+                                    width: "100%",
+                                    maxWidth: "200px"
+                                }
+                            }}
+                            content={{
+                                button: "Upload PDF File",
+                            }}
+                            endpoint="textUploader"
+                            onClientUploadComplete={(res) => {
+                                console.log("Files: ", res);
+                                // Set the projectImage value to the uploaded image URL
+                                setDocumentName(res[0].name);
+                                setValue('projectFile', res[0].url);
+                                //setValue('projectFileName', res[0].name);
+                                // alert("Upload Completed");
+                            }}
+                            onUploadError={(error: Error) => {
+                                toast.error('Unexpected error occurred!');
+                            }}
+                        />
+                        <p className={styles.fileName}>{documentName}</p>
+                    </div>
 
-                        <DialogActions>
-                            {
-                                // Show remove button only if the user is the project admin
-                                isProjectAdmin && (
-                                    <Button variant="contained" color="error" onClick={handleActionButtonClick}>
-                                        Delete Project
-                                    </Button>
-                                )
-                            }
-                            {
-                                // Show leave button only if the user is not the project admin
-                                isNotProjectAdmin && (
-                                    <Button variant="contained" color="error" onClick={handleActionButtonClick}>
-                                        Leave Project
-                                    </Button>
-                                )
-                            }
-                            <Button variant="contained" type="submit">
-                                Update
-                            </Button>
-                            <Dialog
-                                open={confirmationDialogOpen}
-                                onClose={handleConfirmationDialogClose}
-                            >
-                                <DialogTitle>
+                    <DialogActions>
+                        {
+                            // Show remove button only if the user is the project admin
+                            isProjectAdmin && (
+                                <Button variant="contained" color="error" onClick={handleActionButtonClick}>
+                                    Delete Project
+                                </Button>
+                            )
+                        }
+                        {
+                            // Show leave button only if the user is not the project admin
+                            isNotProjectAdmin && (
+                                <Button variant="contained" color="error" onClick={handleActionButtonClick}>
+                                    Leave Project
+                                </Button>
+                            )
+                        }
+                        <Button variant="contained" type="submit">
+                            Update
+                        </Button>
+                        <Dialog
+                            open={confirmationDialogOpen}
+                            onClose={handleConfirmationDialogClose}
+                        >
+                            <DialogTitle>
+                                {
+                                    isProjectAdmin && ('Confirm Deletion')
+                                }
+                                {
+                                    isNotProjectAdmin && ('Confirm Leave')
+                                }
+                            </DialogTitle>
+                            <DialogContent>
+                                <DialogContentText>
                                     {
-                                        isProjectAdmin && ('Confirm Deletion')
+                                        isProjectAdmin && ('Are you sure you want to delete this project?')
                                     }
                                     {
-                                        isNotProjectAdmin && ('Confirm Leave')
+                                        isNotProjectAdmin && ('Are you sure you want to leave this project?')
                                     }
-                                </DialogTitle>
-                                <DialogContent>
-                                    <DialogContentText>
-                                        {
-                                            isProjectAdmin && ('Are you sure you want to delete this project?')
-                                        }
-                                        {
-                                            isNotProjectAdmin && ('Are you sure you want to leave this project?')
-                                        }
-                                    </DialogContentText>
-                                </DialogContent>
-                                <DialogActions>
-                                    <Button onClick={handleConfirmationDialogClose}>Cancel</Button>
-                                    {
-                                        isProjectAdmin && (<Button onClick={handleDeleteProject} color="error">Delete</Button>)
-                                    }
-                                    {
-                                        isNotProjectAdmin && (<Button onClick={handleLeaveProject} color="error">Leave</Button>)
-                                    }
-                                </DialogActions>
-                            </Dialog>
-                        </DialogActions>
-                    </form>
-                </DialogContent>
-            </Dialog>
-            {successAlert && (
-                <Alert severity="success" onClose={handleCloseAlert} className={styles.alert}>
-                    {successMessage}
-                </Alert>
-            )}
-            {errorAlert && (
-                <Alert severity="error" onClose={handleCloseAlert} className={styles.alert}>
-                    {serverErrorMessage}
-                </Alert>
-            )}
-        </>
+                                </DialogContentText>
+                            </DialogContent>
+                            <DialogActions>
+                                <Button onClick={handleConfirmationDialogClose}>Cancel</Button>
+                                {
+                                    isProjectAdmin && (<Button onClick={handleDeleteProject} color="error">Delete</Button>)
+                                }
+                                {
+                                    isNotProjectAdmin && (<Button onClick={handleLeaveProject} color="error">Leave</Button>)
+                                }
+                            </DialogActions>
+                        </Dialog>
+                    </DialogActions>
+                </form>
+            </DialogContent>
+        </Dialog>
     );
 };
 

@@ -17,6 +17,9 @@ import SearchIcon from '@mui/icons-material/Search';
 import { ApplyFilter } from './ApplyFilterAction';
 import ViewAllProjectsCard from '../ViewAllProjectsCard/ViewAllProjectsCard';
 import { getProjectTypes } from '@/app/lib/GetProjectTypesAction';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 export default function ViewAllProjects({ eventData, session }: { eventData: any, session: any }) {
     const [projectsResult, setProjectsResult] = useState<any>({});
@@ -77,7 +80,7 @@ export default function ViewAllProjects({ eventData, session }: { eventData: any
         } catch (error) {
             console.error('Error processing form:', error);
             // Handle error if there's an issue with ApplyFilter or resetting the form
-            alert("Something went wrong");
+            toast.error('Unexpected error occurred!');
         }
     };
 

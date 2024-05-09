@@ -10,6 +10,8 @@ import NavigationButton from "@/components/NavigationButton/NavigationButton";
 import styles from "@/styles/dashboard.module.scss"
 import FindTeamMembers from "@/components/FindTeamMembers/FindTeamMembers";
 import { getEvent } from '@/app/lib/GetEventAction';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default async function Members({ params }: { params: any }) {
     const eventId = params.eventId;
@@ -26,30 +28,44 @@ export default async function Members({ params }: { params: any }) {
     }
 
     return (
-        <div className={styles.container}>
-            <div className={styles.topArea}>
-                <TopArea session={session} eventData={eventData} />
+        <>
+            <ToastContainer
+                position="top-center"
+                autoClose={3000}
+                hideProgressBar={false}
+                newestOnTop
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable={false}
+                pauseOnHover={false}
+                theme="light"
+            />
+            <div className={styles.container}>
+                <div className={styles.topArea}>
+                    <TopArea session={session} eventData={eventData} />
+                </div>
+                <div className={styles.optionsArea}>
+                    <OptionsArea session={session} eventData={eventData} />
+                </div>
+                <div className={styles.mainArea}>
+                    <MainArea
+                        topLeftComponent={<NavigationButton
+                            href="../"
+                            imgSrc={backToDashboardImg}
+                            altText="Illustration of a team celebrating together"
+                            buttonText="Back to Dashboard"
+                        />}
+                        topRightComponent={<NavigationButton
+                            href={`./projects`}
+                            imgSrc={viewAllProjectsImg}
+                            altText="Illustration of a team working together"
+                            buttonText="View all projects"
+                        />}
+                        bottomLeftComponent={<FindTeamMembers session={session} eventData={eventData} />}
+                    />
+                </div>
             </div>
-            <div className={styles.optionsArea}>
-                <OptionsArea session={session} eventData={eventData} />
-            </div>
-            <div className={styles.mainArea}>
-                <MainArea
-                    topLeftComponent={<NavigationButton
-                        href="../"
-                        imgSrc={backToDashboardImg}
-                        altText="Illustration of a team celebrating together"
-                        buttonText="Back to Dashboard"
-                    />}
-                    topRightComponent={<NavigationButton
-                        href={`./projects`}
-                        imgSrc={viewAllProjectsImg}
-                        altText="Illustration of a team working together"
-                        buttonText="View all projects"
-                    />}
-                    bottomLeftComponent={<FindTeamMembers session={session} eventData={eventData} />}
-                />
-            </div>
-        </div>
+        </>
     )
 }

@@ -25,11 +25,11 @@ const DoughnutChart: React.FC<DoughnutChartProps> = ({ id, chartData }) => {
                     data: chartData.map((item: ChartData) => item.itemCount),
                     borderColor: [
                         "#007DFF", "#0057B2", "#cf2b2b", "#6F2931",
-                        "#CC0000", "#66B2FF", "#003366",
+                        "#CC0000", "#66B2FF", "#003366", "#FF5C73", "#8D91A8", "42D7C8", "#AEF6FF", "#2883BF", "#FF0000", "#E64000", "#631929", "#F45F44", "#DBC6BB", "#8EFCFF", "#C4CFE5", "#FF8000",
                     ],
                     backgroundColor: [
                         "#007DFF", "#0057B2", "#cf2b2b", "#6F2931",
-                        "#CC0000", "#66B2FF", "#003366",
+                        "#CC0000", "#66B2FF", "#003366", "#FF5C73", "#8D91A8", "42D7C8", "#AEF6FF", "#2883BF", "#FF0000", "#E64000", "#631929", "#F45F44", "#DBC6BB", "#8EFCFF", "#C4CFE5", "#FF8000",
                     ],
                     borderWidth: 2,
                 }]

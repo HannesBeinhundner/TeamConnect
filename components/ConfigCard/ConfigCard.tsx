@@ -9,7 +9,6 @@ import Link from "next/link";
 import { Tooltip } from '@mui/material'
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-import Alert from '@mui/material/Alert'
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import styles from "./ConfigCard.module.scss"
@@ -38,6 +37,8 @@ import { CreateEventInputs } from '@/app/lib/types'
 import { addEvent } from './AddEventAction';
 import { getEvents } from './GetEventsAction';
 import EventUpdateDialog from '../EventUpdateDialog/EventUpdateDialog';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 export default function ConfigCard() {
@@ -46,9 +47,6 @@ export default function ConfigCard() {
 
     const [openCreate, setOpenCreate] = useState(false);
     const [openUpdate, setOpenUpdate] = useState<Record<string, boolean>>({});
-    const [errorAlert, setErrorAlert] = useState(false)
-    const [successAlert, setSucessAlert] = useState(false)
-    const [serverErrorMessage, setServerErrorMessage] = useState("")
     const [copiedEventId, setCopiedEventId] = useState<string | null>(null);
     const [projectTypeChips, setProjectTypeChips] = useState<string[]>([])
     const [expertiseChips, setExpertiseChips] = useState<string[]>([])
@@ -81,11 +79,6 @@ export default function ConfigCard() {
         setOpenUpdate(prevState => ({ ...prevState, [id]: false }));
     };
 
-    const handleCloseAlert = () => {
-        setSucessAlert(false)
-        setErrorAlert(false)
-    }
-
     const handleTooltipOpen = (eventId: string) => {
         setCopiedEventId(eventId);
         setTimeout(() => {
@@ -96,16 +89,6 @@ export default function ConfigCard() {
     const handleTooltipClose = () => {
         setCopiedEventId(null);
     }
-
-    useEffect(() => {
-        if (successAlert || errorAlert) {
-            const timerId = setTimeout(() => {
-                handleCloseAlert();
-            }, 3000);
-
-            return () => clearTimeout(timerId);
-        }
-    }, [successAlert, errorAlert]);
 
     const fetchEvents = async () => {
         const eventResult: any = await getEvents(sessionEmail);
@@ -135,17 +118,16 @@ export default function ConfigCard() {
         const result = await addEvent(data, sessionEmail)
 
         if (!result) {
-            alert("Something went wrong")
+            toast.error('Unexpected error occurred!');
             return
         }
 
         if (result.error) {
-            setServerErrorMessage(result.error.toString())
-            setErrorAlert(true)
+            toast.success('Your Event could not be created!')
             return
         }
 
-        setSucessAlert(true)
+        toast.success('Your Event was successfully created!')
         reset()
         handleCreateClose()
         fetchEvents()
@@ -302,20 +284,6 @@ export default function ConfigCard() {
                         </form>
                     </DialogContent>
                 </Dialog>
-                {
-                    successAlert && (
-                        <Alert severity="success" onClose={handleCloseAlert} className={styles.alert}>
-                            {'Your Event was successfully created!'}
-                        </Alert>
-                    )
-                }
-                {
-                    errorAlert && (
-                        <Alert severity="error" onClose={handleCloseAlert} className={styles.alert}>
-                            {serverErrorMessage}
-                        </Alert>
-                    )
-                }
             </div>
         </div>
     );

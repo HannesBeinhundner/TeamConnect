@@ -15,30 +15,30 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import Alert from '@mui/material/Alert';
 import { removeUser } from './RemoveUserAction';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 //@ts-ignore
 export default function FindTeamMembersCard({ userResult, session, eventData, reloadComponent }) {
     const [updateDialogOpen, setUpdateDialogOpen] = useState(false);
     const [confirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
-    const [errorAlert, setErrorAlert] = useState(false);
-    const [successAlert, setSuccessAlert] = useState(false);
 
     const handleRemoveUser = async () => {
         const result = await removeUser(userResult?.id);
 
         if (!result) {
-            alert("Something went wrong");
+            toast.error('Unexpected error occurred!');
             return;
         }
 
         if (result.error) {
-            setErrorAlert(true);
+            toast.error('This user could not be removed!')
             return;
         }
-        setSuccessAlert(true);
-        setTimeout(() => reloadComponent(), 1500)
+        toast.success('This user was successfully removed!')
+        handleUpdateDialogClose();
+        reloadComponent();
     };
 
     const handleUpdateDialogOpen = () => {
@@ -55,11 +55,6 @@ export default function FindTeamMembersCard({ userResult, session, eventData, re
 
     const handleConfirmationDialogClose = () => {
         setConfirmationDialogOpen(false);
-    };
-
-    const handleCloseAlert = () => {
-        setSuccessAlert(false);
-        setErrorAlert(false);
     };
 
     return (
@@ -116,7 +111,7 @@ export default function FindTeamMembersCard({ userResult, session, eventData, re
                         <DialogTitle>Confirm Remove User</DialogTitle>
                         <DialogContent>
                             <DialogContentText>
-                                Are you sure you want to remove this User?
+                                Are you sure you want to {userResult?.name}?
                                 {userResult?.projectAdmin && <strong> This user is a project admin and the project will be deleted!</strong>}
                             </DialogContentText>
                         </DialogContent>
@@ -125,16 +120,6 @@ export default function FindTeamMembersCard({ userResult, session, eventData, re
                             <Button onClick={handleRemoveUser} color="error">Remove</Button>
                         </DialogActions>
                     </Dialog>
-                    {successAlert && (
-                        <Alert severity="success" onClose={handleCloseAlert} className={styles.alert}>
-                            This User was successfully removed!
-                        </Alert>
-                    )}
-                    {errorAlert && (
-                        <Alert severity="error" onClose={handleCloseAlert} className={styles.alert}>
-                            This User couldn't be removed!
-                        </Alert>
-                    )}
                 </div>
             </div>
 
