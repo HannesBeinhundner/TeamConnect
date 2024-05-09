@@ -32,9 +32,18 @@
         gap: 0.75rem;
     }
 
-    .descriptionArea {
+    .textArea {
         p {
-            margin-top: 0rem;
+            font-size: 0.85rem;
+            margin-top: 0.3rem;
+            overflow: hidden;
+            word-wrap: break-word;
+            text-overflow: ellipsis;
+            -webkit-line-clamp: 4;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            line-clamp: 4;
+            box-orient: vertical;
         }
     }
 }

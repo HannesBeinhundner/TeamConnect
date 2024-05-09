@@ -8,11 +8,8 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import InputLabel from '@mui/material/InputLabel';
-import Image from "next/image";
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
-import { styled } from '@mui/material/styles';
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
@@ -27,8 +24,7 @@ import { deleteProject } from './DeleteProjectAction';
 import { getUser } from './GetUserAction';
 import { leaveProject } from './LeaveProjectAction';
 import "@uploadthing/react/styles.css";
-import { UploadDropzone, UploadButton } from "@/utils/uploadthing";
-import CustomProjectLogo from '@/images/customProjectLogo.svg'
+import { UploadButton } from "@/utils/uploadthing";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -248,7 +244,6 @@ const ProjectUpdateDialog: React.FC<ProjectUpdateDialogProps> = ({ open, onClose
                                 // Set the projectImage value to the uploaded image URL
                                 setImageName(res[0].name);
                                 setValue('projectImage', res[0].url);
-                                // alert("Upload Completed");
                             }}
                             onUploadError={(error: Error) => {
                                 toast.error('Unexpected error occurred!');
@@ -275,7 +270,6 @@ const ProjectUpdateDialog: React.FC<ProjectUpdateDialogProps> = ({ open, onClose
                                 setDocumentName(res[0].name);
                                 setValue('projectFile', res[0].url);
                                 //setValue('projectFileName', res[0].name);
-                                // alert("Upload Completed");
                             }}
                             onUploadError={(error: Error) => {
                                 toast.error('Unexpected error occurred!');

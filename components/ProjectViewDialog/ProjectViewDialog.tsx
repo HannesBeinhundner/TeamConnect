@@ -1,4 +1,5 @@
 "use client"
+
 import React, { useState, useEffect } from 'react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -12,6 +13,8 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import PersonIcon from '@mui/icons-material/Person';
 import styles from './ProjectViewDialog.module.scss';
 import Image from 'next/image';
+import UserChip from '../UserChip/UserChip';
+import ClearIcon from '@mui/icons-material/Clear';
 import CustomProjectLogo from '@/images/customProjectLogo.svg'
 import CategoryIcon from '@mui/icons-material/Category';
 import Chip from '@/components/Chip/Chip';
@@ -19,8 +22,8 @@ import Link from "next/link";
 import LinkIcon from '@mui/icons-material/Link';
 import UserIconText from '../UserIconText/UserIconText';
 import { checkProject } from './CheckProjectAction';
-import { deleteProject } from '@/components/ProjectUpdateDialog/DeleteProjectAction';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
+import { removeUserFromProject } from '@/components/YourProjectInfoArea/RemoveUserProjectAction';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -32,15 +35,29 @@ interface ProjectUpdateDialogProps {
     eventData: any;
     reloadComponent: any;
     projectResult: any;
+    userData: any;
+    handleDeleteButtonClick: any;
+    handleJoinButtonClick: any;
+    handleOtherProjectJoinButtonClick: any;
 }
 
-const ProjectViewDialog: React.FC<ProjectUpdateDialogProps> = ({ open, onClose, projectResult, session, eventData, reloadComponent }) => {
-    const [confirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
-
+const ProjectViewDialog: React.FC<ProjectUpdateDialogProps> = ({ open, onClose, projectResult, session, eventData, reloadComponent, userData, handleDeleteButtonClick, handleJoinButtonClick, handleOtherProjectJoinButtonClick }) => {
+    const [selectedUserId, setSelectedUserId] = useState(null);
+    const [removeConfirmationDialogOpen, setRemoveConfirmationDialogOpen] = useState(false);
     const [projectUsers, setProjectUsers] = useState<any>([]);
 
-    const handleDeleteProject = async () => {
-        const result = await deleteProject(projectResult?.id);
+    const fetchProjectUsers = async () => {
+        const projectUsers: any = await checkProject(projectResult.id);
+        setProjectUsers(projectUsers);
+    };
+
+    const handleRemoveClick = (userId: any) => {
+        setSelectedUserId(userId)
+        setRemoveConfirmationDialogOpen(true);
+    };
+
+    const handleRemoveUser = async () => {
+        const result = await removeUserFromProject(selectedUserId);
 
         if (!result) {
             toast.error('Unexpected error occurred!');
@@ -48,30 +65,20 @@ const ProjectViewDialog: React.FC<ProjectUpdateDialogProps> = ({ open, onClose, 
         }
 
         if (result.error) {
-            toast.error('This Project could not be deleted!');
+            toast.success('User could not be removed!');
             return;
         }
-        toast.success('This Project was successfully deleted!');
-        reloadComponent();
-    };
 
-    const fetchProjectUsers = async () => {
-        const projectUsers: any = await checkProject(projectResult.id);
-        setProjectUsers(projectUsers);
-        console.log(projectResult)
-    };
-
-    const handleDeleteButtonClick = () => {
-        setConfirmationDialogOpen(true);
-    };
+        toast.success('User was successfully removed!');
+        reloadComponent()
+    }
 
     const handleConfirmationDialogClose = () => {
-        setConfirmationDialogOpen(false);
+        setRemoveConfirmationDialogOpen(false);
     };
 
     useEffect(() => {
         fetchProjectUsers();
-        console.log(projectResult)
     }, []);
 
     return (
@@ -116,16 +123,80 @@ const ProjectViewDialog: React.FC<ProjectUpdateDialogProps> = ({ open, onClose, 
                         .sort((a: any, b: any) => (a.projectAdmin === b.projectAdmin ? 0 : a.projectAdmin ? -1 : 1))
                         .map((user: any) => (
                             <div key={user.id}>
-                                {user.projectAdmin ? (
-                                    <UserIconText text={user.name} smallText={user.expertise} icon={<AccountCircleIcon sx={{ fontSize: 30 }} />} />
-                                ) : (
-                                    <UserIconText text={user.name} smallText={user.expertise} icon={<PersonIcon sx={{ fontSize: 30 }} />} />
-                                )}
+                                {
+                                    user.projectAdmin ? (
+                                        // show remove functionality only when currentUser is event admin
+                                        session.user.email === eventData.adminEmail ?
+                                            (
+                                                <UserChip userIconText={
+                                                    <UserIconText text={user.name} smallText={user.expertise} icon={<AccountCircleIcon sx={{ fontSize: 30 }} />} />
+                                                }
+                                                    rightIcon={<IconButton
+                                                        aria-label="close"
+                                                        onClick={() => handleRemoveClick(user.id)}
+                                                    >
+                                                        <ClearIcon sx={{ fontSize: 18 }} />
+                                                    </IconButton>}
+                                                />
+                                            ) : (
+                                                <UserChip userIconText={
+                                                    <UserIconText text={user.name} smallText={user.expertise} icon={<AccountCircleIcon sx={{ fontSize: 30 }} />} />
+                                                }
+                                                />
+                                            )
+                                    ) : (
+                                        // show remove functionality only when currentUser is event admin                                    
+                                        session.user.email === eventData.adminEmail ? (
+                                            <>
+                                                <UserChip userIconText={
+                                                    <UserIconText text={user.name} smallText={user.expertise} icon={<PersonIcon sx={{ fontSize: 30 }} />} />
+                                                }
+                                                    rightIcon={<IconButton
+                                                        aria-label="close"
+                                                        onClick={() => handleRemoveClick(user.id)}
+                                                    >
+                                                        <ClearIcon sx={{ fontSize: 18 }} />
+                                                    </IconButton>}
+                                                />
+                                                <Dialog
+                                                    open={removeConfirmationDialogOpen}
+                                                    onClose={handleConfirmationDialogClose}
+                                                >
+                                                    <DialogTitle>Confirm Remove User</DialogTitle>
+                                                    <DialogContent>
+                                                        <DialogContentText>
+                                                            Are you sure you want to remove this user from the project?
+                                                            {user?.projectAdmin && <strong> This user is a project admin and the project will be deleted!</strong>}
+                                                        </DialogContentText>
+                                                    </DialogContent>
+                                                    <DialogActions>
+                                                        <Button onClick={handleConfirmationDialogClose}>Cancel</Button>
+                                                        <Button onClick={() => handleRemoveUser()} color="error">Remove</Button>
+                                                    </DialogActions>
+                                                </Dialog>
+                                            </>
+                                        ) : (
+                                            <UserChip userIconText={
+                                                <UserIconText text={user.name} smallText={user.expertise} icon={<PersonIcon sx={{ fontSize: 30 }} />} />
+                                            }
+                                            />
+                                        )
+                                    )
+                                }
                             </div>
                         ))}
                 </div>
                 <DialogContentText sx={{ color: '#1C1C1C' }}>
-                    {projectResult.description}
+                    <div>
+                        <div className={styles.textArea}>
+                            <h4>Description</h4>
+                            <p>{projectResult?.description}</p>
+                        </div>
+                        <div className={styles.textArea}>
+                            <h4>Prefred Skills and Expertise</h4>
+                            <p>{projectResult?.skills ? projectResult?.skills : 'not defined'}</p>
+                        </div>
+                    </div>
                 </DialogContentText>
             </DialogContent>
             <DialogActions>
@@ -137,24 +208,17 @@ const ProjectViewDialog: React.FC<ProjectUpdateDialogProps> = ({ open, onClose, 
                         </Button>
                     )
                 }
-                <Button variant="contained" type="submit">
-                    Request to Join
-                </Button>
-                <Dialog
-                    open={confirmationDialogOpen}
-                    onClose={handleConfirmationDialogClose}
-                >
-                    <DialogTitle>Confirm Delete Project</DialogTitle>
-                    <DialogContent>
-                        <DialogContentText>
-                            Are you sure you want to delete this Project?
-                        </DialogContentText>
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={handleConfirmationDialogClose}>Cancel</Button>
-                        <Button onClick={handleDeleteProject} color="error">Delete</Button>
-                    </DialogActions>
-                </Dialog>
+                {
+                    userData.projectId == null ? (
+                        <Button variant="contained" onClick={handleJoinButtonClick}>
+                            Join
+                        </Button>
+                    ) : userData.projectId !== projectResult?.id ? (
+                        <Button variant="contained" onClick={handleOtherProjectJoinButtonClick}>
+                            Join other Project
+                        </Button>
+                    ) : null
+                }
             </DialogActions>
         </Dialog>
     );

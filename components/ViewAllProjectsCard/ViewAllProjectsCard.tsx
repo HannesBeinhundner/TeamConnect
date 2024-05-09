@@ -25,7 +25,6 @@ import AttachFileIcon from '@mui/icons-material/AttachFile';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-
 interface Props {
     session: any;
     eventData: any;
@@ -49,7 +48,6 @@ export default function ViewAllProjectsCard({ session, eventData, reloadComponen
             return;
         }
 
-
         if (result.error) {
             toast.error('The Project could not be deleted!');
             return;
@@ -63,14 +61,27 @@ export default function ViewAllProjectsCard({ session, eventData, reloadComponen
         const userData = await joinProject(session.user.email, projectResult?.id);
 
         if (!userData) {
-            alert("Something went wrong");
+            toast.error('You could not join the project!');
             return;
         }
 
-        handleJoinDialogClose();
-        handleOtherProjectJoinDialogClose();
-        setTimeout(() => reloadComponent(), 1500);
+        toast.success('You joined the project successfully!');
+        reloadComponent();
     };
+
+    useEffect(() => {
+        const fetchProjectUsers = async () => {
+            const users: any = await getProjectUsers(projectResult.id);
+            setProjectUsers(users);
+        };
+
+        const fetchUserData = async () => {
+            const userData: any = await getUserData(session.user.email);
+            setUserData(userData);
+        };
+        fetchProjectUsers();
+        fetchUserData();
+    }, []);
 
     const handleUpdateDialogOpen = () => {
         setUpdateDialogOpen(true);
@@ -78,17 +89,6 @@ export default function ViewAllProjectsCard({ session, eventData, reloadComponen
 
     const handleUpdateDialogClose = () => {
         setUpdateDialogOpen(false);
-    };
-
-    const fetchProjectUsers = async () => {
-        const users: any = await getProjectUsers(projectResult.id);
-        setProjectUsers(users);
-    };
-
-    const fetchUserData = async () => {
-        const userData: any = await getUserData(session.user.email);
-        console.log(userData);
-        setUserData(userData);
     };
 
     const handleDeleteButtonClick = () => {
@@ -115,11 +115,6 @@ export default function ViewAllProjectsCard({ session, eventData, reloadComponen
         setOtherProjectJoinDialogOpen(false);
     };
 
-    useEffect(() => {
-        fetchProjectUsers();
-        fetchUserData();
-    }, []);
-
     return (
         <div className={styles.projectInformationArea}>
             <div className={styles.titleArea}>
@@ -138,6 +133,10 @@ export default function ViewAllProjectsCard({ session, eventData, reloadComponen
                 eventData={eventData}
                 projectResult={projectResult}
                 reloadComponent={reloadComponent}
+                userData={userData}
+                handleDeleteButtonClick={handleDeleteButtonClick}
+                handleJoinButtonClick={handleJoinButtonClick}
+                handleOtherProjectJoinButtonClick={handleOtherProjectJoinButtonClick}
             />
             <div className={styles.propertyArea}>
                 <Chip className={styles.chipColor} text={projectResult?.type} icon={<CategoryIcon fontSize='small' />} />
@@ -195,7 +194,7 @@ export default function ViewAllProjectsCard({ session, eventData, reloadComponen
                             <Button onClick={handleDeleteProject} color="error">Delete</Button>
                         </DialogActions>
                     </Dialog>
-                  
+
                     <Dialog
                         open={joinDialogOpen}
                         onClose={handleJoinDialogClose}

@@ -28,9 +28,6 @@ import LinkIcon from '@mui/icons-material/Link';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import EditIcon from '@mui/icons-material/Edit';
-import FormGroup from '@mui/material/FormGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import { MuiChipsInput } from 'mui-chips-input'
 import { CreateEventSchema } from '@/app/lib/types'
 import { CreateEventInputs } from '@/app/lib/types'
@@ -94,7 +91,6 @@ export default function ConfigCard() {
         const eventResult: any = await getEvents(sessionEmail);
         eventResult ? setCheckEventResult(true) : setCheckEventResult(false)
         setEventResult(eventResult);
-        console.log(eventResult)
     };
 
     useEffect(() => {
@@ -114,7 +110,6 @@ export default function ConfigCard() {
     })
 
     const processForm: SubmitHandler<CreateEventInputs> = async data => {
-        console.log(data)
         const result = await addEvent(data, sessionEmail)
 
         if (!result) {

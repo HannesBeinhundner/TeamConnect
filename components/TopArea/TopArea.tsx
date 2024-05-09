@@ -15,8 +15,6 @@ import Button from "@mui/material/Button";
 import DialogContentText from "@mui/material/DialogContentText";
 import { signOut } from "next-auth/react";
 
-
-
 export default function TopArea({ session, eventData }: { session: any, eventData: any }) {
     const [confirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
 

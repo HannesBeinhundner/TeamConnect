@@ -1,15 +1,12 @@
 "use client"
 
 import React, { useEffect } from "react";
-import CircularProgress, {
+import {
     CircularProgressProps,
 } from '@mui/material/CircularProgress';
-import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
 import styles from "./EventStatistics.module.scss"
 import NumberCard from "@/components/NumberCard/NumberCard";
 import DoughnutChart from "@/components/DoughnutChart/DoughnutChart";
-import { projectTypes } from '@/app/lib/data'
 import { getUserCnt } from "./GetUsersAction";
 import { getProjectCnt } from "./GetProjectsAction";
 import { countSingleUserProjects } from "./GetUsersForProjectAction";

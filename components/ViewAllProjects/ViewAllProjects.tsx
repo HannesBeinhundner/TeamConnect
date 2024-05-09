@@ -11,7 +11,7 @@ import FormHelperText from '@mui/material/FormHelperText';
 import styles from "./ViewAllProjects.module.scss"
 import { useForm, SubmitHandler } from "react-hook-form"
 import { zodResolver } from '@hookform/resolvers/zod';
-import { ApplyFilterInputs, ApplyFilterSchema, CreateProjectSchema } from '@/app/lib/types'
+import { ApplyFilterInputs, ApplyFilterSchema } from '@/app/lib/types'
 import { Box } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { ApplyFilter } from './ApplyFilterAction';
@@ -26,7 +26,6 @@ export default function ViewAllProjects({ eventData, session }: { eventData: any
     const [projectTypes, setProjectTypes] = useState<any>([]);
 
     const fetchProjects = async () => {
-        console.log("AJHSFKLJAHDFASLKHDFASLKJFJHAS");
         try {
             const data = {
                 projectSearch: "",

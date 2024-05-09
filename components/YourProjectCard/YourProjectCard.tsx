@@ -7,8 +7,6 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-import { styled } from '@mui/material/styles';
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import SettingsIcon from '@mui/icons-material/Settings';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
@@ -29,7 +27,7 @@ import YourProjectInformationArea from '../YourProjectInfoArea/YourProjectInfoAr
 import ProjectUpdateDialog from '@/components/ProjectUpdateDialog/ProjectUpdateDialog';
 import { getProjectTypes } from '@/app/lib/GetProjectTypesAction';
 import "@uploadthing/react/styles.css";
-import { UploadDropzone, UploadButton } from "@/utils/uploadthing";
+import { UploadButton } from "@/utils/uploadthing";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -70,7 +68,6 @@ export default function YourProjectCard({ eventId }) {
         const projectResult: any = await checkProject(sessionEmail, eventId);
         projectResult ? setCheckProjectResult(true) : setCheckProjectResult(false)
         setProjectResult(projectResult);
-        console.log(projectResult)
     };
 
     useEffect(() => {
@@ -254,7 +251,6 @@ export default function YourProjectCard({ eventId }) {
                                                     // Set the projectImage value to the uploaded image URL
                                                     setImageName(res[0].name);
                                                     setValue('projectImage', res[0].url);
-                                                    // alert("Upload Completed");
                                                 }}
                                                 onUploadError={(error: Error) => {
                                                     toast.error('Unexpected error occurred!');
@@ -281,7 +277,6 @@ export default function YourProjectCard({ eventId }) {
                                                     setDocumentName(res[0].name);
                                                     setValue('projectFile', res[0].url);
                                                     //setValue('projectFileName', res[0].name);
-                                                    // alert("Upload Completed");
                                                 }}
                                                 onUploadError={(error: Error) => {
                                                     toast.error('Unexpected error occurred!');

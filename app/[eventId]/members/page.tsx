@@ -15,7 +15,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 export default async function Members({ params }: { params: any }) {
     const eventId = params.eventId;
-    console.log(eventId);
+
     // @ts-ignore
     const session = await getServerSession(options);
     if (!session || !session.user) {

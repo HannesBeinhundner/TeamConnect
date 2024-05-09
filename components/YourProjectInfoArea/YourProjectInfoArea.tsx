@@ -2,9 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import Image from "next/image";
 import Button from '@mui/material/Button';
 import Chip from '@/components/Chip/Chip';
-import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import CategoryIcon from '@mui/icons-material/Category';
-import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 import LinkIcon from '@mui/icons-material/Link';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import UserIconText from '../UserIconText/UserIconText';
@@ -30,7 +28,7 @@ export default function YourProjectInformationArea({ projectResult, reloadCompon
     const [selectedUserId, setSelectedUserId] = useState(null);
     const [confirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
 
-    const handleDeleteRemoveClick = (userId: any) => {
+    const handleRemoveClick = (userId: any) => {
         setSelectedUserId(userId)
         setConfirmationDialogOpen(true);
     };
@@ -99,7 +97,7 @@ export default function YourProjectInformationArea({ projectResult, reloadCompon
                                             }
                                                 rightIcon={<IconButton
                                                     aria-label="close"
-                                                    onClick={() => handleDeleteRemoveClick(user.id)}
+                                                    onClick={() => handleRemoveClick(user.id)}
                                                 >
                                                     <ClearIcon sx={{ fontSize: 18 }} />
                                                 </IconButton>}
@@ -131,8 +129,15 @@ export default function YourProjectInformationArea({ projectResult, reloadCompon
                         </div>
                     ))}
             </div>
-            <div className={styles.descriptionArea}>
-                <p>{projectResult?.description}</p>
+            <div>
+                <div className={styles.textArea}>
+                    <h4>Description</h4>
+                    <p>{projectResult?.description}</p>
+                </div>
+                <div className={styles.textArea}>
+                    <h4>Prefred Skills and Expertise</h4>
+                    <p>{projectResult?.skills ? projectResult?.skills : 'not defined'}</p>
+                </div>
             </div>
         </div>
     );
