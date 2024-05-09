@@ -12,12 +12,14 @@ import Link from "next/link";
 import CustomProjectLogo from '@/images/customProjectLogo.svg'
 import { Button, IconButton } from '@mui/material';
 import { getProjectUsers } from './GetProjectUsersAction';
+import { joinProject } from './JoinProjectAction';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { deleteProject } from '@/components/ProjectUpdateDialog/DeleteProjectAction';
+import { getUserData } from './getUserAction';
 import ProjectViewDialog from '@/components/ProjectViewDialog/ProjectViewDialog';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import { toast } from 'react-toastify';
@@ -33,8 +35,11 @@ interface Props {
 
 export default function ViewAllProjectsCard({ session, eventData, reloadComponent, projectResult }: Props) {
     const [projectUsers, setProjectUsers] = useState<any>([]);
+    const [userData, setUserData] = useState<any>([]);
     const [updateDialogOpen, setUpdateDialogOpen] = useState(false);
     const [confirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
+    const [joinDialogOpen, setJoinDialogOpen] = useState(false);
+    const [otherProjectJoinDialogOpen, setOtherProjectJoinDialogOpen] = useState(false);
 
     const handleDeleteProject = async () => {
         const result = await deleteProject(projectResult?.id);
@@ -44,6 +49,7 @@ export default function ViewAllProjectsCard({ session, eventData, reloadComponen
             return;
         }
 
+
         if (result.error) {
             toast.error('The Project could not be deleted!');
             return;
@@ -51,6 +57,19 @@ export default function ViewAllProjectsCard({ session, eventData, reloadComponen
 
         toast.success('The Project was successfully deleted!');
         reloadComponent();
+    };
+
+    const handleJoinProject = async () => {
+        const userData = await joinProject(session.user.email, projectResult?.id);
+
+        if (!userData) {
+            alert("Something went wrong");
+            return;
+        }
+
+        handleJoinDialogClose();
+        handleOtherProjectJoinDialogClose();
+        setTimeout(() => reloadComponent(), 1500);
     };
 
     const handleUpdateDialogOpen = () => {
@@ -66,16 +85,39 @@ export default function ViewAllProjectsCard({ session, eventData, reloadComponen
         setProjectUsers(users);
     };
 
+    const fetchUserData = async () => {
+        const userData: any = await getUserData(session.user.email);
+        console.log(userData);
+        setUserData(userData);
+    };
+
     const handleDeleteButtonClick = () => {
         setConfirmationDialogOpen(true);
+    };
+
+    const handleJoinButtonClick = () => {
+        setJoinDialogOpen(true);
+    };
+
+    const handleOtherProjectJoinButtonClick = () => {
+        setOtherProjectJoinDialogOpen(true);
     };
 
     const handleConfirmationDialogClose = () => {
         setConfirmationDialogOpen(false);
     };
 
+    const handleJoinDialogClose = () => {
+        setJoinDialogOpen(false);
+    };
+
+    const handleOtherProjectJoinDialogClose = () => {
+        setOtherProjectJoinDialogOpen(false);
+    };
+
     useEffect(() => {
         fetchProjectUsers();
+        fetchUserData();
     }, []);
 
     return (
@@ -126,9 +168,18 @@ export default function ViewAllProjectsCard({ session, eventData, reloadComponen
                             </Button>
                         )
                     }
-                    <Button variant="contained">
-                        Request to Join
-                    </Button>
+                    {
+                        userData.projectId == null ? (
+                            <Button variant="contained" onClick={handleJoinButtonClick}>
+                                Join
+                            </Button>
+                        ) : userData.projectId !== projectResult?.id ? (
+                            <Button variant="contained" onClick={handleOtherProjectJoinButtonClick}>
+                                Join other Project
+                            </Button>
+                        ) : null
+                    }
+
                     <Dialog
                         open={confirmationDialogOpen}
                         onClose={handleConfirmationDialogClose}
@@ -142,6 +193,41 @@ export default function ViewAllProjectsCard({ session, eventData, reloadComponen
                         <DialogActions>
                             <Button onClick={handleConfirmationDialogClose}>Cancel</Button>
                             <Button onClick={handleDeleteProject} color="error">Delete</Button>
+                        </DialogActions>
+                    </Dialog>
+                  
+                    <Dialog
+                        open={joinDialogOpen}
+                        onClose={handleJoinDialogClose}
+                    >
+                        <DialogTitle>Confirm Join Project</DialogTitle>
+                        <DialogContent>
+                            <DialogContentText>
+                                Are you sure you want to join the project <b>{projectResult.name}?</b>
+                            </DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={handleJoinDialogClose}>Cancel</Button>
+                            <Button onClick={handleJoinProject} color="success">Join</Button>
+                        </DialogActions>
+                    </Dialog>
+
+                    <Dialog
+                        open={otherProjectJoinDialogOpen}
+                        onClose={handleOtherProjectJoinDialogClose}
+                    >
+                        <DialogTitle>Confirm Join Project</DialogTitle>
+                        <DialogContent>
+                            <DialogContentText>
+                                Are you sure you want to join the project <b>{projectResult.name}?</b>
+                            </DialogContentText>
+                            <DialogContentText>
+                                You will be removed from your current team!
+                            </DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={handleOtherProjectJoinDialogClose}>Cancel</Button>
+                            <Button onClick={handleJoinProject} color="success">Join</Button>
                         </DialogActions>
                     </Dialog>
                 </div>

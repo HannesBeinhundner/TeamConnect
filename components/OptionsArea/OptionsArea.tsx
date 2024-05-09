@@ -65,9 +65,6 @@ export default function OptionsArea({ session, eventData }: Props) {
                     </Link>
                 ) : null
             }
-            <IconButton aria-label="logout" onClick={() => signOut()} sx={{ color: '#1C1C1C' }}>
-                <LogoutIcon />
-            </IconButton>
             <NotificationsIcon />
             <div className={styles.profile}>
                 {session.user.image !== null ? (
@@ -110,7 +107,8 @@ export default function OptionsArea({ session, eventData }: Props) {
                     />
                 )}
             </div>
-            <FormControl component="fieldset">
+
+            {/* <FormControl component="fieldset">
                 <FormGroup aria-label="position" row>
                     <FormControlLabel
                         value="bottom"
@@ -119,7 +117,10 @@ export default function OptionsArea({ session, eventData }: Props) {
                         labelPlacement="bottom"
                     />
                 </FormGroup>
-            </FormControl>
+            </FormControl> */}
+            <IconButton aria-label="logout" onClick={() => signOut()} sx={{ color: '#1C1C1C' }}>
+                <LogoutIcon />
+            </IconButton>
             <ProfileEditDialog
                 open={updateDialogOpen}
                 onClose={handleUpdateDialogClose}

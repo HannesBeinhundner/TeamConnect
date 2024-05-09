@@ -5,7 +5,6 @@ import { CreateEventInputs } from '@/app/lib/types';
 import { prisma } from '@/prisma';
 
 export async function updateEvent(inputData: CreateEventInputs, eventId: string) {
-    console.log(inputData)
     const result = CreateEventSchema.safeParse(inputData);
 
     try {
