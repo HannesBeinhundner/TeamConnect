@@ -106,7 +106,6 @@ export default function ConfigCard() {
                 style={{
                     display: 'block',
                     lineHeight: 3.1,
-                    width: 1300,
                     margin: '2rem'
                 }}
             >
@@ -149,7 +148,7 @@ export default function ConfigCard() {
     return (
         <div className={styles.container}>
             {
-                isLoading ? <Skeleton wrapper={LoadingBox} height={45} count={5} /> : (
+                isLoading ? <Skeleton wrapper={LoadingBox} height={45} count={5} width={"100%"} /> : (
                     <>
                         <div className={styles.headerArea}>
                             <h5>Event Settings</h5>

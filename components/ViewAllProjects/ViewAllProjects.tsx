@@ -149,7 +149,7 @@ export default function ViewAllProjects({ eventData, session }: { eventData: any
                 </form>
                 <div className={styles.cardsArea}>
                     {
-                        isLoading ? <Skeleton wrapper={LoadingBox} height={45} count={4} /> : (
+                        isLoading ? <Skeleton wrapper={LoadingBox} height={45} count={4} width={"100%"} /> : (
                             Array.isArray(projectsResult) && projectsResult.map((project: any) => (
                                 <ViewAllProjectsCard session={session} eventData={eventData} key={project.id} projectResult={project} reloadComponent={fetchProjects} />
                             ))

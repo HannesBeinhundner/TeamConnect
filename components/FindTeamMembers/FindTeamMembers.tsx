@@ -152,7 +152,7 @@ export default function FindTeamMembers({ session, eventData }: Props) {
                 </form>
                 <div className={styles.cardsArea}>
                     {
-                        isLoading ? <Skeleton wrapper={LoadingBox} height={45} count={4} /> : (
+                        isLoading ? <Skeleton wrapper={LoadingBox} height={45} count={4} width={"100%"} /> : (
                             Array.isArray(userResult) && userResult.map((user: any) => (
                                 //Filter own user from the list
                                 session?.user?.email !== user.email &&

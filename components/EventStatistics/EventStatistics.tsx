@@ -86,7 +86,7 @@ export default function EventStatistics(props: CircularProgressProps & { value: 
             <div className={styles.contentArea}>
                 <div className={styles.doughnutChart}>
                     {
-                        isLoadingProjects ? <Skeleton wrapper={Box} height={27} count={4} /> : (
+                        isLoadingProjects ? <Skeleton wrapper={Box} height={27} count={4} width={"100%"} /> : (
                             <>
                                 <div className={styles.numbersArea}>
                                     <NumberCard number={projectCountResult.allProjects} text={"All Projects"} />

@@ -157,7 +157,7 @@ export default function YourProjectCard({ eventId }) {
 
             <div className={styles.contentArea}>
                 {
-                    isLoading ? <Skeleton wrapper={Box} height={45} count={5} /> : (
+                    isLoading ? <Skeleton wrapper={Box} height={45} count={5} width={"100%"} /> : (
                         checkProjectResult ? (
                             <YourProjectInformationArea projectResult={projectResult} reloadComponent={fetchProjectStatus} />
                         ) : (

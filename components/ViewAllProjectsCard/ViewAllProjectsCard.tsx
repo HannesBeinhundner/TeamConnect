@@ -125,7 +125,6 @@ export default function ViewAllProjectsCard({ session, eventData, reloadComponen
                 style={{
                     display: 'block',
                     lineHeight: 4.5,
-                    width: 550,
                 }}
             >
                 {children}
@@ -137,7 +136,7 @@ export default function ViewAllProjectsCard({ session, eventData, reloadComponen
 
         <div className={styles.projectInformationArea}>
             {
-                isLoading ? <Skeleton wrapper={LoadingBox} height={35} count={4} /> : (
+                isLoading ? <Skeleton wrapper={LoadingBox} height={35} count={4} width={"100%"} /> : (
                     <>
                         <div className={styles.titleArea}>
                             <div className={styles.iconName}>
