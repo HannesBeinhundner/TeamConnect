@@ -105,7 +105,7 @@ export default async function Dashboard({ params }) {
                             buttonText="View all projects"
                         />}
                         bottomLeftComponent={<YourProjectCard eventId={paramEventId} />}
-                        bottomRightComponent={<EventStatistics value={60} />}
+                        bottomRightComponent={<EventStatistics session={session} eventId={paramEventId} value={60} />}
                     />
                 </div>
             </div>
