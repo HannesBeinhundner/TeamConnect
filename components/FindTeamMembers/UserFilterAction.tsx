@@ -5,7 +5,6 @@ import { prisma } from "@/prisma";
 
 export async function UserFilter(inputData: FindTeamMemberInputs, eventId: any) {
 
-    console.log(inputData)
     const result = FindTeamMemberSchema.safeParse(inputData);
 
     try {
