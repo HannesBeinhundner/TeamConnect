@@ -30,7 +30,7 @@ export async function checkProject(sessionEmail: string | null | undefined, even
                 })
                 if (joinedUsers) {
                     //project = { ...project, users: joinedUsers };
-                    return { ...project, users: joinedUsers };
+                    return { ...project, currentUser: user, users: joinedUsers };
                 }
 
             }

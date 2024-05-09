@@ -10,7 +10,6 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
-import Alert from '@mui/material/Alert';
 import { useForm, SubmitHandler, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { CreateEventSchema } from '@/app/lib/types';
@@ -19,6 +18,8 @@ import styles from './EventUpdateDialog.module.scss';
 import { updateEvent } from './UpdateEventAction';
 import { deleteEvent } from './DeleteEventAction';
 import { MuiChipsInput } from 'mui-chips-input'
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 interface EventUpdateDialogProps {
     open: boolean;
@@ -28,26 +29,8 @@ interface EventUpdateDialogProps {
 }
 
 const EventUpdateDialog: React.FC<EventUpdateDialogProps> = ({ open, onClose, eventResult, reloadComponent }) => {
-    const [errorAlert, setErrorAlert] = useState(false);
-    const [successAlert, setSuccessAlert] = useState(false);
-    const [successMessage, setSuccessMessage] = useState('');
     const [serverErrorMessage, setServerErrorMessage] = useState('');
     const [confirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
-
-    const handleCloseAlert = () => {
-        setSuccessAlert(false);
-        setErrorAlert(false);
-    };
-
-    useEffect(() => {
-        if (successAlert || errorAlert) {
-            const timerId = setTimeout(() => {
-                handleCloseAlert();
-            }, 3000);
-
-            return () => clearTimeout(timerId);
-        }
-    }, [successAlert, errorAlert]);
 
     const {
         register,
@@ -69,18 +52,17 @@ const EventUpdateDialog: React.FC<EventUpdateDialogProps> = ({ open, onClose, ev
         const result = await updateEvent(data, eventResult?.id);
 
         if (!result) {
-            alert("Something went wrong");
+            toast.error('Unexpected error occurred!');
             return;
         }
 
         if (result.error) {
             setServerErrorMessage(result.error.toString());
-            setErrorAlert(true);
+            toast.error(serverErrorMessage);
             return;
         }
 
-        setSuccessMessage('Your Event was successfully updated!')
-        setSuccessAlert(true);
+        toast.success('Your Event was successfully updated!');
         onClose();
         reloadComponent();
     };
@@ -89,19 +71,18 @@ const EventUpdateDialog: React.FC<EventUpdateDialogProps> = ({ open, onClose, ev
         const result = await deleteEvent(eventResult?.id);
 
         if (!result) {
-            alert("Something went wrong");
+            toast.error('Unexpected error occurred!');
             return;
         }
 
         if (result.error) {
             setServerErrorMessage(result.error.toString());
-            setErrorAlert(true);
+            toast.error(serverErrorMessage);
             return;
         }
-        setSuccessMessage('Your Event was successfully deleted!')
-        setSuccessAlert(true);
+        toast.success('Your Event was successfully deleted!');
         onClose();
-        setTimeout(() => reloadComponent(), 1500)
+        reloadComponent()
     };
 
     const handleDeleteButtonClick = () => {
@@ -113,89 +94,77 @@ const EventUpdateDialog: React.FC<EventUpdateDialogProps> = ({ open, onClose, ev
     };
 
     return (
-        <>
-            <Dialog open={open} onClose={onClose} fullWidth maxWidth="md" className={styles.updateModal}>
-                <DialogTitle>Update Event</DialogTitle>
-                <IconButton
-                    aria-label="close"
-                    onClick={onClose}
-                    sx={{
-                        position: 'absolute',
-                        right: 8,
-                        top: 8,
-                        color: (theme) => theme.palette.grey[700],
-                    }}
-                >
-                    <CloseIcon />
-                </IconButton>
-                <DialogContent>
-                    <form onSubmit={handleSubmit(handleUpdate)} className={styles.formContainer}>
-                        <TextField
-                            margin="dense"
-                            id="eventName"
-                            label="Event Name*"
-                            type="text"
-                            defaultValue={eventResult?.name}
-                            fullWidth
-                            variant="standard"
-                            {...register('eventName')}
-                            error={!!errors.eventName}
-                            helperText={errors.eventName?.message}
-                        />
+        <Dialog open={open} onClose={onClose} fullWidth maxWidth="md" className={styles.updateModal}>
+            <DialogTitle>Update Event</DialogTitle>
+            <IconButton
+                aria-label="close"
+                onClick={onClose}
+                sx={{
+                    position: 'absolute',
+                    right: 8,
+                    top: 8,
+                    color: (theme) => theme.palette.grey[700],
+                }}
+            >
+                <CloseIcon />
+            </IconButton>
+            <DialogContent>
+                <form onSubmit={handleSubmit(handleUpdate)} className={styles.formContainer}>
+                    <TextField
+                        margin="dense"
+                        id="eventName"
+                        label="Event Name*"
+                        type="text"
+                        defaultValue={eventResult?.name}
+                        fullWidth
+                        variant="standard"
+                        {...register('eventName')}
+                        error={!!errors.eventName}
+                        helperText={errors.eventName?.message}
+                    />
 
-                        <Controller
-                            control={control}
-                            render={({ field, fieldState }) => (
-                                <MuiChipsInput {...field} error={fieldState.invalid} helperText={fieldState.error?.message} label="Project Types" />
-                            )}
-                            name="eventProjectType"
-                        />
+                    <Controller
+                        control={control}
+                        render={({ field, fieldState }) => (
+                            <MuiChipsInput {...field} error={fieldState.invalid} helperText={fieldState.error?.message} label="Project Types" />
+                        )}
+                        name="eventProjectType"
+                    />
 
-                        <Controller
-                            control={control}
-                            render={({ field, fieldState }) => (
-                                <MuiChipsInput {...field} error={fieldState.invalid} helperText={fieldState.error?.message} label="User Expertises" />
-                            )}
-                            name="eventExpertise"
-                        />
+                    <Controller
+                        control={control}
+                        render={({ field, fieldState }) => (
+                            <MuiChipsInput {...field} error={fieldState.invalid} helperText={fieldState.error?.message} label="User Expertises" />
+                        )}
+                        name="eventExpertise"
+                    />
 
-                        <DialogActions>
-                            <Button variant="contained" color="error" onClick={handleDeleteButtonClick}>
-                                Delete Event
-                            </Button>
-                            <Button variant="contained" type="submit">
-                                Update
-                            </Button>
-                            <Dialog
-                                open={confirmationDialogOpen}
-                                onClose={handleConfirmationDialogClose}
-                            >
-                                <DialogTitle>Confirm Deletion</DialogTitle>
-                                <DialogContent>
-                                    <DialogContentText>
-                                        Are you sure you want to delete this event and all it's projects?
-                                    </DialogContentText>
-                                </DialogContent>
-                                <DialogActions>
-                                    <Button onClick={handleConfirmationDialogClose}>Cancel</Button>
-                                    <Button onClick={handleDeleteEvent} color="error">Delete</Button>
-                                </DialogActions>
-                            </Dialog>
-                        </DialogActions>
-                    </form>
-                </DialogContent>
-            </Dialog>
-            {successAlert && (
-                <Alert severity="success" onClose={handleCloseAlert} className={styles.alert}>
-                    {successMessage}
-                </Alert>
-            )}
-            {errorAlert && (
-                <Alert severity="error" onClose={handleCloseAlert} className={styles.alert}>
-                    {serverErrorMessage}
-                </Alert>
-            )}
-        </>
+                    <DialogActions>
+                        <Button variant="contained" color="error" onClick={handleDeleteButtonClick}>
+                            Delete Event
+                        </Button>
+                        <Button variant="contained" type="submit">
+                            Update
+                        </Button>
+                        <Dialog
+                            open={confirmationDialogOpen}
+                            onClose={handleConfirmationDialogClose}
+                        >
+                            <DialogTitle>Confirm Deletion</DialogTitle>
+                            <DialogContent>
+                                <DialogContentText>
+                                    Are you sure you want to delete this event and all it's projects?
+                                </DialogContentText>
+                            </DialogContent>
+                            <DialogActions>
+                                <Button onClick={handleConfirmationDialogClose}>Cancel</Button>
+                                <Button onClick={handleDeleteEvent} color="error">Delete</Button>
+                            </DialogActions>
+                        </Dialog>
+                    </DialogActions>
+                </form>
+            </DialogContent>
+        </Dialog>
     );
 };
 

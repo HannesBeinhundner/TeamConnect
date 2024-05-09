@@ -36,8 +36,9 @@ export default function OptionsArea({ session, eventData }: Props) {
         const isMissingProfileData = (profileResult?.data?.expertise === '') || (profileResult?.data?.expertise === null) || (profileResult?.data?.description === '') || (profileResult?.data?.description === null);
         setMissingProfileData(isMissingProfileData);
 
-        // If user has not set expertise or description, open ProfileEditDialog window
-        isMissingProfileData && setUpdateDialogOpen(true)
+        // If user has not set expertise or description and
+        // there is a valid eventID (for first time admins), open ProfileEditDialog window
+        isMissingProfileData && eventData?.id && setUpdateDialogOpen(true)
     };
 
     useEffect(() => {
@@ -71,7 +72,7 @@ export default function OptionsArea({ session, eventData }: Props) {
             <div className={styles.profile}>
                 {session.user.image !== null ? (
                     // If user has not set expertise or description, set a badge on the profile picture
-                    missingProfileData ? (
+                    missingProfileData && eventData?.id ? (
                         <Badge color="error" badgeContent="!">
                             <Image
                                 aria-label="expand"

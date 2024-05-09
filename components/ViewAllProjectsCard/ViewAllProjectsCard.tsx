@@ -17,10 +17,11 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import Alert from '@mui/material/Alert';
 import { deleteProject } from '@/components/ProjectUpdateDialog/DeleteProjectAction';
 import ProjectViewDialog from '@/components/ProjectViewDialog/ProjectViewDialog';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 interface Props {
@@ -34,23 +35,22 @@ export default function ViewAllProjectsCard({ session, eventData, reloadComponen
     const [projectUsers, setProjectUsers] = useState<any>([]);
     const [updateDialogOpen, setUpdateDialogOpen] = useState(false);
     const [confirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
-    const [errorAlert, setErrorAlert] = useState(false);
-    const [successAlert, setSuccessAlert] = useState(false);
 
     const handleDeleteProject = async () => {
         const result = await deleteProject(projectResult?.id);
 
         if (!result) {
-            alert("Something went wrong");
+            toast.error('Unexpected error occurred!');
             return;
         }
 
         if (result.error) {
-            setErrorAlert(true);
+            toast.error('The Project could not be deleted!');
             return;
         }
-        setSuccessAlert(true);
-        setTimeout(() => reloadComponent(), 1500)
+
+        toast.success('The Project was successfully deleted!');
+        reloadComponent();
     };
 
     const handleUpdateDialogOpen = () => {
@@ -72,11 +72,6 @@ export default function ViewAllProjectsCard({ session, eventData, reloadComponen
 
     const handleConfirmationDialogClose = () => {
         setConfirmationDialogOpen(false);
-    };
-
-    const handleCloseAlert = () => {
-        setSuccessAlert(false);
-        setErrorAlert(false);
     };
 
     useEffect(() => {
@@ -141,7 +136,7 @@ export default function ViewAllProjectsCard({ session, eventData, reloadComponen
                         <DialogTitle>Confirm Delete Project</DialogTitle>
                         <DialogContent>
                             <DialogContentText>
-                                Are you sure you want to delete this Project?
+                                Are you sure you want to delete {projectResult?.name}?
                             </DialogContentText>
                         </DialogContent>
                         <DialogActions>
@@ -149,16 +144,6 @@ export default function ViewAllProjectsCard({ session, eventData, reloadComponen
                             <Button onClick={handleDeleteProject} color="error">Delete</Button>
                         </DialogActions>
                     </Dialog>
-                    {successAlert && (
-                        <Alert severity="success" onClose={handleCloseAlert} className={styles.alert}>
-                            This Project was successfully deleted!
-                        </Alert>
-                    )}
-                    {errorAlert && (
-                        <Alert severity="error" onClose={handleCloseAlert} className={styles.alert}>
-                            This Project couldn't be deleted!
-                        </Alert>
-                    )}
                 </div>
             </div>
         </div>

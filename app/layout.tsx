@@ -3,7 +3,6 @@ import "@/styles/globals.scss";
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v13-appRouter';
 import { getServerSession } from "next-auth";
 import SessionProvider from "@/components/SessionProvider";
-import { Toaster } from "react-hot-toast";
 import { options } from "@/app/api/auth/[...nextauth]/options"
 import ThemeRegistry from "@/app/lib/ThemeRegistry";
 
@@ -43,7 +42,6 @@ export default async function RootLayout({
                 {children}
               </ThemeRegistry>
             </AppRouterCacheProvider>
-            <Toaster position="top-right"></Toaster>
           </main>
         </SessionProvider>
       </body>

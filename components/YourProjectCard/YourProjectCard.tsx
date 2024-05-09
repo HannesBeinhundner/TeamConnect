@@ -11,7 +11,6 @@ import { styled } from '@mui/material/styles';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import SettingsIcon from '@mui/icons-material/Settings';
 import InputLabel from '@mui/material/InputLabel';
-import Alert from '@mui/material/Alert'
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
@@ -31,6 +30,8 @@ import ProjectUpdateDialog from '@/components/ProjectUpdateDialog/ProjectUpdateD
 import { getProjectTypes } from '@/app/lib/GetProjectTypesAction';
 import "@uploadthing/react/styles.css";
 import { UploadDropzone, UploadButton } from "@/utils/uploadthing";
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 // @ts-ignore
 export default function YourProjectCard({ eventId }) {
@@ -42,8 +43,6 @@ export default function YourProjectCard({ eventId }) {
 
     const [open, setOpen] = useState(false);
     const [updateDialogOpen, setUpdateDialogOpen] = useState(false);
-    const [errorAlert, setErrorAlert] = useState(false)
-    const [successAlert, setSucessAlert] = useState(false)
     const [serverErrorMessage, setServerErrorMessage] = useState("")
 
     const [documentName, setDocumentName] = useState('');
@@ -58,11 +57,6 @@ export default function YourProjectCard({ eventId }) {
         reset()
         setOpen(false);
     };
-
-    const handleCloseAlert = () => {
-        setSucessAlert(false)
-        setErrorAlert(false)
-    }
 
     const handleUpdateDialogOpen = () => {
         setUpdateDialogOpen(true);
@@ -89,16 +83,6 @@ export default function YourProjectCard({ eventId }) {
         fetchProjectTypes();
     }, []);
 
-    useEffect(() => {
-        if (successAlert || errorAlert) {
-            const timerId = setTimeout(() => {
-                handleCloseAlert();
-            }, 3000);
-
-            return () => clearTimeout(timerId);
-        }
-    }, [successAlert, errorAlert]);
-
     const {
         register,
         handleSubmit,
@@ -116,20 +100,20 @@ export default function YourProjectCard({ eventId }) {
         const result = await addEntry(data, sessionEmail, eventId)
 
         if (!result) {
-            alert("Something went wrong")
+            toast.error('Unexpected error occurred!');
             return
         }
 
         if (result.error) {
             setServerErrorMessage(result.error.toString())
-            setErrorAlert(true)
+            toast.error(serverErrorMessage);
             return
         }
 
-        setSucessAlert(true)
         reset()
         handleModalClose()
         fetchProjectStatus();
+        toast.success('Your Project was successfully created!');
     }
 
     return (
@@ -157,7 +141,7 @@ export default function YourProjectCard({ eventId }) {
 
             <div className={styles.contentArea}>
                 {checkProjectResult ? (
-                    <YourProjectInformationArea projectResult={projectResult} />
+                    <YourProjectInformationArea projectResult={projectResult} reloadComponent={fetchProjectStatus} />
                 ) : (
                     <div className={styles.emptyProjectArea}>
                         <p>You haven’t yet created a project or joined an existing one</p>
@@ -273,7 +257,7 @@ export default function YourProjectCard({ eventId }) {
                                                     // alert("Upload Completed");
                                                 }}
                                                 onUploadError={(error: Error) => {
-                                                    alert(`ERROR! ${error.message}`);
+                                                    toast.error('Unexpected error occurred!');
                                                 }}
                                             />
                                             <p className={styles.fileName}>{imageName}</p>
@@ -300,7 +284,7 @@ export default function YourProjectCard({ eventId }) {
                                                     // alert("Upload Completed");
                                                 }}
                                                 onUploadError={(error: Error) => {
-                                                    alert(`ERROR! ${error.message}`);
+                                                    toast.error('Unexpected error occurred!');
                                                 }}
                                             />
                                             <p className={styles.fileName}>{documentName}</p>
@@ -311,16 +295,6 @@ export default function YourProjectCard({ eventId }) {
                                     </form>
                                 </DialogContent>
                             </Dialog>
-                            {successAlert && (
-                                <Alert severity="success" onClose={handleCloseAlert} className={styles.alert}>
-                                    {'Your Project was successfully created!'}
-                                </Alert>
-                            )}
-                            {errorAlert && (
-                                <Alert severity="error" onClose={handleCloseAlert} className={styles.alert}>
-                                    {serverErrorMessage}
-                                </Alert>
-                            )}
                         </div>
                     </div>
                 )}
