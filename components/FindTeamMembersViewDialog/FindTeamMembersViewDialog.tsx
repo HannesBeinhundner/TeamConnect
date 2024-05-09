@@ -1,12 +1,12 @@
 "use client"
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import IconButton from '@mui/material/IconButton';
-import SchoolIcon from '@mui/icons-material/School';
+import BadgeIcon from '@mui/icons-material/Badge';
 import EmailIcon from '@mui/icons-material/Email';
 import CloseIcon from '@mui/icons-material/Close';
 import DialogActions from '@mui/material/DialogActions';
@@ -14,8 +14,6 @@ import styles from './FindTeamMembersViewDialog.module.scss';
 import Image from 'next/image';
 import Chip from '@/components/Chip/Chip';
 import Link from "next/link";
-import { removeUser } from '@/components/FindTeamMembersCard/RemoveUserAction';
-import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 interface ProjectUpdateDialogProps {
@@ -24,37 +22,11 @@ interface ProjectUpdateDialogProps {
     session: any;
     eventData: any;
     userResult: any;
-    reloadComponent: any
+    reloadComponent: any;
+    handleDeleteButtonClick: any;
 }
 
-const FindTeamMembersViewDialog: React.FC<ProjectUpdateDialogProps> = ({ open, onClose, userResult, session, eventData, reloadComponent }) => {
-    const [confirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
-
-    const handleRemoveUser = async () => {
-        const result = await removeUser(userResult?.id);
-
-        if (!result) {
-            toast.error('Unexpected error occurred!');
-            return;
-        }
-
-        if (result.error) {
-            toast.success('This user could not be removed!');
-            return;
-        }
-
-        toast.success('This user was successfully removed!');
-        reloadComponent();
-    };
-
-    const handleDeleteButtonClick = () => {
-        setConfirmationDialogOpen(true);
-    };
-
-    const handleConfirmationDialogClose = () => {
-        setConfirmationDialogOpen(false);
-    };
-
+const FindTeamMembersViewDialog: React.FC<ProjectUpdateDialogProps> = ({ open, onClose, userResult, session, eventData, reloadComponent, handleDeleteButtonClick }) => {
 
     return (
         <Dialog open={open} onClose={onClose} fullWidth maxWidth="md">
@@ -86,7 +58,7 @@ const FindTeamMembersViewDialog: React.FC<ProjectUpdateDialogProps> = ({ open, o
                     <h1>{userResult?.name}</h1>
                 </div>
                 <div className={styles.propertyArea}>
-                    <Chip className={styles.chipColor} text={userResult?.expertise} icon={<SchoolIcon fontSize='small' />} />
+                    <Chip className={styles.chipColor} text={userResult?.expertise} icon={<BadgeIcon fontSize='small' />} />
                     <Link href={`mailto:${userResult?.email}`} className={styles.chipLink} target="_blank">
                         <Chip className={styles.chipColor} text={userResult?.email} icon={<EmailIcon fontSize='small' sx={{ color: '#000000DE' }} />} />
                     </Link>
@@ -107,22 +79,6 @@ const FindTeamMembersViewDialog: React.FC<ProjectUpdateDialogProps> = ({ open, o
                 <Button variant="contained" type="submit">
                     Invite to Join
                 </Button>
-                <Dialog
-                    open={confirmationDialogOpen}
-                    onClose={handleConfirmationDialogClose}
-                >
-                    <DialogTitle>Confirm Remove User</DialogTitle>
-                    <DialogContent>
-                        <DialogContentText>
-                            Are you sure you want to remove {userResult?.name}?
-                            {userResult?.projectAdmin && <strong> This user is a project admin and the project will be deleted!</strong>}
-                        </DialogContentText>
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={handleConfirmationDialogClose}>Cancel</Button>
-                        <Button onClick={handleRemoveUser} color="error">Remove</Button>
-                    </DialogActions>
-                </Dialog>
             </DialogActions>
         </Dialog>
     );

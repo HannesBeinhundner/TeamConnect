@@ -5,7 +5,6 @@ import { prisma } from "@/prisma";
 
 export async function ApplyFilter(inputData: ApplyFilterInputs, eventId: any) {
 
-    console.log(inputData)
     const result = ApplyFilterSchema.safeParse(inputData);
 
     try {
@@ -33,8 +32,6 @@ export async function ApplyFilter(inputData: ApplyFilterInputs, eventId: any) {
             const projects = await prisma.project.findMany({
                 where: filter
             });
-
-            console.log(projects);
 
             return { success: true, data: projects };
         }

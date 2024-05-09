@@ -1,6 +1,5 @@
 
 import styles from "./LoginCard.module.scss"
-import Link from "next/link";
 import Image from "next/image";
 import LoginImg from '@/images/login_dark.svg'
 import Login from "../Login/Login";

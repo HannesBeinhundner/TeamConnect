@@ -7,7 +7,6 @@ import Link from "next/link";
 import Image from "next/image";
 import LogoDarkImg from '@/images/logo_dark.svg'
 import GoogleIcon from '@mui/icons-material/Google';
-import FacebookIcon from '@mui/icons-material/Facebook';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import XIcon from '@mui/icons-material/X';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
@@ -28,7 +27,6 @@ function AuthButtons({ eventData }: { eventData: any }) {
             ) : (
                 // normal Login
                 <>
-                    {/* <Button variant="contained" color="primary" onClick={() => signIn("teamconnect")}>Sign in with FH</Button> */}
                     <Button variant="contained" color="primary" onClick={() => signIn("google")} startIcon={<GoogleIcon />} >Sign in with Google</Button>
                     <Button variant="contained" color="primary" onClick={() => signIn("github")} startIcon={<GitHubIcon />}> Sign in with Github</Button>
                     <Button variant="contained" color="primary" onClick={() => signIn("twitter")} startIcon={<XIcon />}> Sign in with X</Button>

@@ -14,20 +14,46 @@ export async function removeUserFromProject(userId: any) {
             return { success: false, error: 'User not found.' };
         }
 
-        //Remove User from the project
-        const removedUser = await prisma.user.update({
-            where: { id: userId },
-            data: {
-                projectId: null,
-                projectAdmin: false,
-            },
-        });
+        // if user is project admin, delete the whole project (only for event admin)
+        if (existingUser.projectAdmin) {
 
-        if (!removedUser) {
-            return { success: false, error: 'User could not be removed.' };
+            //Delete the project
+            const deletedProject = await prisma.project.delete({
+                where: { id: existingUser.projectId! },
+            });
+
+            // Reset user
+            const removedUser = await prisma.user.update({
+                where: { id: userId },
+                data: {
+                    projectId: null,
+                    projectAdmin: false,
+                },
+            });
+
+
+            if (!removedUser) {
+                return { success: false, error: 'User could not be removed.' };
+            }
+
+            return { success: true, data: removedUser };
+        } else {
+            //Remove User from the project
+            const removedUser = await prisma.user.update({
+                where: { id: userId },
+                data: {
+                    projectId: null,
+                    projectAdmin: false,
+                },
+            });
+
+            if (!removedUser) {
+                return { success: false, error: 'User could not be removed.' };
+            }
+
+            return { success: true, data: removedUser };
         }
 
-        return { success: true, data: removedUser };
     } catch (error) {
         console.error(error);
         return { success: false, error: 'An unexpected error occurred.' };

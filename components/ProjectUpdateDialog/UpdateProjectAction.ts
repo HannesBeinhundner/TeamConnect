@@ -5,9 +5,8 @@ import { UpdateProjectInputs } from '@/app/lib/types';
 import { prisma } from '@/prisma';
 
 export async function updateProject(inputData: UpdateProjectInputs, projectId: number) {
-    console.log(inputData)
+
     const result = UpdateProjectSchema.safeParse(inputData);
-    // console.log(result)
 
     try {
 

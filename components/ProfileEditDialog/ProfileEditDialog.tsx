@@ -38,7 +38,6 @@ const ProfileEditDialog: React.FC<ProfileUpdateDialogProps> = ({ open, onClose, 
     const [expertises, setExpertises] = useState([]);
 
     useEffect(() => {
-        console.log(eventData?.id)
         const fetchExpertises = async () => {
             const expertises: any = await getExpertises(eventData?.id);
             setExpertises(expertises);

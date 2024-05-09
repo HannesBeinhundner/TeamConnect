@@ -5,6 +5,7 @@ import { getServerSession } from "next-auth";
 import SessionProvider from "@/components/SessionProvider";
 import { options } from "@/app/api/auth/[...nextauth]/options"
 import ThemeRegistry from "@/app/lib/ThemeRegistry";
+import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 
 
 const defaultUrl = process.env.PRODUCTION
@@ -39,7 +40,9 @@ export default async function RootLayout({
           <main style={containerStyle}>
             <AppRouterCacheProvider options={{ enableCssLayer: true }}>
               <ThemeRegistry>
-                {children}
+                <SkeletonTheme baseColor="#e8e8e8" highlightColor="#d9d9d9">
+                  {children}
+                </SkeletonTheme>
               </ThemeRegistry>
             </AppRouterCacheProvider>
           </main>

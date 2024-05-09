@@ -24,7 +24,8 @@ import ProjectViewDialog from '@/components/ProjectViewDialog/ProjectViewDialog'
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 
 interface Props {
     session: any;
@@ -34,6 +35,7 @@ interface Props {
 }
 
 export default function ViewAllProjectsCard({ session, eventData, reloadComponent, projectResult }: Props) {
+    const [isLoading, setIsLoading] = useState(true);
     const [projectUsers, setProjectUsers] = useState<any>([]);
     const [userData, setUserData] = useState<any>([]);
     const [updateDialogOpen, setUpdateDialogOpen] = useState(false);
@@ -49,7 +51,6 @@ export default function ViewAllProjectsCard({ session, eventData, reloadComponen
             return;
         }
 
-
         if (result.error) {
             toast.error('The Project could not be deleted!');
             return;
@@ -63,14 +64,28 @@ export default function ViewAllProjectsCard({ session, eventData, reloadComponen
         const userData = await joinProject(session.user.email, projectResult?.id);
 
         if (!userData) {
-            alert("Something went wrong");
+            toast.error('You could not join the project!');
             return;
         }
 
-        handleJoinDialogClose();
-        handleOtherProjectJoinDialogClose();
-        setTimeout(() => reloadComponent(), 1500);
+        toast.success('You joined the project successfully!');
+        reloadComponent();
     };
+
+    useEffect(() => {
+        const fetchProjectUsers = async () => {
+            const users: any = await getProjectUsers(projectResult.id);
+            setProjectUsers(users);
+        };
+
+        const fetchUserData = async () => {
+            const userData: any = await getUserData(session.user.email);
+            setUserData(userData);
+            setIsLoading(false)
+        };
+        fetchProjectUsers();
+        fetchUserData();
+    }, []);
 
     const handleUpdateDialogOpen = () => {
         setUpdateDialogOpen(true);
@@ -78,17 +93,6 @@ export default function ViewAllProjectsCard({ session, eventData, reloadComponen
 
     const handleUpdateDialogClose = () => {
         setUpdateDialogOpen(false);
-    };
-
-    const fetchProjectUsers = async () => {
-        const users: any = await getProjectUsers(projectResult.id);
-        setProjectUsers(users);
-    };
-
-    const fetchUserData = async () => {
-        const userData: any = await getUserData(session.user.email);
-        console.log(userData);
-        setUserData(userData);
     };
 
     const handleDeleteButtonClick = () => {
@@ -115,123 +119,142 @@ export default function ViewAllProjectsCard({ session, eventData, reloadComponen
         setOtherProjectJoinDialogOpen(false);
     };
 
-    useEffect(() => {
-        fetchProjectUsers();
-        fetchUserData();
-    }, []);
+    function LoadingBox({ children }: any) {
+        return (
+            <div
+                style={{
+                    display: 'block',
+                    lineHeight: 4.5,
+                }}
+            >
+                {children}
+            </div>
+        );
+    }
 
     return (
+
         <div className={styles.projectInformationArea}>
-            <div className={styles.titleArea}>
-                <div className={styles.iconName}>
-                    <Image src={projectResult?.image !== 'undefined' ? projectResult?.image : CustomProjectLogo} alt="Custom Logo" width={53} height={53} />
-                    <h2>{projectResult?.name}</h2>
-                </div>
-                <IconButton aria-label="expand" sx={{ color: '#1C1C1C' }} onClick={handleUpdateDialogOpen}>
-                    <OpenInFullIcon fontSize="small" />
-                </IconButton>
-            </div>
-            <ProjectViewDialog
-                open={updateDialogOpen}
-                onClose={handleUpdateDialogClose}
-                session={session}
-                eventData={eventData}
-                projectResult={projectResult}
-                reloadComponent={reloadComponent}
-            />
-            <div className={styles.propertyArea}>
-                <Chip className={styles.chipColor} text={projectResult?.type} icon={<CategoryIcon fontSize='small' />} />
-                <Chip className={styles.chipColor} text={projectUsers} icon={<AssignmentIndIcon fontSize='small' />} />
-                {
-                    projectResult.file !== 'undefined' && (
-                        <Link href={projectResult.file} className={styles.chipLink} target="_blank">
-                            <Chip className={styles.chipColor} text={"Project file"} icon={<AttachFileIcon fontSize='small' sx={{ color: '#000000DE' }} />} />
-                        </Link>
-                    )
-                }
-                {
-                    projectResult?.link && (
-                        <Link href={(projectResult.link.startsWith("https://") || projectResult.link.startsWith("http://")) ? projectResult.link : "https://" + projectResult?.link} className={styles.chipLink} target="_blank">
-                            <Chip className={styles.chipColor} text={projectResult?.link} icon={<LinkIcon fontSize='small' sx={{ color: '#000000DE' }} />} />
-                        </Link>
-                    )
-                }
-            </div>
-            <div className={styles.descriptionArea}>
-                <p>{projectResult?.description}</p>
-                <div className={styles.buttonWrapper}>
-                    {
-                        // Show delete button only if the user is an event admin
-                        eventData.adminEmail === session.user.email && (
-                            <Button variant="contained" color="error" onClick={handleDeleteButtonClick}>
-                                Delete Project
-                            </Button>
-                        )
-                    }
-                    {
-                        userData.projectId == null ? (
-                            <Button variant="contained" onClick={handleJoinButtonClick}>
-                                Join
-                            </Button>
-                        ) : userData.projectId !== projectResult?.id ? (
-                            <Button variant="contained" onClick={handleOtherProjectJoinButtonClick}>
-                                Join other Project
-                            </Button>
-                        ) : null
-                    }
+            {
+                isLoading ? <Skeleton wrapper={LoadingBox} height={35} count={4} width={"100%"} /> : (
+                    <>
+                        <div className={styles.titleArea}>
+                            <div className={styles.iconName}>
+                                <Image src={projectResult?.image !== 'undefined' ? projectResult?.image : CustomProjectLogo} alt="Custom Logo" width={53} height={53} />
+                                <h2>{projectResult?.name}</h2>
+                            </div>
+                            <IconButton aria-label="expand" sx={{ color: '#1C1C1C' }} onClick={handleUpdateDialogOpen}>
+                                <OpenInFullIcon fontSize="small" />
+                            </IconButton>
+                        </div>
+                        <ProjectViewDialog
+                            open={updateDialogOpen}
+                            onClose={handleUpdateDialogClose}
+                            session={session}
+                            eventData={eventData}
+                            projectResult={projectResult}
+                            reloadComponent={reloadComponent}
+                            userData={userData}
+                            handleDeleteButtonClick={handleDeleteButtonClick}
+                            handleJoinButtonClick={handleJoinButtonClick}
+                            handleOtherProjectJoinButtonClick={handleOtherProjectJoinButtonClick}
+                        />
+                        <div className={styles.propertyArea}>
+                            <Chip className={styles.chipColor} text={projectResult?.type} icon={<CategoryIcon fontSize='small' />} />
+                            <Chip className={styles.chipColor} text={projectUsers} icon={<AssignmentIndIcon fontSize='small' />} />
+                            {
+                                projectResult.file !== 'undefined' && (
+                                    <Link href={projectResult.file} className={styles.chipLink} target="_blank">
+                                        <Chip className={styles.chipColor} text={"Project file"} icon={<AttachFileIcon fontSize='small' sx={{ color: '#000000DE' }} />} />
+                                    </Link>
+                                )
+                            }
+                            {
+                                projectResult?.link && (
+                                    <Link href={(projectResult.link.startsWith("https://") || projectResult.link.startsWith("http://")) ? projectResult.link : "https://" + projectResult?.link} className={styles.chipLink} target="_blank">
+                                        <Chip className={styles.chipColor} text={projectResult?.link} icon={<LinkIcon fontSize='small' sx={{ color: '#000000DE' }} />} />
+                                    </Link>
+                                )
+                            }
+                        </div>
+                        <div className={styles.descriptionArea}>
+                            <p>{projectResult?.description}</p>
+                            <div className={styles.buttonWrapper}>
+                                {
+                                    // Show delete button only if the user is an event admin
+                                    eventData.adminEmail === session.user.email && (
+                                        <Button variant="contained" color="error" onClick={handleDeleteButtonClick}>
+                                            Delete Project
+                                        </Button>
+                                    )
+                                }
+                                {
+                                    userData.projectId == null ? (
+                                        <Button variant="contained" onClick={handleJoinButtonClick}>
+                                            Join
+                                        </Button>
+                                    ) : userData.projectId !== projectResult?.id ? (
+                                        <Button variant="contained" onClick={handleOtherProjectJoinButtonClick}>
+                                            Join other Project
+                                        </Button>
+                                    ) : null
+                                }
 
-                    <Dialog
-                        open={confirmationDialogOpen}
-                        onClose={handleConfirmationDialogClose}
-                    >
-                        <DialogTitle>Confirm Delete Project</DialogTitle>
-                        <DialogContent>
-                            <DialogContentText>
-                                Are you sure you want to delete {projectResult?.name}?
-                            </DialogContentText>
-                        </DialogContent>
-                        <DialogActions>
-                            <Button onClick={handleConfirmationDialogClose}>Cancel</Button>
-                            <Button onClick={handleDeleteProject} color="error">Delete</Button>
-                        </DialogActions>
-                    </Dialog>
-                  
-                    <Dialog
-                        open={joinDialogOpen}
-                        onClose={handleJoinDialogClose}
-                    >
-                        <DialogTitle>Confirm Join Project</DialogTitle>
-                        <DialogContent>
-                            <DialogContentText>
-                                Are you sure you want to join the project <b>{projectResult.name}?</b>
-                            </DialogContentText>
-                        </DialogContent>
-                        <DialogActions>
-                            <Button onClick={handleJoinDialogClose}>Cancel</Button>
-                            <Button onClick={handleJoinProject} color="success">Join</Button>
-                        </DialogActions>
-                    </Dialog>
+                                <Dialog
+                                    open={confirmationDialogOpen}
+                                    onClose={handleConfirmationDialogClose}
+                                >
+                                    <DialogTitle>Confirm Delete Project</DialogTitle>
+                                    <DialogContent>
+                                        <DialogContentText>
+                                            Are you sure you want to delete {projectResult?.name}?
+                                        </DialogContentText>
+                                    </DialogContent>
+                                    <DialogActions>
+                                        <Button onClick={handleConfirmationDialogClose}>Cancel</Button>
+                                        <Button onClick={handleDeleteProject} color="error">Delete</Button>
+                                    </DialogActions>
+                                </Dialog>
 
-                    <Dialog
-                        open={otherProjectJoinDialogOpen}
-                        onClose={handleOtherProjectJoinDialogClose}
-                    >
-                        <DialogTitle>Confirm Join Project</DialogTitle>
-                        <DialogContent>
-                            <DialogContentText>
-                                Are you sure you want to join the project <b>{projectResult.name}?</b>
-                            </DialogContentText>
-                            <DialogContentText>
-                                You will be removed from your current team!
-                            </DialogContentText>
-                        </DialogContent>
-                        <DialogActions>
-                            <Button onClick={handleOtherProjectJoinDialogClose}>Cancel</Button>
-                            <Button onClick={handleJoinProject} color="success">Join</Button>
-                        </DialogActions>
-                    </Dialog>
-                </div>
-            </div>
+                                <Dialog
+                                    open={joinDialogOpen}
+                                    onClose={handleJoinDialogClose}
+                                >
+                                    <DialogTitle>Confirm Join Project</DialogTitle>
+                                    <DialogContent>
+                                        <DialogContentText>
+                                            Are you sure you want to join the project <b>{projectResult.name}?</b>
+                                        </DialogContentText>
+                                    </DialogContent>
+                                    <DialogActions>
+                                        <Button onClick={handleJoinDialogClose}>Cancel</Button>
+                                        <Button onClick={handleJoinProject} color="success">Join</Button>
+                                    </DialogActions>
+                                </Dialog>
+
+                                <Dialog
+                                    open={otherProjectJoinDialogOpen}
+                                    onClose={handleOtherProjectJoinDialogClose}
+                                >
+                                    <DialogTitle>Confirm Join Project</DialogTitle>
+                                    <DialogContent>
+                                        <DialogContentText>
+                                            Are you sure you want to join the project <b>{projectResult.name}?</b>
+                                        </DialogContentText>
+                                        <DialogContentText>
+                                            You will be removed from your current team!
+                                        </DialogContentText>
+                                    </DialogContent>
+                                    <DialogActions>
+                                        <Button onClick={handleOtherProjectJoinDialogClose}>Cancel</Button>
+                                        <Button onClick={handleJoinProject} color="success">Join</Button>
+                                    </DialogActions>
+                                </Dialog>
+                            </div>
+                        </div>
+                    </>
+                )
+            }
         </div>
     );
 };
