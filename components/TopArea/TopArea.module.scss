@@ -15,6 +15,7 @@
         flex-direction: column;
         padding: 0.75rem 1rem 0rem 1rem;
         gap: 1rem;
+        min-height: 65px;
     }
 }
 
@@ -27,7 +28,7 @@
 
 .eventName {
     @include mobile {
-        font-size: 1.8rem;
+        font-size: 1.7rem;
     }
 }
 

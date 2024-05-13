@@ -4,7 +4,8 @@
 .container {
     @include card;
     background-color: $grey-light;
-    height: 100%;
+    height: max-content;
+    min-height: 500px;
 }
 
 .headerArea {
@@ -24,7 +25,6 @@
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    //align-items: center;
     gap: 1.5rem;
 
     .paragraphWrapper {
@@ -35,6 +35,10 @@
         p {
             margin: 0;
         }
+    }
+
+    .configTable {
+        width: 100%;
     }
 
     .tableHeaderWrapper {
@@ -48,7 +52,6 @@
     th {
         a {
             color: $black-light;
-            //text-decoration: none;
         }
     }
 

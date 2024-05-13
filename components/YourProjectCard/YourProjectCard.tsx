@@ -123,8 +123,8 @@ export default function YourProjectCard({ eventId }) {
                 style={{
                     display: 'block',
                     lineHeight: 4.5,
-                    width: 650,
                 }}
+                className={styles.skeletonContainer}
             >
                 {children}
             </div>

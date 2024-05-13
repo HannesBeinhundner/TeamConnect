@@ -76,10 +76,9 @@ export default function FindTeamMembers({ session, eventData }: Props) {
             <div
                 style={{
                     display: 'block',
-                    lineHeight: 3.1,
-                    width: 1200,
-                    margin: '2rem'
+                    lineHeight: 0,
                 }}
+                className={styles.skeletonContainer}
             >
                 {children}
             </div>
@@ -152,7 +151,7 @@ export default function FindTeamMembers({ session, eventData }: Props) {
                 </form>
                 <div className={styles.cardsArea}>
                     {
-                        isLoading ? <Skeleton wrapper={LoadingBox} height={45} count={4} width={"100%"} /> : (
+                        isLoading ? <Skeleton wrapper={LoadingBox} height={40} count={4} width={"100%"} /> : (
                             Array.isArray(userResult) && userResult.map((user: any) => (
                                 //Filter own user from the list
                                 session?.user?.email !== user.email &&

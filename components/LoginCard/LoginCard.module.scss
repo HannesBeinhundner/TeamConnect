@@ -3,7 +3,7 @@
 
 .container {
     width: 100vw;
-    height: 100vh;
+    height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -13,14 +13,22 @@
     background-image: url("../../images/landingpageBackground.svg");
     background-size: cover;
 
-    @include mobile {
+    @include tablet {
         flex-direction: column;
+        gap: 4rem;
+    }
+
+    @include mobile {
         gap: 2rem;
     }
 }
 
 .imageContainer {
     width: 45%;
+
+    @include tablet {
+        width: 70%;
+    }
 
     @include mobile {
         width: 100%;

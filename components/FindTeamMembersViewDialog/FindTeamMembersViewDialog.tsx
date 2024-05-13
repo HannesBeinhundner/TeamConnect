@@ -55,7 +55,7 @@ const FindTeamMembersViewDialog: React.FC<ProjectUpdateDialogProps> = ({ open, o
                             objectFit: 'cover',
                         }}
                     />
-                    <h1>{userResult?.name}</h1>
+                    <h1 className={styles.userName}>{userResult?.name}</h1>
                 </div>
                 <div className={styles.propertyArea}>
                     <Chip className={styles.chipColor} text={userResult?.expertise} icon={<BadgeIcon fontSize='small' />} />

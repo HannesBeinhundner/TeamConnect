@@ -158,8 +158,8 @@ export default function ConfigCard() {
                                 <p>This is your admin dashboard, where you can oversee all your events. Click on the event name to view it and all it's associated projects.</p>
                                 <p>To add users to the event, distribute the invitation link!</p>
                             </div>
-                            <TableContainer component={Paper} sx={{ backgroundColor: 'transparent' }}>
-                                <Table sx={{ minWidth: 650 }} aria-label="event table">
+                            <TableContainer component={Paper} sx={{ backgroundColor: 'transparent' }} className={styles.configTable}>
+                                <Table aria-label="event table">
                                     <TableHead>
                                         <TableRow>
                                             <TableCell></TableCell>
@@ -304,6 +304,6 @@ export default function ConfigCard() {
                 )
             }
 
-        </div>
+        </div >
     );
 }

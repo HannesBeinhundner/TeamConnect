@@ -48,3 +48,11 @@
     display: flex;
     justify-content: center;
 }
+
+.skeletonContainer {
+    width: 650px;
+
+    @include mobile {
+        width: 300px;
+    }
+}

@@ -14,13 +14,24 @@
     button {
         width: 70%;
 
-        @include mobile {
-            width: 90%;
+        @include tablet {
+            width: 80%;
         }
+
+        @include mobile {
+            width: 100%;
+        }
+    }
+
+    @include tablet {
+        width: 75%;
+        padding: 3rem;
     }
 
     @include mobile {
         width: 90%;
+        padding: 2rem;
+        margin-top: 4rem;
     }
 }
 

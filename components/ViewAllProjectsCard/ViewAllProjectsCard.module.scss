@@ -9,7 +9,7 @@
     width: 47%;
     gap: 1.25rem;
 
-    @include tablet {
+    @media (max-width: 1320px) {
         width: 100%;
     }
 
@@ -24,6 +24,20 @@
             flex-direction: row;
             align-items: center;
             gap: 1.2rem;
+
+            @include mobile {
+                gap: 1rem;
+            }
+        }
+
+        .projectLogo {
+            max-width: 53px;
+            max-height: 53px;
+
+            @include mobile {
+                max-width: 43px;
+                max-height: 43px;
+            }
         }
     }
 
