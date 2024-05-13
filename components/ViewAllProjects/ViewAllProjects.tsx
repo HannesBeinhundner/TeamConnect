@@ -108,7 +108,7 @@ export default function ViewAllProjects({ eventData, session }: { eventData: any
             </div>
             <div className={styles.contentArea}>
                 <form onSubmit={handleSubmit(processForm)} className={styles.filterArea}>
-                    <Box sx={{ display: 'flex', alignItems: 'flex-end', minWidth: "22%" }}>
+                    <Box sx={{ display: 'flex', alignItems: 'flex-end' }} className={styles.nameInput}>
                         <SearchIcon
                             sx={{ color: 'action.active', mr: 1, my: 0.5 }}
                         />
@@ -120,7 +120,7 @@ export default function ViewAllProjects({ eventData, session }: { eventData: any
                             {...register('projectSearch')}
                         />
                     </Box>
-                    <FormControl variant="standard" sx={{ width: "22%" }}>
+                    <FormControl variant="standard" className={styles.projectTypeInput}>
                         <InputLabel id="projectType">Project Type</InputLabel>
                         <Select
                             labelId="projectType"

@@ -9,7 +9,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import DialogActions from '@mui/material/DialogActions';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import PersonIcon from '@mui/icons-material/Person';
 import styles from './ProjectViewDialog.module.scss';
 import Image from 'next/image';
@@ -129,7 +129,7 @@ const ProjectViewDialog: React.FC<ProjectUpdateDialogProps> = ({ open, onClose, 
                                         session.user.email === eventData.adminEmail ?
                                             (
                                                 <UserChip userIconText={
-                                                    <UserIconText text={user.name} smallText={user.expertise} icon={<AccountCircleIcon sx={{ fontSize: 30 }} />} />
+                                                    <UserIconText text={user.name} smallText={user.expertise} icon={<ManageAccountsIcon sx={{ fontSize: 30 }} />} />
                                                 }
                                                     rightIcon={<IconButton
                                                         aria-label="close"
@@ -140,7 +140,7 @@ const ProjectViewDialog: React.FC<ProjectUpdateDialogProps> = ({ open, onClose, 
                                                 />
                                             ) : (
                                                 <UserChip userIconText={
-                                                    <UserIconText text={user.name} smallText={user.expertise} icon={<AccountCircleIcon sx={{ fontSize: 30 }} />} />
+                                                    <UserIconText text={user.name} smallText={user.expertise} icon={<ManageAccountsIcon sx={{ fontSize: 30 }} />} />
                                                 }
                                                 />
                                             )

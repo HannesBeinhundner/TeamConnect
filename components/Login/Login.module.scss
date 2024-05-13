@@ -13,6 +13,14 @@
 
     button {
         width: 70%;
+
+        @include mobile {
+            width: 90%;
+        }
+    }
+
+    @include mobile {
+        width: 90%;
     }
 }
 
@@ -21,6 +29,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    text-align: center;
     gap: 0rem;
     text-decoration: none;
     color: $white;

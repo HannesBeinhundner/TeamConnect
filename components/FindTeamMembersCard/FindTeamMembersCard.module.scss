@@ -9,6 +9,10 @@
     width: 47%;
     justify-content: space-between;
 
+    @include tablet {
+        width: 100%;
+    }
+
     .topArea {
         display: flex;
         flex-direction: column;

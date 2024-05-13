@@ -14,6 +14,11 @@
     min-width: 100px;
     background-color: #e8e8e8;
 
+    @include mobile {
+        min-width: unset;
+        width: 50%;
+    }
+
     h4 {
         font-size: 2.5rem;
         letter-spacing: 0.7px;
