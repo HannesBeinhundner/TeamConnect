@@ -18,7 +18,12 @@
 
 .titleArea {
     display: flex;
+    align-items: center;
     gap: 1.2rem;
+
+    @include mobile {
+        gap: 1rem;
+    }
 }
 
 .propertyArea {
@@ -49,6 +54,23 @@
     display: flex;
     flex-direction: column;
     gap: 1.25rem;
+
+    .projectLogo {
+        max-width: 53px;
+        max-height: 53px;
+
+        @include mobile {
+            max-width: 43px;
+            max-height: 43px;
+        }
+    }
+
+    @include mobile {
+        .projectName {
+            font-size: 1.2rem;
+        }
+    }
+
 }
 
 .textArea {

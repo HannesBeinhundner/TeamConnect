@@ -5,6 +5,7 @@ import Image from "next/image";
 import LogoDarkImg from '@/images/logo_dark.svg';
 import styles from "./TopArea.module.scss";
 import LogoutIcon from '@mui/icons-material/Logout';
+import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
 import IconButton from '@mui/material/IconButton';
 import { leaveEvent } from "./LeaveEventAction";
 import Dialog from "@mui/material/Dialog";
@@ -53,7 +54,7 @@ export default function TopArea({ session, eventData }: { session: any, eventDat
                             eventData?.adminEmail !== session.user.email && (
                                 <>
                                     <IconButton aria-label="expand" sx={{ color: '#1C1C1C' }} onClick={handleLeaveButtonClick}>
-                                        <LogoutIcon fontSize="medium" />
+                                        <PersonRemoveIcon fontSize="medium" />
                                     </IconButton>
 
                                     <Dialog

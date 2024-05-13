@@ -91,10 +91,9 @@ export default function ViewAllProjects({ eventData, session }: { eventData: any
             <div
                 style={{
                     display: 'block',
-                    lineHeight: 3.1,
-                    width: 1200,
-                    margin: '2rem'
+                    lineHeight: 0,
                 }}
+                className={styles.skeletonContainer}
             >
                 {children}
             </div>
@@ -149,7 +148,7 @@ export default function ViewAllProjects({ eventData, session }: { eventData: any
                 </form>
                 <div className={styles.cardsArea}>
                     {
-                        isLoading ? <Skeleton wrapper={LoadingBox} height={45} count={4} width={"100%"} /> : (
+                        isLoading ? <Skeleton wrapper={LoadingBox} height={40} count={4} width={"100%"} /> : (
                             Array.isArray(projectsResult) && projectsResult.map((project: any) => (
                                 <ViewAllProjectsCard session={session} eventData={eventData} key={project.id} projectResult={project} reloadComponent={fetchProjects} />
                             ))

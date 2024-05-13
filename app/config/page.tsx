@@ -18,11 +18,6 @@ export default async function Config({ params }: { params: any }) {
         redirect("/");
     }
 
-    // const eventData: any = await getEvent(eventId);
-    // if (!eventData) {
-    //     redirect("/");
-    // }
-
     return (
         <>
             <ToastContainer

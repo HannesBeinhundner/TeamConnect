@@ -72,3 +72,11 @@
         font-size: 0.7rem;
     }
 }
+
+.skeletonContainer {
+    width: 450px;
+
+    @include mobile {
+        width: 300px;
+    }
+}

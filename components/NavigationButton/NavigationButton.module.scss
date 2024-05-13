@@ -27,7 +27,7 @@
     padding: 2rem;
     border: none;
 
-    @include tablet {
+    @include mobile {
         padding: 1rem;
         max-height: 80px;
     }
@@ -57,7 +57,7 @@
         width: max-content;
         text-transform: uppercase;
 
-        @include tablet {
+        @include mobile {
             font-size: 1rem;
             line-height: 1.8rem;
             letter-spacing: 0.7px;

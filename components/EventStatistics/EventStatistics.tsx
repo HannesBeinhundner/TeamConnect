@@ -70,8 +70,8 @@ export default function EventStatistics(props: CircularProgressProps & { value: 
                 style={{
                     display: 'block',
                     lineHeight: 3.1,
-                    width: 450,
                 }}
+                className={styles.skeletonContainer}
             >
                 {children}
             </div>

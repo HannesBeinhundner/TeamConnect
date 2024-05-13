@@ -87,3 +87,13 @@
     flex-direction: column;
     gap: 1.2rem;
 }
+
+
+.skeletonContainer {
+    width: 1200px;
+    margin: 2rem;
+
+    @include mobile {
+        width: 300px;
+    }
+}
