@@ -13,12 +13,12 @@
 @mixin card {
     padding: 25px;
 
-    @include mobile {
-        padding: 25px;
-    }
-
     border-radius: 15px;
     border: 0.5px solid rgba($white, 0.1);
     background-color: $grey-light;
     box-shadow: $container-shadow;
+
+    @include tablet {
+        padding: 1rem;
+    }
 }

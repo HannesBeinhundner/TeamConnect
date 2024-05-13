@@ -23,8 +23,10 @@ export default function NavigationButton({ href, imgSrc, altText, buttonText }: 
                     src={imgSrc}
                     alt={altText}
                     width={400}
+                    layout="responsive"
+                    className={styles.image}
                     style={{
-                        objectFit: 'cover',
+                        objectFit: 'contain',
                     }}
                 />
             </Link>

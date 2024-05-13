@@ -16,4 +16,9 @@
         font-size: 0.8rem;
         letter-spacing: 0.7px;
     }
+
+    @include mobile {
+        gap: 0.3rem;
+        padding: 4px 0.8rem;
+    }
 }

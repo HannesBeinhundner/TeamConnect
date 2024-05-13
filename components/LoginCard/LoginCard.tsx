@@ -8,11 +8,17 @@ export default function LoginCard({ eventData }: { eventData: any }) {
     return (
         <div className={styles.container}>
             <Login eventData={eventData} />
-            <Image
-                src={LoginImg}
-                alt="Illustration of a team working together"
-                width={600}
-            />
+            <div className={styles.imageContainer}>
+                <Image
+                    src={LoginImg}
+                    alt="Illustration of a team working together"
+                    layout="responsive"
+                    className={styles.image}
+                    style={{
+                        objectFit: 'cover',
+                    }}
+                />
+            </div>
         </div>
     )
 }

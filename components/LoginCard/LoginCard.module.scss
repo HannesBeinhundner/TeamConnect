@@ -12,4 +12,17 @@
     background-attachment: fixed;
     background-image: url("../../images/landingpageBackground.svg");
     background-size: cover;
+
+    @include mobile {
+        flex-direction: column;
+        gap: 2rem;
+    }
+}
+
+.imageContainer {
+    width: 45%;
+
+    @include mobile {
+        width: 100%;
+    }
 }

@@ -9,6 +9,10 @@
     width: 47%;
     gap: 1.25rem;
 
+    @include tablet {
+        width: 100%;
+    }
+
     .titleArea {
         display: flex;
         flex-direction: row;
@@ -37,13 +41,6 @@
         .chipColor {
             background-color: $grey-light;
         }
-    }
-
-    .teamArea {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        gap: 0.75rem;
     }
 
     .descriptionArea {

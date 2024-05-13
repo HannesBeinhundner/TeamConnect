@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import styles from "./OptionsArea.module.scss"
 import NotificationsIcon from '@mui/icons-material/Notifications';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import IconButton from '@mui/material/IconButton';
 import SettingsIcon from '@mui/icons-material/Settings';
 import LogoutIcon from '@mui/icons-material/Logout';
@@ -53,15 +53,15 @@ export default function OptionsArea({ session, eventData }: Props) {
         <div className={styles.container}>
             {
                 //Check if current user is admin of event, if so show Link to config page
-                session.user.email === eventData?.adminEmail ? (
-                    <Link href={`/config`}>
-                        <IconButton aria-label="config" sx={{ color: '#1C1C1C' }}>
+                session.user.email === eventData?.adminEmail && (
+                    <Link href={`/config`} className={styles.config}>
+                        <IconButton aria-label="config" sx={{ color: '#1C1C1C' }} >
                             <SettingsIcon />
                         </IconButton>
                     </Link>
-                ) : null
+                )
             }
-            <NotificationsIcon />
+            {/* <NotificationsIcon /> */}
             <div className={styles.profile}>
                 {session.user.image !== null ? (
                     // If user has not set expertise or description, set a badge on the profile picture
@@ -95,7 +95,7 @@ export default function OptionsArea({ session, eventData }: Props) {
                         />
                     )
                 ) : (
-                    <AccountCircleIcon
+                    <ManageAccountsIcon
                         aria-label="expand"
                         onClick={handleUpdateDialogOpen}
                         className={styles.profile}
@@ -114,7 +114,7 @@ export default function OptionsArea({ session, eventData }: Props) {
                     />
                 </FormGroup>
             </FormControl> */}
-            <IconButton aria-label="logout" onClick={() => signOut()} sx={{ color: '#1C1C1C' }}>
+            <IconButton aria-label="logout" onClick={() => signOut()} sx={{ color: '#1C1C1C' }} className={styles.signOut}>
                 <LogoutIcon />
             </IconButton>
             <ProfileEditDialog

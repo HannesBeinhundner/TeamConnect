@@ -17,6 +17,10 @@ body {
   color: $white;
   margin: 0;
   padding: 0;
+
+  @include tablet {
+    height: 100%;
+  }
 }
 
 h1,
@@ -34,6 +38,10 @@ h1 {
 
 h2 {
   font-weight: 400;
+
+  @include mobile {
+    font-size: 1.3rem;
+  }
 }
 
 h3 {
@@ -55,4 +63,12 @@ h5 {
 p {
   font-weight: 300;
   color: $black-light;
+}
+
+.MuiPaper-root {
+  padding: 1rem;
+
+  @include mobile {
+    padding: 0.5rem;
+  }
 }

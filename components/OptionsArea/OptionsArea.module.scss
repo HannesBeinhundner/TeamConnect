@@ -7,6 +7,13 @@
     align-items: center;
     gap: 1rem;
     //background-color: pink;
+
+    @include mobile {
+        flex-direction: row;
+        width: 100%;
+        justify-content: space-around;
+        padding: 1rem 0rem;
+    }
 }
 
 .profile {
@@ -18,4 +25,20 @@
     justify-content: center;
     align-items: center;
     cursor: pointer;
+
+    @include mobile {
+        order: 3;
+    }
+}
+
+.config {
+    @include mobile {
+        order: 2;
+    }
+}
+
+.signOut {
+    @include mobile {
+        order: 1;
+    }
 }

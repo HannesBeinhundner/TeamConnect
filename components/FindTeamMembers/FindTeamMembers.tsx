@@ -112,7 +112,7 @@ export default function FindTeamMembers({ session, eventData }: Props) {
             </div>
             <div className={styles.contentArea}>
                 <form onSubmit={handleSubmit(processForm)} className={styles.filterArea}>
-                    <Box sx={{ display: 'flex', alignItems: 'flex-end', minWidth: "30%" }}>
+                    <Box sx={{ display: 'flex', alignItems: 'flex-end' }} className={styles.nameInput}>
                         <SearchIcon
                             sx={{ color: 'action.active', mr: 1, my: 0.5 }}
                         />
@@ -124,7 +124,7 @@ export default function FindTeamMembers({ session, eventData }: Props) {
                             {...register('memberSearch')}
                         />
                     </Box>
-                    <FormControl variant="standard" sx={{ width: "25%" }}>
+                    <FormControl variant="standard" className={styles.expertiseInput}>
                         <InputLabel id="expertise">Expertise</InputLabel>
                         <Select
                             labelId="expertise"

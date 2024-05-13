@@ -6,7 +6,7 @@ import CategoryIcon from '@mui/icons-material/Category';
 import LinkIcon from '@mui/icons-material/Link';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import UserIconText from '../UserIconText/UserIconText';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import PersonIcon from '@mui/icons-material/Person';
 import styles from "./YourProjectInformationArea.module.scss";
 import Link from "next/link";
@@ -85,7 +85,7 @@ export default function YourProjectInformationArea({ projectResult, reloadCompon
                             {
                                 user.projectAdmin ? (
                                     <UserChip userIconText={
-                                        <UserIconText text={user.name} smallText={user.expertise} icon={<AccountCircleIcon sx={{ fontSize: 30 }} />} />
+                                        <UserIconText text={user.name} smallText={user.expertise} icon={<ManageAccountsIcon sx={{ fontSize: 30 }} />} />
                                     }
                                     />
                                 ) : (

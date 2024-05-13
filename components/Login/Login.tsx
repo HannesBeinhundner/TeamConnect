@@ -44,7 +44,11 @@ export default function Login({ eventData }: { eventData: any }) {
                 <Image
                     src={LogoDarkImg}
                     alt="TeamConnect Logo"
-                    width={340}
+                    layout="responsive"
+                    className={styles.image}
+                    style={{
+                        objectFit: 'cover',
+                    }}
                 />
                 <p>simplify the interdisciplinary team and project finding phase</p>
             </Link>

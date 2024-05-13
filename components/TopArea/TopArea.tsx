@@ -30,7 +30,6 @@ export default function TopArea({ session, eventData }: { session: any, eventDat
         await leaveEvent(session.user.email, eventData.id);
         // end the session
         signOut();
-
     }
 
     return (
@@ -46,8 +45,8 @@ export default function TopArea({ session, eventData }: { session: any, eventDat
                 // Don't show the event info in the config page
                 session && eventData && (
                     <div className={styles.eventInfoWrapper}>
-                        <p>{eventData?.adminEmail === session.user.email && `Current Event: `}</p>
-                        <h2>{eventData?.name && `${eventData?.name}`}</h2>
+                        {/* <p>{eventData?.adminEmail === session.user.email && `Current Event: `}</p> */}
+                        <h2 className={styles.eventName}>{eventData?.name && `${eventData?.name}`}</h2>
 
                         {
                             // Show the leave button only if the user is not the event admin
