@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Image from "next/image";
 import Chip from '@/components/Chip/Chip';
-import SchoolIcon from '@mui/icons-material/School';
+import BadgeIcon from '@mui/icons-material/Badge';
 import EmailIcon from '@mui/icons-material/Email';
 import OpenInFullIcon from '@mui/icons-material/OpenInFull';
 import styles from "./FindTeamMembersCard.module.scss";
@@ -123,7 +123,7 @@ export default function FindTeamMembersCard({ userResult, session, eventData, re
                     </IconButton>
                 </div>
                 <div className={styles.propertyArea}>
-                    <Chip className={styles.chipColor} text={userResult?.expertise} icon={<SchoolIcon fontSize='small' />} />
+                    <Chip className={styles.chipColor} text={userResult?.expertise} icon={<BadgeIcon fontSize='small' />} />
                     <Link href={`mailto:${userResult?.email}`} className={styles.chipLink} target="_blank">
                         <Chip className={styles.chipColor} text={userResult?.email} icon={<EmailIcon fontSize='small' sx={{ color: '#000000DE' }} />} />
                     </Link>
@@ -139,25 +139,25 @@ export default function FindTeamMembersCard({ userResult, session, eventData, re
                             </Button>
                         )
                     }
-                    
+
                     <div>
-                    <div>
-                        {currentUserData?.projectAdmin && !userResult?.projectId && !invitationData && (
-                            <Button variant="contained" onClick={handleInviteButtonClick}>
-                            Invite to Join
-                            </Button>
-                        )}
-                        {currentUserData?.projectAdmin && !userResult?.projectId && invitationData && (
-                            <Button variant="contained" onClick={handleInviteButtonClick} disabled>
-                            Invitation pending
-                            </Button>
-                        )}
-                        {currentUserData?.projectAdmin && userResult?.projectId && (
-                            <Button variant="contained" onClick={handleInviteButtonClick} disabled>
-                            Already in project
-                            </Button>
-                        )}
-                    </div>
+                        <div>
+                            {currentUserData?.projectAdmin && !userResult?.projectId && !invitationData && (
+                                <Button variant="contained" onClick={handleInviteButtonClick}>
+                                    Invite to Join
+                                </Button>
+                            )}
+                            {currentUserData?.projectAdmin && !userResult?.projectId && invitationData && (
+                                <Button variant="contained" onClick={handleInviteButtonClick} disabled>
+                                    Invitation pending
+                                </Button>
+                            )}
+                            {currentUserData?.projectAdmin && userResult?.projectId && (
+                                <Button variant="contained" onClick={handleInviteButtonClick} disabled>
+                                    Already in project
+                                </Button>
+                            )}
+                        </div>
                     </div>
                     <Dialog
                         open={confirmationDialogOpen}

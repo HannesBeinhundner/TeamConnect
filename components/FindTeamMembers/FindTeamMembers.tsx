@@ -22,6 +22,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 
+
 interface Props {
     session: any;
     eventData: any;
