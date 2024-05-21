@@ -21,3 +21,15 @@
     display: flex;
     justify-content: center;
 }
+
+// .Toastify__toast-container {
+//     width: 1640px;
+// }
+
+.Toastify__toast-container {
+    width: 100px !important;
+}
+
+.Toastify__toast-container--top-center {
+    width: 100px !important;
+}

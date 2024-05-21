@@ -141,8 +141,8 @@ export default function ViewAllProjectsCard({ session, eventData, reloadComponen
                         <div className={styles.titleArea}>
                             <div className={styles.iconName}>
                                 <Image className={styles.projectLogo} src={projectResult?.image !== 'undefined' ? projectResult?.image : CustomProjectLogo} alt="Custom Logo" layout='responsive' style={{
-                                    objectFit: 'contain',
-                                }} />
+                                    objectFit: 'contain'
+                                }} width={53} height={53} />
                                 <h2>{projectResult?.name}</h2>
                             </div>
                             <IconButton aria-label="expand" sx={{ color: '#1C1C1C' }} onClick={handleUpdateDialogOpen}>

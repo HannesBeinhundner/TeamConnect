@@ -18,7 +18,7 @@ function AuthButtons({ eventData }: { eventData: any }) {
             {eventData ? (
                 // Login via invite Link
                 <>
-                    <h2>You have been invited to MMP3!</h2>
+                    <h2>You have been invited to {eventData.name}!</h2>
                     <Button variant="contained" color="primary" onClick={() => signIn("google", { callbackUrl: `${window.location.origin}/${eventData.id}` })} startIcon={<GoogleIcon />} >Sign in with Google</Button>
                     <Button variant="contained" color="primary" onClick={() => signIn("github", { callbackUrl: `${window.location.origin}/${eventData.id}` })} startIcon={<GitHubIcon />} >Sign in with Github</Button>
                     <Button variant="contained" color="primary" onClick={() => signIn("twitter", { callbackUrl: `${window.location.origin}/${eventData.id}` })} startIcon={<XIcon />} >Sign in with X</Button>
