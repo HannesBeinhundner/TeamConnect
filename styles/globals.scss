@@ -80,3 +80,11 @@ p {
     max-width: 100%;
   }
 }
+
+.Toastify__toast-container {
+  width: 520px !important;
+
+  @include mobile {
+    width: 100% !important;
+  }
+}

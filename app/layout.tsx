@@ -6,6 +6,7 @@ import SessionProvider from "@/components/SessionProvider";
 import { options } from "@/app/api/auth/[...nextauth]/options"
 import ThemeRegistry from "@/app/lib/ThemeRegistry";
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
+import ProgressProvider from '@/components/ProgressBarProvider/ProgressBarProvider';
 
 
 const defaultUrl = process.env.PRODUCTION
@@ -41,7 +42,7 @@ export default async function RootLayout({
             <AppRouterCacheProvider options={{ enableCssLayer: true }}>
               <ThemeRegistry>
                 <SkeletonTheme baseColor="#e8e8e8" highlightColor="#d9d9d9">
-                  {children}
+                  <ProgressProvider>{children}</ProgressProvider>
                 </SkeletonTheme>
               </ThemeRegistry>
             </AppRouterCacheProvider>

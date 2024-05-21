@@ -100,7 +100,7 @@ const ProjectViewDialog: React.FC<ProjectUpdateDialogProps> = ({ open, onClose, 
                 <div className={styles.titleArea}>
                     <Image className={styles.projectLogo} src={projectResult?.image !== 'undefined' ? projectResult?.image : CustomProjectLogo} alt="Custom Logo" layout='responsive' style={{
                         objectFit: 'contain',
-                    }} />
+                    }} width={60} height={60} />
                     <h1 className={styles.projectName}>{projectResult?.name}</h1>
                 </div>
                 <div className={styles.propertyArea}>
