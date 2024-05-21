@@ -17,6 +17,8 @@ import Link from "next/link";
 import 'react-toastify/dist/ReactToastify.css';
 
 interface ProjectUpdateDialogProps {
+    invite: any;
+    invitationData: any;
     open: boolean;
     onClose: () => void;
     session: any;
@@ -24,9 +26,10 @@ interface ProjectUpdateDialogProps {
     userResult: any;
     reloadComponent: any;
     handleDeleteButtonClick: any;
+    currentUser: any;
 }
 
-const FindTeamMembersViewDialog: React.FC<ProjectUpdateDialogProps> = ({ open, onClose, userResult, session, eventData, reloadComponent, handleDeleteButtonClick }) => {
+const FindTeamMembersViewDialog: React.FC<ProjectUpdateDialogProps> = ({ invite, invitationData, open, onClose, userResult, session, eventData, reloadComponent, handleDeleteButtonClick, currentUser }) => {
 
     return (
         <Dialog open={open} onClose={onClose} fullWidth maxWidth="md">
@@ -76,9 +79,13 @@ const FindTeamMembersViewDialog: React.FC<ProjectUpdateDialogProps> = ({ open, o
                         </Button>
                     )
                 }
-                <Button variant="contained" type="submit">
-                    Invite to Join
-                </Button>
+                <div>
+                    {currentUser?.projectAdmin && !userResult?.projectId && !invitationData && (
+                        <Button variant="contained" onClick={invite}>
+                            Invite to Join
+                        </Button>
+                    )}
+                    </div>
             </DialogActions>
         </Dialog>
     );
