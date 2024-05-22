@@ -24,7 +24,7 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 //@ts-ignore
-export default function YourProjectInformationArea({ projectResult, reloadComponent }) {
+export default function YourProjectInformationArea({ projectResult, reloadComponent, reloadParentComponent }) {
     const [selectedUserId, setSelectedUserId] = useState(null);
     const [confirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
 
@@ -52,6 +52,7 @@ export default function YourProjectInformationArea({ projectResult, reloadCompon
         toast.success('User was successfully removed!');
         setConfirmationDialogOpen(false);
         reloadComponent()
+        reloadParentComponent()
     }
 
     return (

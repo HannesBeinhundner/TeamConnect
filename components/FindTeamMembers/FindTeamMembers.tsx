@@ -9,7 +9,7 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import FormHelperText from '@mui/material/FormHelperText';
 import styles from "./FindTeamMembers.module.scss"
-import { useForm, SubmitHandler } from "react-hook-form"
+import { useForm, SubmitHandler, Controller } from "react-hook-form"
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FindTeamMemberInputs, FindTeamMemberSchema } from '@/app/lib/types'
 import { Box } from '@mui/material';
@@ -32,8 +32,14 @@ export default function FindTeamMembers({ session, eventData }: Props) {
     const [isLoading, setIsLoading] = useState(true);
     const [userResult, setUserResult] = useState<any>({});
     const [expertises, setExpertises] = useState([]);
+    const [reloadKey, setReloadKey] = useState(0);
+
+    const reloadComponent = () => {
+        setReloadKey(prevReloadKey => prevReloadKey + 1); // Update key to force remount
+    };
 
     const fetchUsers = async () => {
+        reset();
         try {
             const data = {
                 memberSearch: "",
@@ -52,6 +58,19 @@ export default function FindTeamMembers({ session, eventData }: Props) {
         }
     };
 
+    const {
+        register,
+        handleSubmit,
+        setError,
+        reset,
+        resetField,
+        control,
+        watch,
+        formState: { errors },
+    } = useForm<FindTeamMemberInputs>({
+        resolver: zodResolver(FindTeamMemberSchema)
+    })
+
     useEffect(() => {
         const fetchExpertises = async () => {
             const expertises: any = await getExpertises(eventData.id);
@@ -60,31 +79,6 @@ export default function FindTeamMembers({ session, eventData }: Props) {
         fetchUsers();
         fetchExpertises();
     }, []);
-
-    const {
-        register,
-        handleSubmit,
-        setError,
-        reset,
-        watch,
-        formState: { errors },
-    } = useForm<FindTeamMemberInputs>({
-        resolver: zodResolver(FindTeamMemberSchema)
-    })
-
-    function LoadingBox({ children }: any) {
-        return (
-            <div
-                style={{
-                    display: 'block',
-                    lineHeight: 0,
-                }}
-                className={styles.skeletonContainer}
-            >
-                {children}
-            </div>
-        );
-    }
 
     const processForm: SubmitHandler<FindTeamMemberInputs> = async data => {
         try {
@@ -105,6 +99,19 @@ export default function FindTeamMembers({ session, eventData }: Props) {
         }
     };
 
+    function LoadingBox({ children }: any) {
+        return (
+            <div
+                style={{
+                    display: 'block',
+                    lineHeight: 0,
+                }}
+                className={styles.skeletonContainer}
+            >
+                {children}
+            </div>
+        );
+    }
     return (
         <div className={styles.container}>
             <div className={styles.headerArea}>
@@ -126,22 +133,29 @@ export default function FindTeamMembers({ session, eventData }: Props) {
                     </Box>
                     <FormControl variant="standard" className={styles.expertiseInput}>
                         <InputLabel id="expertise">Expertise</InputLabel>
-                        <Select
-                            labelId="expertise"
-                            id="expertise"
-                            label="expertise"
-                            fullWidth
-                            {...register('expertise')}
-                        >
-                            <MenuItem value="">
-                                <em>None</em>
-                            </MenuItem>
-                            {
-                                expertises.map((expertise: any) => (
-                                    <MenuItem key={expertise.id} value={expertise.name}>{expertise.name}</MenuItem>
-                                ))
-                            }
-                        </Select>
+                        <Controller
+                            name="expertise"
+                            control={control}
+                            defaultValue=""
+                            render={({ field }) => (
+                                <Select
+                                    labelId="expertise"
+                                    id="expertise"
+                                    label="Expertise"
+                                    fullWidth
+                                    {...field}
+                                >
+                                    <MenuItem value="">
+                                        <em>None</em>
+                                    </MenuItem>
+                                    {
+                                        expertises.map((expertise: any) => (
+                                            <MenuItem key={expertise.id} value={expertise.name}>{expertise.name}</MenuItem>
+                                        ))
+                                    }
+                                </Select>
+                            )}
+                        />
                         <FormHelperText sx={{ color: (theme) => theme.palette.error.main }}></FormHelperText>
                     </FormControl>
                     <Button
@@ -156,7 +170,7 @@ export default function FindTeamMembers({ session, eventData }: Props) {
                             Array.isArray(userResult) && userResult.map((user: any) => (
                                 //Filter own user from the list
                                 session?.user?.email !== user.email &&
-                                <FindTeamMembersCard session={session} eventData={eventData} key={user.id} userResult={user} reloadComponent={fetchUsers} />
+                                <FindTeamMembersCard session={session} eventData={eventData} key={`${user.id}-${reloadKey}`} userResult={user} reloadComponent={fetchUsers} reloadParentComponent={reloadComponent} />
                             ))
                         )
                     }

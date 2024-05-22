@@ -1,5 +1,5 @@
 "use client"
-import React from 'react';
+import React, { useState } from 'react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
@@ -17,7 +17,7 @@ import Link from "next/link";
 import 'react-toastify/dist/ReactToastify.css';
 
 interface ProjectUpdateDialogProps {
-    invite: any;
+    handleInviteUser: any;
     invitationData: any;
     open: boolean;
     onClose: () => void;
@@ -29,7 +29,16 @@ interface ProjectUpdateDialogProps {
     currentUser: any;
 }
 
-const FindTeamMembersViewDialog: React.FC<ProjectUpdateDialogProps> = ({ invite, invitationData, open, onClose, userResult, session, eventData, reloadComponent, handleDeleteButtonClick, currentUser }) => {
+const FindTeamMembersViewDialog: React.FC<ProjectUpdateDialogProps> = ({ handleInviteUser, invitationData, open, onClose, userResult, session, eventData, reloadComponent, handleDeleteButtonClick, currentUser }) => {
+    const [inviteDialogOpen, setInviteDialogOpen] = useState(false);
+
+    const handleInviteButtonClick = () => {
+        setInviteDialogOpen(true);
+    };
+
+    const handleInviteDialogClose = () => {
+        setInviteDialogOpen(false);
+    };
 
     return (
         <Dialog open={open} onClose={onClose} fullWidth maxWidth="md">
@@ -81,11 +90,44 @@ const FindTeamMembersViewDialog: React.FC<ProjectUpdateDialogProps> = ({ invite,
                 }
                 <div>
                     {currentUser?.projectAdmin && !userResult?.projectId && !invitationData && (
-                        <Button variant="contained" onClick={invite}>
+                        <Button variant="contained" onClick={handleInviteButtonClick}>
                             Invite to Join
                         </Button>
                     )}
-                    </div>
+                    {currentUser?.projectAdmin && !userResult?.projectId && invitationData && (
+                        <Button variant="contained" disabled>
+                            Invitation pending
+                        </Button>
+                    )}
+                    {currentUser?.projectAdmin && (userResult?.projectId === currentUser?.projectId) && (
+                        <Button variant="contained" disabled>
+                            Already in your project
+                        </Button>
+                    )}
+                    {currentUser?.projectAdmin && userResult?.projectId !== null && (userResult?.projectId !== currentUser?.projectId) && (
+                        <Button variant="contained" disabled>
+                            Already in other project
+                        </Button>
+                    )}
+                    <Dialog
+                        open={inviteDialogOpen}
+                        onClose={handleInviteDialogClose}
+                    >
+                        <DialogTitle>Confirm Invitation</DialogTitle>
+                        <DialogContent>
+                            <DialogContentText>
+                                Are you sure you want to invite {userResult?.name} to join your project?
+                            </DialogContentText>
+                            <DialogContentText>
+                                An invitation email will be sent to {userResult?.email}.
+                            </DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={handleInviteDialogClose}>Cancel</Button>
+                            <Button onClick={handleInviteUser} color="success">Invite</Button>
+                        </DialogActions>
+                    </Dialog>
+                </div>
             </DialogActions>
         </Dialog>
     );

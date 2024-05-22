@@ -1,7 +1,8 @@
 'use server'
- 
+
 import { prisma } from "@/prisma";
- 
+import { redirect } from "next/navigation";
+
 export async function joinProject(session: any, projectId: number) {
     try {
         const user = await prisma.user.findUnique({

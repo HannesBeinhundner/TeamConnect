@@ -1,7 +1,6 @@
 'use server'
 
 import { prisma } from "@/prisma";
-import { redirect } from "next/navigation";
 
 export async function leaveEvent(userEmail: string, eventId: string) {
     try {

@@ -26,6 +26,8 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
+// import { redirect } from "next/navigation";
+import { useRouter } from 'next/navigation'
 
 interface Props {
     session: any;
@@ -42,6 +44,7 @@ export default function ViewAllProjectsCard({ session, eventData, reloadComponen
     const [confirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
     const [joinDialogOpen, setJoinDialogOpen] = useState(false);
     const [otherProjectJoinDialogOpen, setOtherProjectJoinDialogOpen] = useState(false);
+    const router = useRouter()
 
     const handleDeleteProject = async () => {
         const result = await deleteProject(projectResult?.id);
@@ -68,21 +71,22 @@ export default function ViewAllProjectsCard({ session, eventData, reloadComponen
             return;
         }
 
-        toast.success('You joined the project successfully!');
-        reloadComponent();
+        //redirect to dashboard with flag joined=true
+        router.push(`/${eventData.id}?joined=true`);
+    };
+
+    const fetchProjectUsers = async () => {
+        const users: any = await getProjectUsers(projectResult.id);
+        setProjectUsers(users);
+    };
+
+    const fetchUserData = async () => {
+        const userData: any = await getUserData(session.user.email);
+        setUserData(userData);
+        setIsLoading(false)
     };
 
     useEffect(() => {
-        const fetchProjectUsers = async () => {
-            const users: any = await getProjectUsers(projectResult.id);
-            setProjectUsers(users);
-        };
-
-        const fetchUserData = async () => {
-            const userData: any = await getUserData(session.user.email);
-            setUserData(userData);
-            setIsLoading(false)
-        };
         fetchProjectUsers();
         fetchUserData();
     }, []);
@@ -195,7 +199,7 @@ export default function ViewAllProjectsCard({ session, eventData, reloadComponen
                                         <Button variant="contained" onClick={handleJoinButtonClick}>
                                             Join
                                         </Button>
-                                    ) : userData.projectId !== projectResult?.id ? (
+                                    ) : (userData.projectId !== projectResult?.id && userData.projectAdmin === false) ? (
                                         <Button variant="contained" onClick={handleOtherProjectJoinButtonClick}>
                                             Join other Project
                                         </Button>

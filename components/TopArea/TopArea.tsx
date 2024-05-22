@@ -4,7 +4,6 @@ import { useState } from "react";
 import Image from "next/image";
 import LogoDarkImg from '@/images/logo_dark.svg';
 import styles from "./TopArea.module.scss";
-import LogoutIcon from '@mui/icons-material/Logout';
 import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
 import IconButton from '@mui/material/IconButton';
 import { leaveEvent } from "./LeaveEventAction";

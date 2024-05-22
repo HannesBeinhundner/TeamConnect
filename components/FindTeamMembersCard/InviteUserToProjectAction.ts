@@ -1,12 +1,15 @@
- 'use server'
+'use server'
 
 import { prisma } from '@/prisma';
 import { Resend } from 'resend';
 import crypto from 'crypto';
+import Image from "next/image";
+import LogoDarkImg from '@/images/logo_dark.svg';
+
 
 const resend = new Resend(process.env.RESEND_KEY);
 
-export async function inviteUserToProject(eventId: any, sessionEmail: any, userEmail: string, projectId: number) {
+export async function inviteUserToProject(eventData: any, sessionEmail: any, userEmail: string) {
     try {
         const user = await prisma.user.findUnique({
             where: {
@@ -17,6 +20,14 @@ export async function inviteUserToProject(eventId: any, sessionEmail: any, userE
         if (!user || user.projectId === null) {
             return { success: false, error: 'User not found or does not have a project ID.' };
         }
+
+        console.log(user.projectId)
+        //Get Project from the admin
+        const project = await prisma.project.findUnique({
+            where: {
+                id: user.projectId
+            }
+        });
 
         // Generate a unique token for the invitation
         const token = crypto.randomBytes(32).toString('hex');
@@ -33,15 +44,29 @@ export async function inviteUserToProject(eventId: any, sessionEmail: any, userE
         });
 
         // Generate the confirmation link
-        console.log(eventId)
-        const confirmationLink = `https://team-connect.app/${eventId}/confirm-invitation?token=${token}`;
+        console.log(eventData)
+        const confirmationLink = `https://team-connect.app/${eventData.id}/confirm-invitation?token=${token}`;
 
         // Send the invitation email using resend
         await resend.emails.send({
             from: 'no-reply@team-connect.app',
             to: userEmail,
             subject: 'Invitation to Join Project',
-            html: `<p>You have been invited to join a project. Click <a href="${confirmationLink}">here</a> to confirm.</p>`
+            html: `
+            <div style="font-family: Arial, sans-serif; padding: 20px;">
+            <a href="https://team-connect.app/">
+                    <img
+                        src="https://utfs.io/f/1c62eed8-a76b-467c-8332-083579ed3573-x6zvat.png"
+                        alt="TeamConnect Logo"
+                        style="width: 300px;"
+                    />
+                </a>
+                <h2 style="color: #333;">Invitation to Join Project</h2>
+                <p style="color: #333; font-size: 16px;">You have been invited by ${user.name} to join the Project "${project?.name}" of ${eventData.name}.</p>
+                <p style="color: #333; font-size: 16px;">Click <a href="${confirmationLink}" style="color: #1a0dab;">here</a> to confirm.</p>
+                <p style="color: #333; font-size: 16px;"><strong>Project Description:</strong> ${project?.description}<p/>
+            </div>
+            `
         });
 
         return { success: true };

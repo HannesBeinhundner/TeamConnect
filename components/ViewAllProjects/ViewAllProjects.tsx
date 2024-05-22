@@ -9,7 +9,7 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import FormHelperText from '@mui/material/FormHelperText';
 import styles from "./ViewAllProjects.module.scss"
-import { useForm, SubmitHandler } from "react-hook-form"
+import { useForm, SubmitHandler, Controller } from "react-hook-form"
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ApplyFilterInputs, ApplyFilterSchema } from '@/app/lib/types'
 import { Box } from '@mui/material';
@@ -23,11 +23,27 @@ import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 
 export default function ViewAllProjects({ eventData, session }: { eventData: any, session: any }) {
+
     const [isLoading, setIsLoading] = useState(true);
     const [projectsResult, setProjectsResult] = useState<any>({});
     const [projectTypes, setProjectTypes] = useState<any>([]);
 
+    const {
+        register,
+        handleSubmit,
+        setError,
+        reset,
+        setValue,
+        control,
+        watch,
+        formState: { errors },
+    } = useForm<ApplyFilterInputs>({
+        resolver: zodResolver(ApplyFilterSchema)
+    })
+
     const fetchProjects = async () => {
+        reset();
+
         try {
             const data = {
                 projectSearch: "",
@@ -56,16 +72,6 @@ export default function ViewAllProjects({ eventData, session }: { eventData: any
         fetchProjectTypes();
     }, []);
 
-    const {
-        register,
-        handleSubmit,
-        setError,
-        reset,
-        watch,
-        formState: { errors },
-    } = useForm<ApplyFilterInputs>({
-        resolver: zodResolver(ApplyFilterSchema)
-    })
 
     const processForm: SubmitHandler<ApplyFilterInputs> = async data => {
         try {
@@ -121,23 +127,29 @@ export default function ViewAllProjects({ eventData, session }: { eventData: any
                     </Box>
                     <FormControl variant="standard" className={styles.projectTypeInput}>
                         <InputLabel id="projectType">Project Type</InputLabel>
-                        <Select
-                            labelId="projectType"
-                            id="projectType"
-                            label="Project Type"
-                            fullWidth
-                            {...register('projectType')}
-                        // error={!!errors.projectType}
-                        >
-                            <MenuItem value="">
-                                <em>None</em>
-                            </MenuItem>
-                            {
-                                projectTypes.map((projectType: any) => (
-                                    <MenuItem key={projectType.id} value={projectType.name}>{projectType.name}</MenuItem>
-                                ))
-                            }
-                        </Select>
+                        <Controller
+                            name="projectType"
+                            control={control}
+                            defaultValue=""
+                            render={({ field }) => (
+                                <Select
+                                    labelId="projectType"
+                                    id="projectType"
+                                    label="Project Type"
+                                    fullWidth
+                                    {...field}
+                                >
+                                    <MenuItem value="">
+                                        <em>None</em>
+                                    </MenuItem>
+                                    {
+                                        projectTypes.map((projectType: any) => (
+                                            <MenuItem key={projectType.id} value={projectType.name}>{projectType.name}</MenuItem>
+                                        ))
+                                    }
+                                </Select>
+                            )}
+                        />
                         <FormHelperText sx={{ color: (theme) => theme.palette.error.main }}></FormHelperText>
                     </FormControl>
                     <Button

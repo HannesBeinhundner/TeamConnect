@@ -88,3 +88,41 @@ p {
     width: 100% !important;
   }
 }
+
+/* Define the scrollbar style */
+::-webkit-scrollbar {
+  width: 12px;
+  /* Width of the scrollbar */
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background-color: $blue;
+  /* Blue color */
+  border-radius: 6px;
+  /* Rounded corners */
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background-color: #2675ca;
+  /* Darker shade of blue on hover */
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  /* Light grey color for the track */
+}
+
+/* Track on hover */
+::-webkit-scrollbar-track:hover {
+  background: #e0e0e0;
+  /* Slightly darker shade of grey on hover */
+}
+
+/* Corner */
+::-webkit-scrollbar-corner {
+  background: transparent;
+  /* Transparent background for the scrollbar corner */
+}

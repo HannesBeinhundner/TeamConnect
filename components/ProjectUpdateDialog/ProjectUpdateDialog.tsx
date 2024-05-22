@@ -33,11 +33,12 @@ interface ProjectUpdateDialogProps {
     onClose: () => void;
     projectResult: any;
     reloadComponent: () => void;
+    reloadParentComponent: () => void;
     projectTypes: any;
     sessionEmail: any;
 }
 
-const ProjectUpdateDialog: React.FC<ProjectUpdateDialogProps> = ({ open, onClose, projectResult, reloadComponent, projectTypes, sessionEmail }) => {
+const ProjectUpdateDialog: React.FC<ProjectUpdateDialogProps> = ({ open, onClose, projectResult, reloadComponent, reloadParentComponent, projectTypes, sessionEmail }) => {
     const [user, setUser] = useState<any>(null);
     const [serverErrorMessage, setServerErrorMessage] = useState('');
     const [confirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
@@ -94,6 +95,7 @@ const ProjectUpdateDialog: React.FC<ProjectUpdateDialogProps> = ({ open, onClose
         toast.success('Your Project was successfully updated!');
         onClose();
         reloadComponent();
+        reloadParentComponent();
     };
 
     const handleDeleteProject = async () => {
@@ -113,6 +115,7 @@ const ProjectUpdateDialog: React.FC<ProjectUpdateDialogProps> = ({ open, onClose
         toast.success('Your Project was successfully deleted!');
         onClose();
         reloadComponent();
+        reloadParentComponent();
     };
 
     const handleLeaveProject = async () => {
@@ -132,6 +135,7 @@ const ProjectUpdateDialog: React.FC<ProjectUpdateDialogProps> = ({ open, onClose
         toast.success('You successfully left the Project!');
         onClose();
         reloadComponent();
+        reloadParentComponent();
     };
 
     const handleActionButtonClick = () => {
