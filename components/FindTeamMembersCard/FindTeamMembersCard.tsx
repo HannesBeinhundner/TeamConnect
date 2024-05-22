@@ -177,7 +177,7 @@ export default function FindTeamMembersCard({ userResult, session, eventData, re
                                 )}
                                 {currentUserData?.projectAdmin && userResult?.projectId !== null && (userResult?.projectId !== currentUserData?.projectId) && (
                                     <Button variant="contained" disabled>
-                                        Already in a Project
+                                        Already in a project
                                     </Button>
                                 )}
                             </>
