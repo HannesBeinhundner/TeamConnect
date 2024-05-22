@@ -215,7 +215,7 @@ const ProjectViewDialog: React.FC<ProjectUpdateDialogProps> = ({ open, onClose, 
                         <Button variant="contained" onClick={handleJoinButtonClick}>
                             Join
                         </Button>
-                    ) : userData.projectId !== projectResult?.id ? (
+                    ) : (userData.projectId !== projectResult?.id && userData.projectAdmin === false) ? (
                         <Button variant="contained" onClick={handleOtherProjectJoinButtonClick}>
                             Join other Project
                         </Button>

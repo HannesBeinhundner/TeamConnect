@@ -10,7 +10,8 @@ import NavigationButton from "@/components/NavigationButton/NavigationButton";
 import styles from "@/styles/dashboard.module.scss"
 import ViewAllProjects from "@/components/ViewAllProjects/ViewAllProjects";
 import { getEvent } from '@/app/lib/GetEventAction';
-import { ToastContainer, toast } from 'react-toastify';
+import { prisma } from "@/prisma";
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 export default async function Projects({ params }: { params: any }) {
@@ -26,6 +27,13 @@ export default async function Projects({ params }: { params: any }) {
     if (!eventData) {
         redirect("/");
     }
+
+    const sessionEmail = session?.user?.email ?? undefined;
+
+    //Get current User iformation
+    const user = await prisma.user.findUnique({
+        where: { email: sessionEmail }
+    });
 
     return (
         <>

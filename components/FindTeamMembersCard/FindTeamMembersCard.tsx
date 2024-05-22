@@ -21,9 +21,12 @@ import { getCurrentUserData } from './getUserAction';
 import { getInviteData } from './getInviteAction';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 
 //@ts-ignore
-export default function FindTeamMembersCard({ userResult, session, eventData, reloadComponent }) {
+export default function FindTeamMembersCard({ userResult, session, eventData, reloadComponent, reloadParentComponent }) {
+    const [isLoading, setIsLoading] = useState(true);
     const [updateDialogOpen, setUpdateDialogOpen] = useState(false);
     const [confirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
     const [inviteDialogOpen, setInviteDialogOpen] = useState(false);
@@ -49,7 +52,7 @@ export default function FindTeamMembersCard({ userResult, session, eventData, re
 
     const handleInviteUser = async () => {
         console.log(userResult?.email);
-        const result = await inviteUserToProject(eventData.id, session.user.email, userResult.email, userResult.projectId);
+        const result = await inviteUserToProject(eventData, session.user.email, userResult.email);
 
         if (result.success) {
             toast.success('Invitation sent successfully!');
@@ -57,7 +60,7 @@ export default function FindTeamMembersCard({ userResult, session, eventData, re
             toast.error('Failed to send invitation: ' + result.error);
         }
         handleInviteDialogClose();
-        reloadComponent();
+        reloadParentComponent();
     };
 
     const handleUpdateDialogOpen = () => {
@@ -87,6 +90,7 @@ export default function FindTeamMembersCard({ userResult, session, eventData, re
     const fetchUserData = async () => {
         const currentUserData: any = await getCurrentUserData(session.user.email);
         setCurrentUserData(currentUserData);
+        setIsLoading(false)
     };
 
     const fetchInvitationData = async () => {
@@ -98,6 +102,20 @@ export default function FindTeamMembersCard({ userResult, session, eventData, re
         fetchUserData();
         fetchInvitationData();
     }, []);
+
+    function LoadingBox({ children }: any) {
+        return (
+            <div
+                style={{
+                    display: 'block',
+                    lineHeight: 0,
+                }}
+                className={styles.skeletonContainer}
+            >
+                {children}
+            </div>
+        );
+    }
 
     return (
         <div className={styles.projectInformationArea}>
@@ -133,32 +151,38 @@ export default function FindTeamMembersCard({ userResult, session, eventData, re
                 <p>{userResult?.description}</p>
                 <div className={styles.buttonWrapper}>
                     {
-                        eventData.adminEmail === session.user.email && (
-                            <Button variant="contained" color="error" onClick={handleDeleteButtonClick}>
-                                Remove User
-                            </Button>
+
+                        isLoading ? <Skeleton wrapper={LoadingBox} height={37} count={1} width={"100%"} /> : (
+                            <>
+                                {eventData.adminEmail === session.user.email && (
+                                    <Button variant="contained" color="error" onClick={handleDeleteButtonClick}>
+                                        Remove User
+                                    </Button>
+                                )}
+                                {currentUserData?.projectAdmin && !userResult?.projectId && !invitationData && (
+                                    <Button variant="contained" onClick={handleInviteButtonClick}>
+                                        Invite to Join
+                                    </Button>
+                                )}
+                                {currentUserData?.projectAdmin && !userResult?.projectId && invitationData && (
+                                    <Button variant="contained" disabled>
+                                        Invitation pending
+                                    </Button>
+                                )}
+                                {currentUserData?.projectAdmin && (userResult?.projectId === currentUserData?.projectId) && (
+                                    <Button variant="contained" disabled>
+                                        Already in your project
+                                    </Button>
+                                )}
+                                {currentUserData?.projectAdmin && userResult?.projectId !== null && (userResult?.projectId !== currentUserData?.projectId) && (
+                                    <Button variant="contained" disabled>
+                                        Already in other project
+                                    </Button>
+                                )}
+                            </>
                         )
                     }
 
-                    <div>
-                        <div>
-                            {currentUserData?.projectAdmin && !userResult?.projectId && !invitationData && (
-                                <Button variant="contained" onClick={handleInviteButtonClick}>
-                                    Invite to Join
-                                </Button>
-                            )}
-                            {currentUserData?.projectAdmin && !userResult?.projectId && invitationData && (
-                                <Button variant="contained" onClick={handleInviteButtonClick} disabled>
-                                    Invitation pending
-                                </Button>
-                            )}
-                            {currentUserData?.projectAdmin && userResult?.projectId && (
-                                <Button variant="contained" onClick={handleInviteButtonClick} disabled>
-                                    Already in project
-                                </Button>
-                            )}
-                        </div>
-                    </div>
                     <Dialog
                         open={confirmationDialogOpen}
                         onClose={handleConfirmationDialogClose}
@@ -191,14 +215,14 @@ export default function FindTeamMembersCard({ userResult, session, eventData, re
                         </DialogContent>
                         <DialogActions>
                             <Button onClick={handleInviteDialogClose}>Cancel</Button>
-                            <Button onClick={handleInviteUser} color="primary">Invite</Button>
+                            <Button onClick={handleInviteUser} color="success">Invite</Button>
                         </DialogActions>
                     </Dialog>
                 </div>
             </div>
 
             <FindTeamMembersViewDialog
-                invite={handleInviteUser}
+                handleInviteUser={handleInviteUser}
                 invitationData={invitationData}
                 open={updateDialogOpen}
                 onClose={handleUpdateDialogClose}

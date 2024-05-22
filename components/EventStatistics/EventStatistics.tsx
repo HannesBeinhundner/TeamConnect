@@ -15,11 +15,10 @@ import { countUserExpertise } from "./GetExpertiseForUsersAction";
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 
-export default function EventStatistics(props: CircularProgressProps & { value: number, session: any, eventId: any }) {
+export default function EventStatistics(props: CircularProgressProps & { session: any, eventId: any, key: any }) {
     const [isLoadingProjects, setIsLoadingProjects] = useState(true);
     const [isLoadingUsers, setIsLoadingUsers] = useState(true);
 
-    const [progress, setProgress] = React.useState(10);
     const [userCountResult, setUserCnt] = React.useState<any>([]);
     const [projectCountResult, setProjectCount] = React.useState<any>([]);
     const [projectUserCountResult, setProjectUserCount] = React.useState<any>([]);

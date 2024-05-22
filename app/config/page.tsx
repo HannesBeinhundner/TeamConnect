@@ -7,6 +7,7 @@ import OptionsArea from "@/components/OptionsArea/OptionsArea";
 import styles from "@/styles/dashboard.module.scss";
 import ConfigCard from "@/components/ConfigCard/ConfigCard";
 import { getEvent } from '@/app/lib/GetEventAction';
+import { prisma } from "@/prisma";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -17,6 +18,13 @@ export default async function Config({ params }: { params: any }) {
     if (!session || !session.user) {
         redirect("/");
     }
+
+    const sessionEmail = session?.user?.email ?? undefined;
+
+    //Get current User iformation
+    const user = await prisma.user.findUnique({
+        where: { email: sessionEmail }
+    });
 
     return (
         <>

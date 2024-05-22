@@ -19,6 +19,8 @@
         margin: 0;
         font-size: 0.8rem;
         letter-spacing: 0.7px;
+        overflow-wrap: break-word;
+        word-break: break-all;
 
         @include mobile {
             letter-spacing: 0.5px;

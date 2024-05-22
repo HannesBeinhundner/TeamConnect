@@ -1,39 +1,38 @@
+"use client"
+import { useEffect, useState } from 'react';
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import { options } from "@/app/api/auth/[...nextauth]/options"
 import TopArea from "@/components/TopArea/TopArea";
 import MainArea from "@/components/MainArea/MainArea";
 import OptionsArea from "@/components/OptionsArea/OptionsArea";
+import YourProjectCard from "@/components/YourProjectCard/YourProjectCard";
+import EventStatistics from "@/components/EventStatistics/EventStatistics";
+import findTeamMembersImg from "@/images/findTeamMembers.svg";
 import viewAllProjectsImg from "@/images/viewAllProjects.svg";
-import backToDashboardImg from "@/images/backToDashboard.svg";
 import NavigationButton from "@/components/NavigationButton/NavigationButton";
-import styles from "@/styles/dashboard.module.scss"
-import FindTeamMembers from "@/components/FindTeamMembers/FindTeamMembers";
+import styles from "@/styles/dashboard.module.scss";
+import React, { Suspense, use } from 'react';
 import { getEvent } from '@/app/lib/GetEventAction';
 import { prisma } from "@/prisma";
-import { ToastContainer } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-export default async function Members({ params }: { params: any }) {
-    const eventId = params.eventId;
+// @ts-ignore
+export default function MainDashboard({ session, eventData, paramEventId, joined }) {
+    const [key, setKey] = useState(0);
 
-    // @ts-ignore
-    const session = await getServerSession(options);
-    if (!session || !session.user) {
-        redirect("/");
-    }
+    useEffect(() => {
+        if (joined) {
+            toast.success('You joined the project successfully!');
+            //remove parameter from url, so that the toast message is not shown again
+            window.history.replaceState({}, document.title, window.location.pathname);
+        }
+    }, [joined]);
 
-    const eventData: any = await getEvent(eventId);
-    if (!eventData) {
-        redirect("/");
-    }
-
-    const sessionEmail = session?.user?.email ?? undefined;
-
-    //Get current User iformation
-    const currentUser = await prisma.user.findUnique({
-        where: { email: sessionEmail }
-    });
+    const reloadComponent = () => {
+        setKey(prevKey => prevKey + 1); // Update key to force remount
+    };
 
     return (
         <>
@@ -59,21 +58,24 @@ export default async function Members({ params }: { params: any }) {
                 <div className={styles.mainArea}>
                     <MainArea
                         topLeftComponent={<NavigationButton
-                            href="../"
-                            imgSrc={backToDashboardImg}
+                            href={`./${paramEventId}/members`}
+                            imgSrc={findTeamMembersImg}
                             altText="Illustration of a team celebrating together"
-                            buttonText="Back to Dashboard"
+                            buttonText="Find Team Members"
                         />}
                         topRightComponent={<NavigationButton
-                            href={`./projects`}
+                            href={`./${paramEventId}/projects`}
                             imgSrc={viewAllProjectsImg}
                             altText="Illustration of a team working together"
                             buttonText="View all projects"
                         />}
-                        bottomLeftComponent={<FindTeamMembers session={session} eventData={eventData} />}
+                        bottomLeftComponent={<YourProjectCard eventId={paramEventId} reloadComponent={reloadComponent} key={key} />}
+                        bottomRightComponent={
+                            <EventStatistics session={session} eventId={paramEventId} key={key} />
+                        }
                     />
                 </div>
             </div>
         </>
-    )
+    );
 }

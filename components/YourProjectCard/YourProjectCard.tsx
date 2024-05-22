@@ -34,7 +34,7 @@ import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
 
 // @ts-ignore
-export default function YourProjectCard({ eventId }) {
+export default function YourProjectCard({ eventId, reloadComponent, key }) {
     const { data: session } = useSession();
     const sessionEmail = session?.user?.email;
     const [isLoading, setIsLoading] = useState(true);
@@ -115,6 +115,7 @@ export default function YourProjectCard({ eventId }) {
         handleModalClose()
         fetchProjectStatus();
         toast.success('Your Project was successfully created!');
+        reloadComponent();
     }
 
     function Box({ children }: any) {
@@ -149,6 +150,7 @@ export default function YourProjectCard({ eventId }) {
                         onClose={handleUpdateDialogClose}
                         projectResult={projectResult}
                         reloadComponent={fetchProjectStatus}
+                        reloadParentComponent={reloadComponent}
                         projectTypes={projectTypes}
                         sessionEmail={sessionEmail}
                     />
@@ -159,7 +161,7 @@ export default function YourProjectCard({ eventId }) {
                 {
                     isLoading ? <Skeleton wrapper={Box} height={45} count={5} width={"100%"} /> : (
                         checkProjectResult ? (
-                            <YourProjectInformationArea projectResult={projectResult} reloadComponent={fetchProjectStatus} />
+                            <YourProjectInformationArea projectResult={projectResult} reloadComponent={fetchProjectStatus} reloadParentComponent={reloadComponent} />
                         ) : (
                             <div className={styles.emptyProjectArea}>
                                 <p>You haven’t yet created a project or joined an existing one</p>
