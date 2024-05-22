@@ -24,7 +24,6 @@ export async function joinProject(session: any, projectId: number) {
 
         return { success: true, data: updatedUser };
     } catch (error) {
-        console.error('Error joining project:', error);
         return { success: false, error: 'An unexpected error occurred.' };
     }
 }

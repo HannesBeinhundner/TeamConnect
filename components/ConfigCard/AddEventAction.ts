@@ -50,7 +50,6 @@ export async function addEvent(inputData: CreateEventInputs, sessionEmail: strin
             return { success: true, data: result.data };
         }
     } catch (error: any) {
-        console.error(error);
         return { success: false, error: 'An unexpected error occurred.' };
     }
 

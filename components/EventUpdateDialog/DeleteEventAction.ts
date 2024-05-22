@@ -25,7 +25,6 @@ export async function deleteEvent(eventId: string) {
 
         return { success: true, data: deletedEvent };
     } catch (error) {
-        console.error(error);
         return { success: false, error: 'An unexpected error occurred.' };
     }
 }

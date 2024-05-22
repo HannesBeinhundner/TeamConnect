@@ -49,7 +49,6 @@ export async function updateEvent(inputData: CreateEventInputs, eventId: string)
 
         return { success: true, data: transaction[0] }; // Return the updated event
     } catch (error) {
-        console.error(error);
         return { success: false, error: 'An unexpected error occurred.' };
     }
 }

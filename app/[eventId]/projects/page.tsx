@@ -28,13 +28,6 @@ export default async function Projects({ params }: { params: any }) {
         redirect("/");
     }
 
-    const sessionEmail = session?.user?.email ?? undefined;
-
-    //Get current User iformation
-    const user = await prisma.user.findUnique({
-        where: { email: sessionEmail }
-    });
-
     return (
         <>
             <ToastContainer

@@ -71,7 +71,7 @@ export default function YourProjectInformationArea({ projectResult, reloadCompon
                     )
                 }
                 {
-                    projectResult?.link && (
+                    projectResult?.link !== 'undefined' && (
                         <Link href={(projectResult.link.startsWith("https://") || projectResult.link.startsWith("http://")) ? projectResult.link : "https://" + projectResult?.link} className={styles.chipLink} target="_blank">
                             <Chip className={styles.chipColor} text={projectResult?.link} icon={<LinkIcon fontSize='small' sx={{ color: '#000000DE' }} />} />
                         </Link>

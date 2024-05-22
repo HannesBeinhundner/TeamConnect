@@ -32,7 +32,6 @@ export async function leaveProject(projectId: number, userId: string) {
 
         return { success: true, data: removedUser };
     } catch (error) {
-        console.error(error);
         return { success: false, error: 'An unexpected error occurred.' };
     }
 }

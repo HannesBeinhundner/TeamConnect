@@ -42,7 +42,6 @@ export async function deleteProject(projectId: number) {
 
         return { success: true, data: deletedProject };
     } catch (error) {
-        console.error(error);
         return { success: false, error: 'An unexpected error occurred.' };
     }
 }

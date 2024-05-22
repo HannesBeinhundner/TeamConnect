@@ -70,7 +70,9 @@ const FindTeamMembersViewDialog: React.FC<ProjectUpdateDialogProps> = ({ handleI
                     <h1 className={styles.userName}>{userResult?.name}</h1>
                 </div>
                 <div className={styles.propertyArea}>
-                    <Chip className={styles.chipColor} text={userResult?.expertise} icon={<BadgeIcon fontSize='small' />} />
+                    {
+                        userResult?.expertise && (<Chip className={styles.chipColor} text={userResult?.expertise} icon={<BadgeIcon fontSize='small' />} />)
+                    }
                     <Link href={`mailto:${userResult?.email}`} className={styles.chipLink} target="_blank">
                         <Chip className={styles.chipColor} text={userResult?.email} icon={<EmailIcon fontSize='small' sx={{ color: '#000000DE' }} />} />
                     </Link>
@@ -106,7 +108,7 @@ const FindTeamMembersViewDialog: React.FC<ProjectUpdateDialogProps> = ({ handleI
                     )}
                     {currentUser?.projectAdmin && userResult?.projectId !== null && (userResult?.projectId !== currentUser?.projectId) && (
                         <Button variant="contained" disabled>
-                            Already in other project
+                            Already in a project
                         </Button>
                     )}
                     <Dialog

@@ -44,7 +44,6 @@ export async function removeUser(userId: any) {
 
         return { success: true, data: removedUser };
     } catch (error) {
-        console.error(error);
         return { success: false, error: 'An unexpected error occurred.' };
     }
 }

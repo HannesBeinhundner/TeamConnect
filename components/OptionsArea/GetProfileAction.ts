@@ -10,7 +10,6 @@ export async function getProfile(userEmail: string) {
 
         return { success: true, data: userProfile };
     } catch (error) {
-        console.error(error);
         return { success: false, error: 'An unexpected error occurred.' };
     }
 }

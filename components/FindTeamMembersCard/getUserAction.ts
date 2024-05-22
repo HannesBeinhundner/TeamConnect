@@ -1,7 +1,7 @@
 'use server'
- 
+
 import { prisma } from "@/prisma";
- 
+
 export async function getCurrentUserData(session: any) {
     try {
         const user = await prisma.user.findUnique({
@@ -16,7 +16,6 @@ export async function getCurrentUserData(session: any) {
 
         return user;
     } catch (error) {
-        console.error('Error joining project:', error);
         return { success: false, error: 'An unexpected error occurred.' };
     }
 }

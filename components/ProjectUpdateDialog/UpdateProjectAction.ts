@@ -38,7 +38,6 @@ export async function updateProject(inputData: UpdateProjectInputs, projectId: n
 
         return { success: true, data: updatedProject };
     } catch (error) {
-        console.error(error);
         return { success: false, error: 'An unexpected error occurred.' };
     }
 }
