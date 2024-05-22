@@ -1,19 +1,8 @@
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import { options } from "@/app/api/auth/[...nextauth]/options"
-import TopArea from "@/components/TopArea/TopArea";
-import MainArea from "@/components/MainArea/MainArea";
-import OptionsArea from "@/components/OptionsArea/OptionsArea";
-import YourProjectCard from "@/components/YourProjectCard/YourProjectCard";
-import EventStatistics from "@/components/EventStatistics/EventStatistics";
-import findTeamMembersImg from "@/images/findTeamMembers.svg";
-import viewAllProjectsImg from "@/images/viewAllProjects.svg";
-import NavigationButton from "@/components/NavigationButton/NavigationButton";
-import styles from "@/styles/dashboard.module.scss";
-import React, { Suspense } from 'react';
 import { getEvent } from '@/app/lib/GetEventAction';
 import { prisma } from "@/prisma";
-import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import MainDashboard from "@/components/MainDashboard/MainDashboard";
 
