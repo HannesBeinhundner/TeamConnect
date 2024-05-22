@@ -36,7 +36,6 @@ export async function ApplyFilter(inputData: ApplyFilterInputs, eventId: any) {
             return { success: true, data: projects };
         }
     } catch (error) {
-        console.error(error);
         return { success: false, error: 'An unexpected error occurred.' };
     }
 

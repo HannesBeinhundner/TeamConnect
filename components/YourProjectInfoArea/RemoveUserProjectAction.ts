@@ -55,7 +55,6 @@ export async function removeUserFromProject(userId: any) {
         }
 
     } catch (error) {
-        console.error(error);
         return { success: false, error: 'An unexpected error occurred.' };
     }
 }

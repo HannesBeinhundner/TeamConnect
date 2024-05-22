@@ -51,7 +51,6 @@ export default function FindTeamMembersCard({ userResult, session, eventData, re
     };
 
     const handleInviteUser = async () => {
-        console.log(userResult?.email);
         const result = await inviteUserToProject(eventData, session.user.email, userResult.email);
 
         if (result.success) {
@@ -141,7 +140,9 @@ export default function FindTeamMembersCard({ userResult, session, eventData, re
                     </IconButton>
                 </div>
                 <div className={styles.propertyArea}>
-                    <Chip className={styles.chipColor} text={userResult?.expertise} icon={<BadgeIcon fontSize='small' />} />
+                    {
+                        userResult?.expertise && (<Chip className={styles.chipColor} text={userResult?.expertise} icon={<BadgeIcon fontSize='small' />} />)
+                    }
                     <Link href={`mailto:${userResult?.email}`} className={styles.chipLink} target="_blank">
                         <Chip className={styles.chipColor} text={userResult?.email} icon={<EmailIcon fontSize='small' sx={{ color: '#000000DE' }} />} />
                     </Link>
@@ -176,7 +177,7 @@ export default function FindTeamMembersCard({ userResult, session, eventData, re
                                 )}
                                 {currentUserData?.projectAdmin && userResult?.projectId !== null && (userResult?.projectId !== currentUserData?.projectId) && (
                                     <Button variant="contained" disabled>
-                                        Already in other project
+                                        Already in a Project
                                     </Button>
                                 )}
                             </>

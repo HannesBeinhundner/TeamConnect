@@ -86,7 +86,6 @@ export default function ViewAllProjects({ eventData, session }: { eventData: any
                 console.error('Error: ApplyFilter did not return the expected data.');
             }
         } catch (error) {
-            console.error('Error processing form:', error);
             // Handle error if there's an issue with ApplyFilter or resetting the form
             toast.error('Unexpected error occurred!');
         }

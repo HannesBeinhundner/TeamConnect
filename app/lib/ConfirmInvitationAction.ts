@@ -2,8 +2,6 @@ import { prisma } from '@/prisma';
 
 export async function confirmInvitation(token: string) {
     try {
-        console.log("THIS IS THE TOKEN:", token);
-
         // Find the invitation by token
         const invitation = await prisma.invitation.findUnique({
             where: { token }
@@ -24,8 +22,6 @@ export async function confirmInvitation(token: string) {
             return { success: false, error: 'User not found.' };
         }
 
-        console.log("Project ID:", invitation.projectId);
-
         // Update the user's projectId
         await prisma.user.update({
             where: { email: invitation.email },
@@ -39,7 +35,6 @@ export async function confirmInvitation(token: string) {
 
         return { success: true, userEmail: user.email };
     } catch (error) {
-        console.error("Unexpected error:", error);
         return { success: false, error: 'An unexpected error occurred.' };
     }
 }

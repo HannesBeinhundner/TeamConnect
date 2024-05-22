@@ -32,7 +32,6 @@ export async function UserFilter(inputData: FindTeamMemberInputs, eventId: any) 
             return { success: true, data: users };
         }
     } catch (error) {
-        console.error(error);
         return { success: false, error: 'An unexpected error occurred.' };
     }
 

@@ -11,20 +11,14 @@ const ConfirmInvitationPage = () => {
 
     useEffect(() => {
         const token = searchParams.get('token');
-        console.log("Current path:", pathname); // Log the current pathname
 
         // Use a regex to extract the eventId from the pathname
         const eventIdMatch = pathname.match(/^\/([^\/]+)\/confirm-invitation/);
         const eventId = eventIdMatch ? eventIdMatch[1] : null;
 
-        console.log("Token received:", token);  // Ensure this logs
-        console.log("Event ID received:", eventId); // Ensure this logs
-
         if (token && eventId) {
-            console.log("Making API call");
             fetch(`/api/confirm-invitation?token=${token}`)
                 .then(response => {
-                    console.log("API response received");
                     if (!response.ok) {
                         throw new Error('API response not ok');
                     }
@@ -40,7 +34,6 @@ const ConfirmInvitationPage = () => {
                     }
                 })
                 .catch(error => {
-                    console.error('Error confirming invitation:', error);
                     toast.error('An unexpected error occurred.');
                     router.push(`/${eventId}/confirmation-error`);
                 });

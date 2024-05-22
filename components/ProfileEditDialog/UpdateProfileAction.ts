@@ -24,7 +24,6 @@ export async function updateProfile(inputData: UpdateProfileInputs, userEmail: s
 
         return { success: true, data: updatedProfile };
     } catch (error) {
-        console.error(error);
         return { success: false, error: 'An unexpected error occurred.' };
     }
 }

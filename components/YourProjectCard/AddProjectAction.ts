@@ -61,7 +61,6 @@ export async function addEntry(inputData: CreateProjectInputs, sessionEmail: str
             return { success: false, error: 'Project name must be unique.' };
         }
 
-        console.error(error);
         return { success: false, error: 'An unexpected error occurred.' };
     }
 

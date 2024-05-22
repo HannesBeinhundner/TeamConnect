@@ -147,7 +147,7 @@ const ProjectUpdateDialog: React.FC<ProjectUpdateDialogProps> = ({ open, onClose
     };
 
     return (
-        <Dialog open={open} onClose={onClose} fullWidth maxWidth="md" className={styles.updateModal}>
+        <Dialog open={open} onClose={onClose} fullWidth maxWidth="md">
             <DialogTitle>Update Project</DialogTitle>
             <IconButton
                 aria-label="close"
@@ -244,7 +244,6 @@ const ProjectUpdateDialog: React.FC<ProjectUpdateDialogProps> = ({ open, onClose
                             }}
                             endpoint="imageUploader"
                             onClientUploadComplete={(res) => {
-                                console.log("Files: ", res);
                                 // Set the projectImage value to the uploaded image URL
                                 setImageName(res[0].name);
                                 setValue('projectImage', res[0].url);
@@ -269,7 +268,6 @@ const ProjectUpdateDialog: React.FC<ProjectUpdateDialogProps> = ({ open, onClose
                             }}
                             endpoint="textUploader"
                             onClientUploadComplete={(res) => {
-                                console.log("Files: ", res);
                                 // Set the projectImage value to the uploaded image URL
                                 setDocumentName(res[0].name);
                                 setValue('projectFile', res[0].url);
@@ -337,7 +335,7 @@ const ProjectUpdateDialog: React.FC<ProjectUpdateDialogProps> = ({ open, onClose
                     </DialogActions>
                 </form>
             </DialogContent>
-        </Dialog>
+        </Dialog >
     );
 };
 

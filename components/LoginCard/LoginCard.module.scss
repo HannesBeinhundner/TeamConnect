@@ -19,7 +19,8 @@
     }
 
     @include mobile {
-        gap: 2rem;
+        gap: 0rem;
+        overflow: hidden;
     }
 }
 
@@ -31,6 +32,8 @@
     }
 
     @include mobile {
+        display: none;
+        visibility: hidden;
         width: 100%;
     }
 }

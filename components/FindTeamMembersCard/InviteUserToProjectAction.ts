@@ -21,7 +21,6 @@ export async function inviteUserToProject(eventData: any, sessionEmail: any, use
             return { success: false, error: 'User not found or does not have a project ID.' };
         }
 
-        console.log(user.projectId)
         //Get Project from the admin
         const project = await prisma.project.findUnique({
             where: {
@@ -44,7 +43,6 @@ export async function inviteUserToProject(eventData: any, sessionEmail: any, use
         });
 
         // Generate the confirmation link
-        console.log(eventData)
         const confirmationLink = `https://team-connect.app/${eventData.id}/confirm-invitation?token=${token}`;
 
         // Send the invitation email using resend
@@ -71,7 +69,6 @@ export async function inviteUserToProject(eventData: any, sessionEmail: any, use
 
         return { success: true };
     } catch (error) {
-        console.error(error);
         return { success: false, error: 'An unexpected error occurred.' };
     }
 }

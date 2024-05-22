@@ -270,7 +270,6 @@ export default function YourProjectCard({ eventId, reloadComponent, key }) {
                                                         }}
                                                         endpoint="imageUploader"
                                                         onClientUploadComplete={(res) => {
-                                                            console.log("Files: ", res);
                                                             // Set the projectImage value to the uploaded image URL
                                                             setImageName(res[0].name);
                                                             setValue('projectImage', res[0].url);
@@ -295,7 +294,6 @@ export default function YourProjectCard({ eventId, reloadComponent, key }) {
                                                         }}
                                                         endpoint="textUploader"
                                                         onClientUploadComplete={(res) => {
-                                                            console.log("Files: ", res);
                                                             // Set the projectImage value to the uploaded image URL
                                                             setDocumentName(res[0].name);
                                                             setValue('projectFile', res[0].url);
