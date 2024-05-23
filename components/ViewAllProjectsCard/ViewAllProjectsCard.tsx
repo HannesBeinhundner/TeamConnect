@@ -37,6 +37,8 @@ interface Props {
 }
 
 export default function ViewAllProjectsCard({ session, eventData, reloadComponent, projectResult }: Props) {
+
+    const [reloadKey, setReloadKey] = useState(0);
     const [isLoading, setIsLoading] = useState(true);
     const [projectUsers, setProjectUsers] = useState<any>([]);
     const [userData, setUserData] = useState<any>([]);
@@ -45,6 +47,10 @@ export default function ViewAllProjectsCard({ session, eventData, reloadComponen
     const [joinDialogOpen, setJoinDialogOpen] = useState(false);
     const [otherProjectJoinDialogOpen, setOtherProjectJoinDialogOpen] = useState(false);
     const router = useRouter()
+
+    const reloadCurrentComponent = () => {
+        setReloadKey(prevKey => prevKey + 1);
+    };
 
     const handleDeleteProject = async () => {
         const result = await deleteProject(projectResult?.id);
@@ -159,7 +165,8 @@ export default function ViewAllProjectsCard({ session, eventData, reloadComponen
                             session={session}
                             eventData={eventData}
                             projectResult={projectResult}
-                            reloadComponent={reloadComponent}
+                            reloadComponent={reloadCurrentComponent}
+                            key={reloadKey}
                             userData={userData}
                             handleDeleteButtonClick={handleDeleteButtonClick}
                             handleJoinButtonClick={handleJoinButtonClick}
