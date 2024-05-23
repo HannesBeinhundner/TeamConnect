@@ -96,7 +96,7 @@ const ProfileEditDialog: React.FC<ProfileUpdateDialogProps> = ({ open, onClose, 
             </IconButton>
             <DialogContent>
                 <DialogContentText>
-                    <strong>Please make sure that you have selected a profile expertise and a profile description!</strong>
+                    <strong>Please make sure that you have selected a profile expertise and a description!</strong>
                 </DialogContentText>
                 <br />
                 <form onSubmit={handleSubmit(handleUpdate)} className={styles.formContainer}>

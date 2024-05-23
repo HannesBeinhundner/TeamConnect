@@ -61,6 +61,16 @@
         align-items: center;
         gap: 0.5rem;
         cursor: pointer;
+
+        span {
+            @include mobile {
+                display: inline-block;
+                max-width: 25ch;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+        }
     }
 
     .createButton {
