@@ -134,7 +134,7 @@ p {
 ::-webkit-scrollbar-thumb {
   background-color: #2675ca;
   /* Blue color */
-  border-radius: 6px;
+  border-radius: 4px;
   /* Rounded corners */
 }
 
@@ -160,4 +160,38 @@ p {
 ::-webkit-scrollbar-corner {
   background: transparent;
   /* Transparent background for the scrollbar corner */
+}
+
+@include mobile {
+
+  /* Reset the scrollbar style */
+  ::-webkit-scrollbar {
+    width: auto;
+  }
+
+  /* Reset the handle */
+  ::-webkit-scrollbar-thumb {
+    background-color: initial;
+    border-radius: 0;
+  }
+
+  /* Reset the handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: initial;
+  }
+
+  /* Reset the track */
+  ::-webkit-scrollbar-track {
+    background: initial;
+  }
+
+  /* Reset the track on hover */
+  ::-webkit-scrollbar-track:hover {
+    background: initial;
+  }
+
+  /* Reset the corner */
+  ::-webkit-scrollbar-corner {
+    background: initial;
+  }
 }
