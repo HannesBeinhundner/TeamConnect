@@ -314,7 +314,7 @@ const ProjectUpdateDialog: React.FC<ProjectUpdateDialogProps> = ({ open, onClose
                             <DialogContent>
                                 <DialogContentText>
                                     {
-                                        isProjectAdmin && ('Are you sure you want to delete this project?')
+                                        isProjectAdmin && ('Are you sure you want to delete the entire project?')
                                     }
                                     {
                                         isNotProjectAdmin && ('Are you sure you want to leave this project?')

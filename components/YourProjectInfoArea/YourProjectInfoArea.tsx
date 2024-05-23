@@ -25,11 +25,11 @@ import 'react-toastify/dist/ReactToastify.css';
 
 //@ts-ignore
 export default function YourProjectInformationArea({ projectResult, reloadComponent, reloadParentComponent }) {
-    const [selectedUserId, setSelectedUserId] = useState(null);
+    const [selectedUser, setSelectedUser] = useState<any>();
     const [confirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
 
-    const handleRemoveClick = (userId: any) => {
-        setSelectedUserId(userId)
+    const handleRemoveClick = (user: any) => {
+        setSelectedUser(user)
         setConfirmationDialogOpen(true);
     };
 
@@ -38,7 +38,7 @@ export default function YourProjectInformationArea({ projectResult, reloadCompon
     };
 
     const handleRemoveUser = async () => {
-        const result = await removeUserFromProject(selectedUserId);
+        const result = await removeUserFromProject(selectedUser?.id);
 
         if (!result) {
             toast.error('Unexpected error occurred!');
@@ -98,7 +98,7 @@ export default function YourProjectInformationArea({ projectResult, reloadCompon
                                             }
                                                 rightIcon={<IconButton
                                                     aria-label="close"
-                                                    onClick={() => handleRemoveClick(user.id)}
+                                                    onClick={() => handleRemoveClick(user)}
                                                 >
                                                     <ClearIcon sx={{ fontSize: 18 }} />
                                                 </IconButton>}
@@ -110,7 +110,7 @@ export default function YourProjectInformationArea({ projectResult, reloadCompon
                                                 <DialogTitle>Confirm Remove User</DialogTitle>
                                                 <DialogContent>
                                                     <DialogContentText>
-                                                        Are you sure you want to remove <strong>{user.name}</strong> from the project?
+                                                        Are you sure you want to remove <strong>{selectedUser?.name}</strong> from the project?
                                                     </DialogContentText>
                                                 </DialogContent>
                                                 <DialogActions>

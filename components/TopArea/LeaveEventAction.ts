@@ -12,7 +12,11 @@ export async function leaveEvent(userEmail: string, eventId: string) {
         await prisma.user.update({
             where: { email: userEmail },
             data: {
-                eventId: null
+                eventId: null,
+                projectAdmin: false,
+                expertise: null,
+                description: null,
+                projectId: null,
             }
         });
 
