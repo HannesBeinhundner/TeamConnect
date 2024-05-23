@@ -30,8 +30,8 @@ export default function FindTeamMembersCard({ userResult, session, eventData, re
     const [updateDialogOpen, setUpdateDialogOpen] = useState(false);
     const [confirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
     const [inviteDialogOpen, setInviteDialogOpen] = useState(false);
-    const [currentUserData, setCurrentUserData] = useState<any>([]);
-    const [invitationData, setInvitationData] = useState<any>([]);
+    const [currentUserData, setCurrentUserData] = useState<any>(null);
+    const [invitationData, setInvitationData] = useState<any>(null);
 
     const handleRemoveUser = async () => {
         const result = await removeUser(userResult?.id);
@@ -89,17 +89,13 @@ export default function FindTeamMembersCard({ userResult, session, eventData, re
     const fetchUserData = async () => {
         const currentUserData: any = await getCurrentUserData(session.user.email);
         setCurrentUserData(currentUserData);
-        setIsLoading(false)
-    };
-
-    const fetchInvitationData = async () => {
-        const invitionData: any = await getInviteData(userResult.email, currentUserData.projectId);
-        setInvitationData(invitionData);
+        const invitationData: any = await getInviteData(userResult.email, currentUserData.projectId);
+        setInvitationData(invitationData);
+        setIsLoading(false);
     };
 
     useEffect(() => {
         fetchUserData();
-        fetchInvitationData();
     }, []);
 
     function LoadingBox({ children }: any) {

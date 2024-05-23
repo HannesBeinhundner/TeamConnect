@@ -31,9 +31,12 @@ export async function deleteProject(projectId: number) {
             }
         }
 
-        //Delete Project
         const deletedProject = await prisma.project.delete({
             where: { id: projectId },
+        });
+
+        await prisma.invitation.deleteMany({
+            where: { projectId: projectId },
         });
 
         if (!deletedProject) {

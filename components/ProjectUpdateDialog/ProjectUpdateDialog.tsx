@@ -232,26 +232,25 @@ const ProjectUpdateDialog: React.FC<ProjectUpdateDialogProps> = ({ open, onClose
                         helperText={errors.projectSkills?.message}
                     />
                     <div>
-                        <UploadButton
-                            appearance={{
-                                button: {
-                                    width: "100%",
-                                    maxWidth: "200px"
-                                }
-                            }}
-                            content={{
-                                button: "Upload Project Logo",
-                            }}
-                            endpoint="imageUploader"
-                            onClientUploadComplete={(res) => {
-                                // Set the projectImage value to the uploaded image URL
-                                setImageName(res[0].name);
-                                setValue('projectImage', res[0].url);
-                            }}
-                            onUploadError={(error: Error) => {
-                                toast.error('Unexpected error occurred!');
-                            }}
-                        />
+                    <UploadButton
+                        appearance={{
+                            button: {
+                                width: "100%",
+                                maxWidth: "200px"
+                            }
+                        }}
+                        content={{
+                            button: "Upload Project Logo",
+                        }}
+                        endpoint="imageUploader"
+                        onClientUploadComplete={(res) => {
+                            setImageName(res[0].name);
+                            setValue('projectImage', res[0].url);
+                        }}
+                        onUploadError={(error: Error) => {
+                            toast.error(`Unexpected error occurred!`);
+                        }}
+                    />
                         <p className={styles.fileName}>{imageName}</p>
                     </div>
 
@@ -274,7 +273,7 @@ const ProjectUpdateDialog: React.FC<ProjectUpdateDialogProps> = ({ open, onClose
                                 //setValue('projectFileName', res[0].name);
                             }}
                             onUploadError={(error: Error) => {
-                                toast.error('Unexpected error occurred!');
+                                toast.error(`Unexpected error occurred!`);
                             }}
                         />
                         <p className={styles.fileName}>{documentName}</p>
