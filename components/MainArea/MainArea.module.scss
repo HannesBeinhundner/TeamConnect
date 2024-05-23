@@ -13,7 +13,6 @@
     grid-template-columns: repeat(12, 1fr);
     grid-template-rows: min-content auto;
     gap: 1.6rem;
-    overflow-y: hidden;
 
     @include tablet {
         border-radius: 20px 20px 0 0;
@@ -22,7 +21,7 @@
         min-height: 100vh;
         gap: 1rem;
         padding: 1.5rem 0.6rem;
-        overflow: hidden;
+        //overflow: hidden;
     }
 }
 
@@ -48,7 +47,6 @@
     @include tablet {
         grid-column: 1 / span 1;
         grid-row: unset;
-
     }
 }
 

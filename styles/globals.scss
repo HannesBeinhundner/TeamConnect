@@ -126,7 +126,7 @@ p {
 
 /* Define the scrollbar style */
 ::-webkit-scrollbar {
-  width: 12px;
+  width: 10px;
   /* Width of the scrollbar */
 }
 
@@ -134,7 +134,7 @@ p {
 ::-webkit-scrollbar-thumb {
   background-color: #2675ca;
   /* Blue color */
-  border-radius: 4px;
+  border-radius: 3px;
   /* Rounded corners */
 }
 

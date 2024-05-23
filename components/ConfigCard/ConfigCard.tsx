@@ -178,7 +178,7 @@ export default function ConfigCard() {
                                             <TableCell align="right">
                                                 <div className={styles.tableHeaderWrapper}>
                                                     <LinkIcon fontSize='small' sx={{ color: '#000000DE' }} />
-                                                    Invite link
+                                                    Invite Link
                                                 </div>
                                             </TableCell>
                                         </TableRow>

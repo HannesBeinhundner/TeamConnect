@@ -108,12 +108,12 @@ const ProjectViewDialog: React.FC<ProjectUpdateDialogProps> = ({ open, onClose, 
                     {
                         projectResult.file !== 'undefined' && (
                             <Link href={projectResult.file} className={styles.chipLink} target="_blank">
-                                <Chip className={styles.chipColor} text={"Project file"} icon={<AttachFileIcon fontSize='small' sx={{ color: '#000000DE' }} />} />
+                                <Chip className={styles.chipColor} text={"Project PDF"} icon={<AttachFileIcon fontSize='small' sx={{ color: '#000000DE' }} />} />
                             </Link>
                         )
                     }
                     {
-                        projectResult?.link !== 'undefined' && (
+                        projectResult?.link !== 'undefined' || projectResult?.link !== '' && (
                             <Link href={(projectResult.link.startsWith("https://") || projectResult.link.startsWith("http://")) ? projectResult.link : "https://" + projectResult?.link} className={styles.chipLink} target="_blank">
                                 <Chip className={styles.chipColor} text={projectResult?.link} icon={<LinkIcon fontSize='small' sx={{ color: '#000000DE' }} />} />
                             </Link>
@@ -127,7 +127,7 @@ const ProjectViewDialog: React.FC<ProjectUpdateDialogProps> = ({ open, onClose, 
                             <div key={user.id}>
                                 {
                                     user.projectAdmin ? (
-                                        // show remove functionality only when currentUser is event admin
+                                        // show remove functionality only when currentUser is event admin but not for his own project (so he cant delete himself)
                                         session.user.email === eventData.adminEmail ?
                                             (
                                                 <UserChip userIconText={
@@ -167,7 +167,7 @@ const ProjectViewDialog: React.FC<ProjectUpdateDialogProps> = ({ open, onClose, 
                                                     <DialogTitle>Confirm Remove User</DialogTitle>
                                                     <DialogContent>
                                                         <DialogContentText>
-                                                            Are you sure you want to remove this user from the project?
+                                                            Are you sure you want to remove <strong>{user?.name}</strong> from the project?
                                                             {user?.projectAdmin && <strong> This user is a project admin and the project will be deleted!</strong>}
                                                         </DialogContentText>
                                                     </DialogContent>
@@ -195,7 +195,7 @@ const ProjectViewDialog: React.FC<ProjectUpdateDialogProps> = ({ open, onClose, 
                             <p>{projectResult?.description}</p>
                         </div>
                         <div className={styles.textArea}>
-                            <h4>Prefred Skills and Expertise</h4>
+                            <h4>Preferred skills and expertise</h4>
                             <p>{projectResult?.skills ? projectResult?.skills : 'not defined'}</p>
                         </div>
                     </div>

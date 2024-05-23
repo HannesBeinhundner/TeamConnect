@@ -6,6 +6,10 @@
     background-color: $grey-light;
     height: max-content;
     min-height: 500px;
+
+    @include mobile {
+        box-shadow: unset;
+    }
 }
 
 .headerArea {

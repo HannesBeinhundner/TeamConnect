@@ -191,7 +191,7 @@ export default function FindTeamMembersCard({ userResult, session, eventData, re
                         <DialogTitle>Confirm Remove User</DialogTitle>
                         <DialogContent>
                             <DialogContentText>
-                                Are you sure you want to remove {userResult?.name}?
+                                Are you sure you want to remove <strong>{userResult?.name}</strong>?
                                 {userResult?.projectAdmin && <strong> This user is a project admin and the project will be deleted!</strong>}
                             </DialogContentText>
                         </DialogContent>
@@ -208,10 +208,10 @@ export default function FindTeamMembersCard({ userResult, session, eventData, re
                         <DialogTitle>Confirm Invitation</DialogTitle>
                         <DialogContent>
                             <DialogContentText>
-                                Are you sure you want to invite {userResult?.name} to join your project?
+                                Are you sure you want to invite <strong>{userResult?.name}</strong> to join your project?
                             </DialogContentText>
                             <DialogContentText>
-                                An invitation email will be sent to {userResult?.email}.
+                                An invitation email will be sent to <strong>{userResult?.email}</strong>.
                             </DialogContentText>
                         </DialogContent>
                         <DialogActions>

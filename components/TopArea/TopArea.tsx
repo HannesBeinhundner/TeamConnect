@@ -63,9 +63,7 @@ export default function TopArea({ session, eventData }: { session: any, eventDat
                                         <DialogTitle>Confirm leaving the Event</DialogTitle>
                                         <DialogContent>
                                             <DialogContentText>
-                                                {
-                                                    `Are you sure you want to leave ${eventData?.name}. You will no longer be able to access this event. If you're a project admin the entire project will be deleted.`
-                                                }
+                                                Are you sure you want to leave <strong>{eventData?.name}</strong>? You will no longer be able to access this event. If you're a project admin the entire project will be deleted.
                                             </DialogContentText>
                                         </DialogContent>
                                         <DialogActions>
