@@ -22,6 +22,17 @@ export async function joinProject(session: any, projectId: number) {
             },
         });
 
+        if (user.email !== null) {
+            await prisma.invitation.deleteMany({
+                where: {
+                    projectId: projectId,
+                    email: user.email
+                },
+            });
+        } else {
+            console.error('Cannot delete invitations without a valid email.');
+        }
+
         return { success: true, data: updatedUser };
     } catch (error) {
         return { success: false, error: 'An unexpected error occurred.' };

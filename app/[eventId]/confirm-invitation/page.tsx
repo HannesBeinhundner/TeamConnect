@@ -29,7 +29,7 @@ const ConfirmInvitationPage = () => {
                         toast.success('Invitation confirmed successfully!');
                         router.push(`/${eventId}`);
                     } else {
-                        toast.error(result.error);
+                        toast.error('An unexpected error occurred.');
                         router.push(`/${eventId}/confirmation-error`);
                     }
                 })
