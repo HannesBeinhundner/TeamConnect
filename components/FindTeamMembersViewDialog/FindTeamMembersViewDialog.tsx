@@ -118,10 +118,10 @@ const FindTeamMembersViewDialog: React.FC<ProjectUpdateDialogProps> = ({ handleI
                         <DialogTitle>Confirm Invitation</DialogTitle>
                         <DialogContent>
                             <DialogContentText>
-                                Are you sure you want to invite {userResult?.name} to join your project?
+                                Are you sure you want to invite <strong>{userResult?.name}</strong> to join your project?
                             </DialogContentText>
                             <DialogContentText>
-                                An invitation email will be sent to {userResult?.email}.
+                                An invitation email will be sent to <strong>{userResult?.email}</strong>.
                             </DialogContentText>
                         </DialogContent>
                         <DialogActions>

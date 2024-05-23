@@ -53,7 +53,7 @@ export default function MainDashboard({ session, eventData, paramEventId, joined
                     <TopArea session={session} eventData={eventData} />
                 </div>
                 <div className={styles.optionsArea}>
-                    <OptionsArea session={session} eventData={eventData} />
+                    <OptionsArea session={session} eventData={eventData} profileDisabled={false} />
                 </div>
                 <div className={styles.mainArea}>
                     <MainArea

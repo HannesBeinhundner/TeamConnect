@@ -171,12 +171,12 @@ export default function ViewAllProjectsCard({ session, eventData, reloadComponen
                             {
                                 projectResult.file !== 'undefined' && (
                                     <Link href={projectResult.file} className={styles.chipLink} target="_blank">
-                                        <Chip className={styles.chipColor} text={"Project file"} icon={<AttachFileIcon fontSize='small' sx={{ color: '#000000DE' }} />} />
+                                        <Chip className={styles.chipColor} text={"Project PDF"} icon={<AttachFileIcon fontSize='small' sx={{ color: '#000000DE' }} />} />
                                     </Link>
                                 )
                             }
                             {
-                                projectResult?.link !== 'undefined' && (
+                                projectResult?.link !== 'undefined' || projectResult?.link !== '' && (
                                     <Link href={(projectResult.link.startsWith("https://") || projectResult.link.startsWith("http://")) ? projectResult.link : "https://" + projectResult?.link} className={styles.chipLink} target="_blank">
                                         <Chip className={styles.chipColor} text={projectResult?.link} icon={<LinkIcon fontSize='small' sx={{ color: '#000000DE' }} />} />
                                     </Link>
@@ -213,7 +213,7 @@ export default function ViewAllProjectsCard({ session, eventData, reloadComponen
                                     <DialogTitle>Confirm Delete Project</DialogTitle>
                                     <DialogContent>
                                         <DialogContentText>
-                                            Are you sure you want to delete {projectResult?.name}?
+                                            Are you sure you want to delete <strong>{projectResult?.name}</strong>?
                                         </DialogContentText>
                                     </DialogContent>
                                     <DialogActions>
@@ -229,7 +229,7 @@ export default function ViewAllProjectsCard({ session, eventData, reloadComponen
                                     <DialogTitle>Confirm Join Project</DialogTitle>
                                     <DialogContent>
                                         <DialogContentText>
-                                            Are you sure you want to join the project <b>{projectResult.name}?</b>
+                                            Are you sure you want to join the project <strong>{projectResult.name}?</strong>
                                         </DialogContentText>
                                     </DialogContent>
                                     <DialogActions>
@@ -245,7 +245,7 @@ export default function ViewAllProjectsCard({ session, eventData, reloadComponen
                                     <DialogTitle>Confirm Join Project</DialogTitle>
                                     <DialogContent>
                                         <DialogContentText>
-                                            Are you sure you want to join the project <b>{projectResult.name}?</b>
+                                            Are you sure you want to join the project <strong>{projectResult.name}?</strong>
                                         </DialogContentText>
                                         <DialogContentText>
                                             You will be removed from your current team!

@@ -17,9 +17,10 @@ import Badge from '@mui/material/Badge';
 interface Props {
     session: any;
     eventData?: any;
+    profileDisabled: boolean;
 }
 
-export default function OptionsArea({ session, eventData }: Props) {
+export default function OptionsArea({ session, eventData, profileDisabled }: Props) {
 
     const [updateDialogOpen, setUpdateDialogOpen] = useState(false);
     const [profileResult, setProfileResult] = useState<any>([]);
@@ -81,18 +82,32 @@ export default function OptionsArea({ session, eventData }: Props) {
                             />
                         </Badge>
                     ) : (
-                        <Image
-                            aria-label="expand"
-                            onClick={handleUpdateDialogOpen}
-                            className={styles.profile}
-                            src={session.user.image}
-                            width={42}
-                            height={42}
-                            alt="Profile picture of user"
-                            style={{
-                                objectFit: 'cover',
-                            }}
-                        />
+                        profileDisabled ? (
+                            <Image
+                                className={styles.profile}
+                                src={session.user.image}
+                                width={42}
+                                height={42}
+                                alt="Profile picture of user"
+                                style={{
+                                    objectFit: 'cover',
+                                }}
+                            />
+                        ) : (
+                            <Image
+                                aria-label="expand"
+                                onClick={handleUpdateDialogOpen}
+                                className={styles.profile}
+                                src={session.user.image}
+                                width={42}
+                                height={42}
+                                alt="Profile picture of user"
+                                style={{
+                                    objectFit: 'cover',
+                                }}
+                            />
+                        )
+
                     )
                 ) : (
                     <ManageAccountsIcon

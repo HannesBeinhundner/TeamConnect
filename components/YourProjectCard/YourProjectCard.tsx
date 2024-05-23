@@ -247,7 +247,7 @@ export default function YourProjectCard({ eventId, reloadComponent, key }) {
                                                 <TextField
                                                     margin="dense"
                                                     id="projectSkills"
-                                                    label="Preffered skills and expertise"
+                                                    label="Preferred skills and expertise"
                                                     type="text"
                                                     placeholder="Specify desired team skills and relevant expertises for your project..."
                                                     fullWidth

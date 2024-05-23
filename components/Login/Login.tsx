@@ -12,13 +12,12 @@ import XIcon from '@mui/icons-material/X';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 
 function AuthButtons({ eventData }: { eventData: any }) {
-
     return (
         <>
             {eventData ? (
                 // Login via invite Link
                 <>
-                    <h2>You have been invited to {eventData.name}!</h2>
+                    <h2>You have been invited to <strong>{eventData.name}!</strong></h2>
                     <Button variant="contained" color="primary" onClick={() => signIn("google", { callbackUrl: `${window.location.origin}/${eventData.id}` })} startIcon={<GoogleIcon />} >Sign in with Google</Button>
                     <Button variant="contained" color="primary" onClick={() => signIn("github", { callbackUrl: `${window.location.origin}/${eventData.id}` })} startIcon={<GitHubIcon />} >Sign in with Github</Button>
                     <Button variant="contained" color="primary" onClick={() => signIn("twitter", { callbackUrl: `${window.location.origin}/${eventData.id}` })} startIcon={<XIcon />} >Sign in with X</Button>

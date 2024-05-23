@@ -16,7 +16,6 @@ export default function MainArea({
 }: MainAreaProps) {
     return (
         <div className={`${styles.container} ${bottomRightComponent ? '' : styles.containerWithScroll}`}>
-
             {
                 topLeftComponent && topRightComponent ? (
                     <>
@@ -27,7 +26,6 @@ export default function MainArea({
                     ""
                 )
             }
-
             {
                 bottomLeftComponent && bottomRightComponent ? (
                     <>
