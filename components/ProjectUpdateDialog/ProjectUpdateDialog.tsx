@@ -237,7 +237,7 @@ const ProjectUpdateDialog: React.FC<ProjectUpdateDialogProps> = ({ open, onClose
                                 button: {
                                     width: "100%",
                                     maxWidth: "200px",
-                                    backgroundColor: "#007DFF"
+                                    backgroundColor: "#1976d2"
                                 }
                             }}
                             content={{
@@ -261,7 +261,7 @@ const ProjectUpdateDialog: React.FC<ProjectUpdateDialogProps> = ({ open, onClose
                                 button: {
                                     width: "100%",
                                     maxWidth: "200px",
-                                    backgroundColor: "#007DFF"
+                                    backgroundColor: "#1976d2"
                                 }
                             }}
                             content={{

@@ -263,7 +263,7 @@ export default function YourProjectCard({ eventId, reloadComponent, key }) {
                                                             button: {
                                                                 width: "100%",
                                                                 maxWidth: "200px",
-                                                                backgroundColor: "#007DFF"
+                                                                backgroundColor: "#1976d2"
                                                             }
                                                         }}
                                                         content={{
@@ -288,7 +288,7 @@ export default function YourProjectCard({ eventId, reloadComponent, key }) {
                                                             button: {
                                                                 width: "100%",
                                                                 maxWidth: "200px",
-                                                                backgroundColor: "#007DFF"
+                                                                backgroundColor: "#1976d2"
                                                             }
                                                         }}
                                                         content={{
