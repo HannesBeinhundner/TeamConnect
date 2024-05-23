@@ -50,6 +50,8 @@ const DoughnutChart: React.FC<DoughnutChartProps> = ({ id, chartData }) => {
                         boxWidth: 15,
                     },
                 },
+                responsive: true,
+                maintainAspectRatio: false
             },
         });
 
@@ -59,7 +61,11 @@ const DoughnutChart: React.FC<DoughnutChartProps> = ({ id, chartData }) => {
     }, [chartData]);
 
     return (
-        <canvas id={id} style={{ width: '100%', maxWidth: '300px', height: '100%', maxHeight: '150px' }}></canvas>
+        <div style={{
+            height: '200px'
+        }}>
+            <canvas id={id} style={{ width: '100%', height: '100%' }}></canvas>
+        </div >
     )
 }
 
