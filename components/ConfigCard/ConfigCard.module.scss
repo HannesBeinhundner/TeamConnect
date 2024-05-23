@@ -38,6 +38,10 @@
 
         p {
             margin: 0;
+
+            @include mobile {
+                font-size: 0.85rem;
+            }
         }
     }
 

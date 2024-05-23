@@ -212,7 +212,7 @@ export default function ConfigCard() {
                                                             >
                                                                 <div className={styles.copyLinkWrapper}>
                                                                     <span>
-                                                                        {`${window.location.origin}/invite/${event.id}`}
+                                                                        {`${window.location.origin.replace(/(^\w+:|^)\/\//, '')}/invite/${event.id}`}
                                                                     </span>
                                                                     <IconButton aria-label="open Modal" sx={{ color: '#1C1C1C' }}>
                                                                         <ContentCopyIcon fontSize='small' />

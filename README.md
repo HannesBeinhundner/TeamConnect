@@ -1,3 +1,6 @@
+# To run in localhost do
+- `npm install`
+- `npm run dev`  
 
 # Commands used in development for Teamconnect
 

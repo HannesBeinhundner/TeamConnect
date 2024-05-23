@@ -33,6 +33,12 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
+        text-align: center;
+
+        @include mobile {
+            margin-top: 2rem;
+            margin-bottom: 3rem;
+        }
     }
 }
 

@@ -32,7 +32,7 @@ export default async function RootLayout({
   const containerStyle: React.CSSProperties = {
     height: '100%',
     width: '100%',
-    overflowX: 'hidden',
+    // overflowX: 'hidden',
   };
 
   return (
