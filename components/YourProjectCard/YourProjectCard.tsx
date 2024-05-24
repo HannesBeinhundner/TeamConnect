@@ -44,7 +44,6 @@ export default function YourProjectCard({ eventId, reloadComponent, key }) {
 
     const [open, setOpen] = useState(false);
     const [updateDialogOpen, setUpdateDialogOpen] = useState(false);
-    const [serverErrorMessage, setServerErrorMessage] = useState("")
 
     const [documentName, setDocumentName] = useState('');
     const [imageName, setImageName] = useState('');
@@ -106,8 +105,7 @@ export default function YourProjectCard({ eventId, reloadComponent, key }) {
         }
 
         if (result.error) {
-            setServerErrorMessage(result.error.toString())
-            toast.error(serverErrorMessage);
+            toast.error(result.error);
             return
         }
 
@@ -247,7 +245,7 @@ export default function YourProjectCard({ eventId, reloadComponent, key }) {
                                                 <TextField
                                                     margin="dense"
                                                     id="projectSkills"
-                                                    label="Preferred skills and expertise"
+                                                    label="Preferred Skills and Expertise"
                                                     type="text"
                                                     placeholder="Specify desired team skills and relevant expertises for your project..."
                                                     fullWidth

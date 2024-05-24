@@ -29,7 +29,6 @@ interface EventUpdateDialogProps {
 }
 
 const EventUpdateDialog: React.FC<EventUpdateDialogProps> = ({ open, onClose, eventResult, reloadComponent }) => {
-    const [serverErrorMessage, setServerErrorMessage] = useState('');
     const [confirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
 
     const {
@@ -57,8 +56,7 @@ const EventUpdateDialog: React.FC<EventUpdateDialogProps> = ({ open, onClose, ev
         }
 
         if (result.error) {
-            setServerErrorMessage(result.error.toString());
-            toast.error(serverErrorMessage);
+            toast.error(result.error);
             return;
         }
 
@@ -76,8 +74,7 @@ const EventUpdateDialog: React.FC<EventUpdateDialogProps> = ({ open, onClose, ev
         }
 
         if (result.error) {
-            setServerErrorMessage(result.error.toString());
-            toast.error(serverErrorMessage);
+            toast.error(result.error);
             return;
         }
         toast.success('Your Event was successfully deleted!');

@@ -135,7 +135,7 @@ export default function ConfigCard() {
         }
 
         if (result.error) {
-            toast.success('Your Event could not be created!')
+            toast.error('Your Event could not be created!')
             return
         }
 

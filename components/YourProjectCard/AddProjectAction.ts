@@ -57,15 +57,10 @@ export async function addEntry(inputData: CreateProjectInputs, sessionEmail: str
         }
     } catch (error: any) {
         if (error.code === 'P2002') {
-            // Unique constraint violation error (P2002)
             return { success: false, error: 'Project name must be unique.' };
         }
 
         return { success: false, error: 'An unexpected error occurred.' };
-    }
-
-    if (result.error) {
-        return { success: false, error: result.error.format() }
     }
 
     return { success: false, error: 'Unknown error occurred.' };

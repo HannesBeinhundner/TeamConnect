@@ -136,7 +136,7 @@ export default function YourProjectInformationArea({ projectResult, reloadCompon
                     <p>{projectResult?.description}</p>
                 </div>
                 <div className={styles.textArea}>
-                    <h4>Preferred skills and expertise</h4>
+                    <h4>Preferred Skills and Expertise</h4>
                     <p>{projectResult?.skills ? projectResult?.skills : 'not defined'}</p>
                 </div>
             </div>

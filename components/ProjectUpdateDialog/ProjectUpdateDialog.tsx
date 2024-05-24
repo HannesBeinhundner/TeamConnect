@@ -40,7 +40,6 @@ interface ProjectUpdateDialogProps {
 
 const ProjectUpdateDialog: React.FC<ProjectUpdateDialogProps> = ({ open, onClose, projectResult, reloadComponent, reloadParentComponent, projectTypes, sessionEmail }) => {
     const [user, setUser] = useState<any>(null);
-    const [serverErrorMessage, setServerErrorMessage] = useState('');
     const [confirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
     const [documentName, setDocumentName] = useState('');
     const [imageName, setImageName] = useState('');
@@ -87,8 +86,7 @@ const ProjectUpdateDialog: React.FC<ProjectUpdateDialogProps> = ({ open, onClose
         }
 
         if (result.error) {
-            setServerErrorMessage(result.error.toString());
-            toast.error(serverErrorMessage);
+            toast.error(result.error);
             return;
         }
 
@@ -107,7 +105,6 @@ const ProjectUpdateDialog: React.FC<ProjectUpdateDialogProps> = ({ open, onClose
         }
 
         if (result.error) {
-            setServerErrorMessage(result.error.toString());
             toast.error('You could not delete the Project!');
             return;
         }
@@ -127,7 +124,6 @@ const ProjectUpdateDialog: React.FC<ProjectUpdateDialogProps> = ({ open, onClose
         }
 
         if (result.error) {
-            setServerErrorMessage(result.error.toString());
             toast.error('You could not leave the Project!');
             return;
         }
@@ -221,7 +217,7 @@ const ProjectUpdateDialog: React.FC<ProjectUpdateDialogProps> = ({ open, onClose
                     <TextField
                         margin="dense"
                         id="projectSkills"
-                        label="Preferred skills and expertise"
+                        label="Preferred Skills and Expertise"
                         type="text"
                         placeholder="Specify desired team skills and relevant expertises for your project..."
                         fullWidth

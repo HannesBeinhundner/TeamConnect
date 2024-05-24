@@ -9,7 +9,6 @@ export async function updateProject(inputData: UpdateProjectInputs, projectId: n
     const result = UpdateProjectSchema.safeParse(inputData);
 
     try {
-
         if (!result.success) {
             return { success: false, error: 'Validation error. Check your input data.' };
         }
@@ -37,7 +36,11 @@ export async function updateProject(inputData: UpdateProjectInputs, projectId: n
         });
 
         return { success: true, data: updatedProject };
-    } catch (error) {
+    } catch (error: any) {
+        if (error.code === 'P2002') {
+            return { success: false, error: 'Project name must be unique.' };
+        }
+
         return { success: false, error: 'An unexpected error occurred.' };
     }
 }

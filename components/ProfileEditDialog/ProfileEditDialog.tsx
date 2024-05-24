@@ -70,7 +70,7 @@ const ProfileEditDialog: React.FC<ProfileUpdateDialogProps> = ({ open, onClose, 
         }
 
         if (result.error) {
-            toast.success(result.error.toString());
+            toast.error(result.error.toString());
             return;
         }
 
