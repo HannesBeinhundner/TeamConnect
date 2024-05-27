@@ -197,7 +197,7 @@ const ProjectViewDialog: React.FC<ProjectUpdateDialogProps> = ({ open, onClose, 
                         </div>
                         <div className={styles.textArea}>
                             <h4>Preferred Skills and Expertise</h4>
-                            <p>{projectResult?.skills ? projectResult?.skills : 'not defined'}</p>
+                            <p>{projectResult?.skills == null || projectResult?.skills === 'undefined' ? 'not defined' : projectResult?.skills}</p>
                         </div>
                     </div>
                 </DialogContentText>
