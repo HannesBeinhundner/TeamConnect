@@ -89,7 +89,7 @@ export default function EventStatistics(props: CircularProgressProps & { session
                             <>
                                 <div className={styles.numbersArea}>
                                     <NumberCard number={projectCountResult.allProjects} text={"All Projects"} />
-                                    <NumberCard number={projectUserCountResult} text={"Teamless projects"} />
+                                    <NumberCard number={projectUserCountResult} text={"Solo projects"} />
                                 </div>
                                 <div className={styles.chartArea}>
                                     <DoughnutChart id={'projectChart'} chartData={projectTypeCountResult} />
