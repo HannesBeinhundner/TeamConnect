@@ -32,7 +32,6 @@ export async function checkProject(sessionEmail: string | null | undefined, even
                     //project = { ...project, users: joinedUsers };
                     return { ...project, currentUser: user, users: joinedUsers };
                 }
-
             }
         }
 

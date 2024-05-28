@@ -21,5 +21,5 @@ export async function countUserExpertise(eventId: string): Promise<ChartData[]> 
   return userExpertiseCounts.map(userExpertise => ({
     type: userExpertise.expertise ?? "Web",
     itemCount: userExpertise._count._all,
-}));
+  }));
 }

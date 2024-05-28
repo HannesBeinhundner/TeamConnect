@@ -113,10 +113,8 @@ export default function EventStatistics(props: CircularProgressProps & { session
                             </>
                         )
                     }
-
                 </div>
             </div>
         </div>
-
     )
 }

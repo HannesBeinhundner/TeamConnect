@@ -26,7 +26,6 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
-// import { redirect } from "next/navigation";
 import { useRouter } from 'next/navigation'
 
 interface Props {

@@ -3,7 +3,6 @@
 import { CreateProjectSchema } from '@/app/lib/types'
 import { CreateProjectInputs } from '@/app/lib/types'
 import { prisma } from "@/prisma";
-import { revalidatePath } from 'next/cache';
 
 export async function addEntry(inputData: CreateProjectInputs, sessionEmail: string | null | undefined, eventId: any) {
 

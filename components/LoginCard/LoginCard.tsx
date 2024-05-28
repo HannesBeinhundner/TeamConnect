@@ -1,4 +1,3 @@
-
 import styles from "./LoginCard.module.scss"
 import Image from "next/image";
 import LoginImg from '@/images/login_dark.svg'

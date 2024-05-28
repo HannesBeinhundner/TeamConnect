@@ -87,9 +87,7 @@ export default function YourProjectCard({ eventId, reloadComponent, key }) {
         register,
         handleSubmit,
         setValue,
-        setError,
         reset,
-        watch,
         formState: { errors },
     } = useForm<CreateProjectInputs>({
         resolver: zodResolver(CreateProjectSchema)

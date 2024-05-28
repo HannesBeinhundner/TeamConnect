@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState } from 'react';
 import Image from "next/image";
 import Button from '@mui/material/Button';
 import Chip from '@/components/Chip/Chip';

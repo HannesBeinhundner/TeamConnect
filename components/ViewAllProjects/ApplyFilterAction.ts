@@ -10,11 +10,6 @@ export async function ApplyFilter(inputData: ApplyFilterInputs, eventId: any) {
     try {
         if (result.success) {
 
-            // const user = await prisma.user.findUnique({
-            //     where: {
-            //         email: sessionEmail,
-            //     },
-            // })
 
             const filter: any = {};
             filter.eventId = eventId;

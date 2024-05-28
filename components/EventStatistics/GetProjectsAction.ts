@@ -15,4 +15,4 @@ export async function getProjectCnt(eventId: any) {
   });
 
   return { allProjects };
-  } 
+} 

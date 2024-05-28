@@ -8,7 +8,6 @@
     justify-content: center;
     align-items: center;
     gap: 5rem;
-    // background: $background-container-login;
     background-attachment: fixed;
     background-image: url("../../images/landingpageBackground.svg");
     background-size: cover;
@@ -22,15 +21,12 @@
     @include mobile {
         gap: 0rem;
         height: 100vh;
-        // justify-content: start;
-        // margin-top: 2.5rem;
         overflow: hidden;
     }
 }
 
 .imageContainer {
     width: 45%;
-
 
     @include tablet {
         width: 70%;

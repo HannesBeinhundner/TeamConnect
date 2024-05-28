@@ -1,5 +1,6 @@
 # To run in localhost do
 - `npm install`
+- `npx prisma generate`
 - `npm run dev`  
 
 # Commands used in development for Teamconnect

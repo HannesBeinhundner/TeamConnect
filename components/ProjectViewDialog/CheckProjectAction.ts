@@ -10,7 +10,6 @@ export async function checkProject(projectId: any) {
             },
         })
         if (users) {
-            //project = { ...project, users: joinedUsers };
             return users;
         }
 

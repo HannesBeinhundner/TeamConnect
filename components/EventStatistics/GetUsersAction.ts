@@ -10,18 +10,18 @@ export interface ProjectUserData {
 
 export async function getUserCnt(eventId: any) {
 
-    const userCount = await prisma.user.count({
-      where: {
-        eventId: eventId,
-      },
-    });
+  const userCount = await prisma.user.count({
+    where: {
+      eventId: eventId,
+    },
+  });
 
-    const usersWithoutProject = await prisma.user.count({
-      where: {
-        eventId: eventId,
-        projectId: null,
-      },
-    });
+  const usersWithoutProject = await prisma.user.count({
+    where: {
+      eventId: eventId,
+      projectId: null,
+    },
+  });
 
-    return { userCount, usersWithoutProject };
-  } 
+  return { userCount, usersWithoutProject };
+} 

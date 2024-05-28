@@ -117,10 +117,8 @@ export default function ConfigCard() {
     const {
         register,
         handleSubmit,
-        setError,
         reset,
         control,
-        watch,
         formState: { errors },
     } = useForm<CreateEventInputs>({
         resolver: zodResolver(CreateEventSchema)
@@ -303,7 +301,6 @@ export default function ConfigCard() {
                     </>
                 )
             }
-
         </div >
     );
 }

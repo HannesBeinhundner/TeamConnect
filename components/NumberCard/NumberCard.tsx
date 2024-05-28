@@ -1,6 +1,5 @@
 import styles from "./NumberCard.module.scss"
 
-
 interface NumberCardProps {
     number: string;
     text: string;
